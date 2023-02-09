@@ -152,20 +152,6 @@ void TriangleComponent::Initialize() {
 }
 
 void TriangleComponent::Update() {
-	Game::GetInstance()->GetContext().ClearState();
-
-	Game::GetInstance()->GetContext().RSSetState(rastState);
-
-	D3D11_VIEWPORT viewport = {};
-	viewport.Width = static_cast<float>(Game::GetInstance()->GetDisplay().GetScreenWidth());
-	viewport.Height = static_cast<float>(Game::GetInstance()->GetDisplay().GetScreenHeight());
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1.0f;
-
-	Game::GetInstance()->GetContext().RSSetViewports(1, &viewport);
-
 	Game::GetInstance()->GetContext().IASetInputLayout(layout);
 	Game::GetInstance()->GetContext().IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Game::GetInstance()->GetContext().IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
@@ -173,18 +159,11 @@ void TriangleComponent::Update() {
 	Game::GetInstance()->GetContext().VSSetShader(vertexShader, nullptr, 0);
 	Game::GetInstance()->GetContext().PSSetShader(pixelShader, nullptr, 0);
 
-	Game::GetInstance()->GetContext().OMSetRenderTargets(1, &Game::GetInstance()->rtv, nullptr);
-
-	float color[] = { Game::GetInstance()->GetTotalTime(), 0.1f, 0.1f, 1.0f};
-	Game::GetInstance()->GetContext().ClearRenderTargetView(Game::GetInstance()->GetRTV(), color);
+	Game::GetInstance()->GetContext().RSSetState(rastState);
 }
 
 void TriangleComponent::Draw() {
 	Game::GetInstance()->GetContext().DrawIndexed(6, 0, 0); // Main function for draw (DrawCall)
-
-	Game::GetInstance()->GetContext().OMSetRenderTargets(0, nullptr, nullptr);
-
-	Game::GetInstance()->GetSwapChain()->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0); // Show what we've drawn
 }
 
 void TriangleComponent::Reload() {

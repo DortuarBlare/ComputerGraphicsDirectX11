@@ -1,6 +1,8 @@
 #pragma once
 #include "GameComponent.h"
 
+class GameComponent;
+
 class TriangleComponent : public GameComponent {
 protected:
 	ID3D11InputLayout* layout;

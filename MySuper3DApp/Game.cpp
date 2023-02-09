@@ -1,15 +1,32 @@
 #include "Game.h"
 
-Game* Game::GetInstance() {
+Game* Game::instance = nullptr;
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
+	return Game::GetInstance()->MessageHandler(hwnd, umessage, wparam, lparam);
+}
+
+
+Game* Game::CreateInstance(LPCWSTR name) {
 	if (!instance)
-		instance = new Game();
+		instance = new Game(name);
 
 	return instance;
 }
 
-void Game::CreateBackBuffer() {
-	display = new DisplayWin32();
+Game* Game::GetInstance() {
+	if (!instance)
+		instance = new Game(L"");
 
+	return instance;
+}
+
+
+void Game::CreateBackBuffer() {
+	
+}
+
+void Game::PrepareResources() {
 	featureLevel[0] = { D3D_FEATURE_LEVEL_11_1 };
 
 	swapDesc = {}; // SwapChain Descriptor
@@ -50,15 +67,32 @@ void Game::CreateBackBuffer() {
 
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backTex);	// __uuidof(ID3D11Texture2D)
 	res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
+
+	viewport = {};
+	viewport.Width = static_cast<float>(display->GetScreenWidth());
+	viewport.Height = static_cast<float>(display->GetScreenHeight());
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
 }
 
 void Game::Initialize() {
-	// Push back all GameComponents that we need
-	components.push_back(new TriangleComponent());
-
 	// Compile shaders
 	for (auto component : components)
 		component->Initialize();
+}
+
+void Game::PrepareFrame() {
+	context->ClearState();
+
+	context->OMSetRenderTargets(1, &rtv, nullptr);
+
+	context->RSSetViewports(1, &viewport);
+	//context->RSSetState(rastState); // In TriangleComponent Update Method
+
+	float color[] = { Game::GetInstance()->GetTotalTime(), 0.1f, 0.1f, 1.0f };
+	context->ClearRenderTargetView(rtv, color);
 }
 
 void Game::Update() {
@@ -66,22 +100,69 @@ void Game::Update() {
 		component->Update();
 }
 
-void Game::UpdateInternal() {
-
-}
-
 void Game::Draw() {
 	for (auto component : components)
 		component->Draw();
 }
 
-void Game::Run() {
+void Game::RestoreTargets() {
+
+}
+
+void Game::EndFrame() {
+	context->OMSetRenderTargets(0, nullptr, nullptr);
+
+	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0); // Show what we've drawn
+}
+
+void Game::UpdateInternal() {
+	auto curTime = std::chrono::steady_clock::now();
+	float deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - *prevTime).count() / 1000000.0f;
+	*prevTime = curTime;
+
+	totalTime += deltaTime;
+	frameCount++;
+
+	if (totalTime > 1.0f) {
+		float fps = frameCount / totalTime;
+
+		totalTime -= 1.0f;
+
+		WCHAR text[256];
+		swprintf_s(text, TEXT("FPS: %f"), fps);
+		SetWindowText(display->GetHWnd(), text);
+
+		frameCount = 0;
+	}
+
+	PrepareFrame();
+
+	Update();
+
+	Draw();
+
+	RestoreTargets();
+
+	EndFrame();
+}
+
+void Game::Run(int screenWidth, int screenHeight) {
+	display = new DisplayWin32(name, screenWidth, screenHeight, WndProc);
+
+	PrepareResources();
+
+	Initialize();
+
+	isExitRequested = false;
+
+	startTime = new std::chrono::time_point<std::chrono::steady_clock>();
+	prevTime = new std::chrono::time_point<std::chrono::steady_clock>();
+	*startTime = std::chrono::steady_clock::now();
+	*prevTime = *startTime;
 	totalTime = 0;
 	frameCount = 0;
-	msg = {};
-	isExitRequested = false;
-	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	
+	MSG msg = {};
 	while (!isExitRequested) {
 		// Handle the windows messages.
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -94,62 +175,38 @@ void Game::Run() {
 			isExitRequested = true;
 		}
 
-		Update();
-
-		// Maybe move this to TriangleComponent?
-		auto curTime = std::chrono::steady_clock::now();
-		float deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - PrevTime).count() / 1000000.0f;
-		PrevTime = curTime;
-
-		totalTime += deltaTime;
-		frameCount++;
-
-		if (totalTime > 1.0f) {
-			float fps = frameCount / totalTime;
-
-			totalTime -= 1.0f;
-
-			WCHAR text[256];
-			swprintf_s(text, TEXT("FPS: %f"), fps);
-			SetWindowText(display->GetHWnd(), text);
-
-			frameCount = 0;
-		}
-		//
-
-		Draw();
+		UpdateInternal();
 	}
 	
-	// End of main cycle
-	std::cout << "Hello World!\n";
+	delete startTime;
+	delete prevTime;
+	DestroyResources();
 }
 
-void Game::PrepareFrame() {
+LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
+	switch (umessage) {
+	case WM_KEYDOWN: {
+		// If a key is pressed send it to the input object so it can record that state.
+		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
 
-}
+		if (static_cast<unsigned int>(wparam) == 27)
+			PostQuitMessage(0);
 
-void Game::MessageHandler() {
-
-}
-
-void Game::DestroyResources() {
-
-}
-
-void Game::EndFrame() {
-
+		return 0;
+	}
+	default: {
+		return DefWindowProc(hwnd, umessage, wparam, lparam);
+	}
+	}
 }
 
 void Game::Exit() {
 
 }
 
-void Game::PrepareResources() {
-
-}
-
-void Game::RestoreTargets() {
-
+void Game::DestroyResources() {
+	for (auto component : components)
+		component->DestroyResources();
 }
 
 

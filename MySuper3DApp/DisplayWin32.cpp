@@ -1,28 +1,11 @@
 #include "DisplayWin32.h"
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
-	switch (umessage) {
-	case WM_KEYDOWN: {
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
-
-		if (static_cast<unsigned int>(wparam) == 27)
-			PostQuitMessage(0);
-
-		return 0;
-	}
-	default: {
-		return DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
-	}
-}
-
-DisplayWin32::DisplayWin32() {
-	applicationName = L"My3DApp";
+DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int screenWidth, int screenHeight, WNDPROC wndProc) {
+	this->applicationName = applicationName;
 	hInstance = GetModuleHandle(nullptr);
 
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc = WndProc;
+	wc.lpfnWndProc = wndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
@@ -37,8 +20,8 @@ DisplayWin32::DisplayWin32() {
 	// Register the window class.
 	RegisterClassEx(&wc);
 
-	screenWidth = 800;
-	screenHeight = 800;
+	this->screenWidth = screenWidth;
+	this->screenHeight = screenHeight;
 
 	windowRect = { 0, 0, static_cast<LONG>(screenWidth), static_cast<LONG>(screenHeight) };
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);

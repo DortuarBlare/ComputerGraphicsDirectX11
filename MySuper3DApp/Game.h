@@ -7,7 +7,6 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include "GameComponent.h"
-#include "TriangleComponent.h"
 #include "DisplayWin32.h"
 #include <iostream>
 #include <chrono>
@@ -18,13 +17,14 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
+class DisplayWin32;
+class GameComponent;
+
 class Game {
 private:
-	static Game* instance; // Singleton
-
 	DisplayWin32* display;
-	std::vector<GameComponent*> components;
 
+	LPCWSTR name;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
@@ -32,37 +32,43 @@ private:
 	DXGI_SWAP_CHAIN_DESC swapDesc;
 	HRESULT res;
 	ID3D11Texture2D* backTex;
+	ID3D11RenderTargetView* rtv; // Back buffer?
+	D3D11_VIEWPORT viewport;
 
-	MSG msg;
 	bool isExitRequested;
-	float totalTime;
-	unsigned int frameCount;
 
-	Game() { 
-		CreateBackBuffer();
+	Game(LPCWSTR name) {
+		this->name = name;
 	}
 
 public:
-	ID3D11RenderTargetView* rtv; // Back buffer?
-	static Game* GetInstance();
+	static Game* instance; // Singleton
+	std::vector<GameComponent*> components;
+	std::chrono::time_point<std::chrono::steady_clock>* startTime = nullptr;
+	std::chrono::time_point<std::chrono::steady_clock>* prevTime = nullptr;
+	float totalTime = 0;
+	unsigned int frameCount;
 
+
+	static Game* CreateInstance(LPCWSTR name);
+	static Game* GetInstance();
+	
 
 	void CreateBackBuffer();
-	void Initialize();
-	void Update();
-	void UpdateInternal();
-	void Draw();
-	void Run();
-	void PrepareFrame();
-	void MessageHandler();
-	void DestroyResources();
-	void EndFrame();
-	void Exit();
 	void PrepareResources();
+	void Initialize();
+	void PrepareFrame();
+	void Update();
+	void Draw();
 	void RestoreTargets();
+	void EndFrame();
+	void UpdateInternal();
+	void Run(int screenWidth, int screenHeight);
+	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
+	void Exit();
+	void DestroyResources();
 
 
-	// Getters and setters
 	DisplayWin32& GetDisplay();
 
 	Microsoft::WRL::ComPtr<ID3D11Device>& GetDevice();
@@ -82,3 +88,5 @@ public:
 	unsigned int GetFrameCount();
 	void SetFrameCount(unsigned int frameCount);
 };
+
+static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

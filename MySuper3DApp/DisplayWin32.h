@@ -1,6 +1,8 @@
 #pragma once
 #include "Game.h"
 
+class Game;
+
 class DisplayWin32 {
 protected:
 	LPCWSTR applicationName;
@@ -14,7 +16,7 @@ protected:
 	int screenHeight;
 
 public:
-	DisplayWin32();
+	DisplayWin32(LPCWSTR& applicationName, int screenWidth, int screenHeight, WNDPROC wndProc);
 
 	int GetScreenWidth();
 	int GetScreenHeight();
