@@ -1,6 +1,6 @@
 #include "DisplayWin32.h"
 
-DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int screenWidth, int screenHeight, WNDPROC wndProc) {
+DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int clientWidth, int clientHeight, WNDPROC wndProc) {
 	this->applicationName = applicationName;
 	hInstance = GetModuleHandle(nullptr);
 
@@ -20,16 +20,16 @@ DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int screenWidth, int screen
 	// Register the window class.
 	RegisterClassEx(&wc);
 
-	this->screenWidth = screenWidth;
-	this->screenHeight = screenHeight;
+	this->clientWidth = clientWidth;
+	this->clientHeight = clientHeight;
 
-	windowRect = { 0, 0, static_cast<LONG>(screenWidth), static_cast<LONG>(screenHeight) };
+	windowRect = { 0, 0, static_cast<LONG>(clientWidth), static_cast<LONG>(clientHeight) };
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	auto dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_THICKFRAME;
 
-	auto posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-	auto posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+	auto posX = (GetSystemMetrics(SM_CXSCREEN) - clientWidth) / 2;
+	auto posY = (GetSystemMetrics(SM_CYSCREEN) - clientHeight) / 2;
 
 	hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW,
@@ -53,10 +53,10 @@ HWND& DisplayWin32::GetHWnd() {
 	return hWnd;
 }
 
-int DisplayWin32::GetScreenWidth() {
-	return screenWidth;
+int DisplayWin32::GetClientWidth() {
+	return clientWidth;
 }
 
-int DisplayWin32::GetScreenHeight() {
-	return screenHeight;
+int DisplayWin32::GetClientHeight() {
+	return clientHeight;
 }

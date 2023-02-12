@@ -12,14 +12,11 @@ protected:
 	WNDCLASSEX wc;
 	int clientHeight;
 	int clientWidth;
-	int screenWidth;
-	int screenHeight;
 
 public:
-	DisplayWin32(LPCWSTR& applicationName, int screenWidth, int screenHeight, WNDPROC wndProc);
+	DisplayWin32(LPCWSTR& applicationName, int clientWidth, int clientHeight, WNDPROC wndProc);
 
-	int GetScreenWidth();
-	int GetScreenHeight();
+	int GetClientWidth();
+	int GetClientHeight();
 	HWND& GetHWnd();
 };
-

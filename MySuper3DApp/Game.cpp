@@ -2,11 +2,21 @@
 
 Game* Game::instance = nullptr;
 
+/*
+* Static method for handling user input
+*/
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
-	return Game::GetInstance()->MessageHandler(hwnd, umessage, wparam, lparam);
+	return Game::instance->MessageHandler(hwnd, umessage, wparam, lparam);
 }
 
+Game::Game(LPCWSTR name) {
+	this->name = name;
+}
 
+/*
+* There is no public access to constructor because of "Singleton" pattern
+* Need to use this method to create Game::instance
+*/
 Game* Game::CreateInstance(LPCWSTR name) {
 	if (!instance)
 		instance = new Game(name);
@@ -14,47 +24,52 @@ Game* Game::CreateInstance(LPCWSTR name) {
 	return instance;
 }
 
-Game* Game::GetInstance() {
-	if (!instance)
-		instance = new Game(L"");
-
-	return instance;
-}
-
-
 void Game::CreateBackBuffer() {
 	
 }
 
+/*
+* Method for preparing all "Game" resources
+*/
 void Game::PrepareResources() {
-	featureLevel[0] = { D3D_FEATURE_LEVEL_11_1 };
+	swapDesc = {}; // Init swap chain descriptor
 
-	swapDesc = {}; // SwapChain Descriptor
-	swapDesc.BufferCount = 2;
-	swapDesc.BufferDesc.Width = display->GetScreenWidth();
-	swapDesc.BufferDesc.Height = display->GetScreenHeight();
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
-	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapDesc.OutputWindow = display->GetHWnd();
-	swapDesc.Windowed = true;
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Main feature
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	swapDesc.SampleDesc.Count = 1; // Only with DXGI_SWAP_EFFECT_DISCARD
-	swapDesc.SampleDesc.Quality = 0;
+	// BufferDesc describes the backbuffer display mode
+	swapDesc.BufferDesc.Width = display->GetClientWidth(); // Resolution width
+	swapDesc.BufferDesc.Height = display->GetClientHeight(); // Resolution height
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Display format (32-bit unsigned normalized integer format supporting 8 bits per channel, including the alpha channel)
+	swapDesc.BufferDesc.RefreshRate.Numerator = 60; // Refresh rate in hertz numerator
+	swapDesc.BufferDesc.RefreshRate.Denominator = 1; // Refresh rate in hertz denominator (for representing integer it = 1)
+	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Scanline drawing mode (indicating the method the raster uses to create an image on a surface)
+	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Scaling mode (indicating how an image is stretched to fit a given monitor's resolution)
 
+	/* 
+	* SampleDesc describes multi - sampling parameters for a resource
+	* The default sampler mode, with no anti-aliasing, has a count of 1 and a quality level of 0
+	*/
+	swapDesc.SampleDesc.Count = 1; // Number of multisamples per pixel
+	swapDesc.SampleDesc.Quality = 0; // The image quality level. The higher the quality, the lower the performance
+
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
+	swapDesc.BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
+	swapDesc.OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
+	swapDesc.Windowed = true; // Fullscreen or not
+	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
+	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
+
+	const int featureLevelsNumber = 1;
+	D3D_FEATURE_LEVEL featureLevels[featureLevelsNumber] = { D3D_FEATURE_LEVEL_11_1 };
+
+	// Creates a device that represents the display adapter and a swap chain used for rendering
 	res = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
 		D3D11_CREATE_DEVICE_DEBUG,
-		featureLevel,
-		1,
+		featureLevels, // Determine the order of feature levels to attempt to create
+		featureLevelsNumber, // The number of elements in feature levels array
 		D3D11_SDK_VERSION,
-		&swapDesc, // Descriptor
+		&swapDesc,
 		&swapChain,
 		&device,
 		nullptr, // Feature level for device
@@ -65,18 +80,23 @@ void Game::PrepareResources() {
 		// Well, that was unexpected
 	}
 
-	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backTex);	// __uuidof(ID3D11Texture2D)
-	res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
+	//backTex = Microsoft::WRL::ComPtr<ID3D11Texture2D>();
+	//rtv = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>();
+	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backTex.GetAddressOf()); // Accesses one of the buffers of the back buffer chain
+	res = device->CreateRenderTargetView(backTex.Get(), nullptr, rtv.GetAddressOf());
 
 	viewport = {};
-	viewport.Width = static_cast<float>(display->GetScreenWidth());
-	viewport.Height = static_cast<float>(display->GetScreenHeight());
+	viewport.Width = static_cast<float>(display->GetClientWidth());
+	viewport.Height = static_cast<float>(display->GetClientHeight());
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 }
 
+/*
+* Method for initializing all "GameComponent" items in vector
+*/
 void Game::Initialize() {
 	// Compile shaders
 	for (auto component : components)
@@ -84,22 +104,28 @@ void Game::Initialize() {
 }
 
 void Game::PrepareFrame() {
-	context->ClearState();
+	context->ClearState(); // Reset parameters to default
 
-	context->OMSetRenderTargets(1, &rtv, nullptr);
+	context->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 
 	context->RSSetViewports(1, &viewport);
 	//context->RSSetState(rastState); // In TriangleComponent Update Method
 
-	float color[] = { Game::GetInstance()->GetTotalTime(), 0.1f, 0.1f, 1.0f };
-	context->ClearRenderTargetView(rtv, color);
+	float color[] = { Game::instance->GetTotalTime(), 0.1f, 0.1f, 1.0f };
+	context->ClearRenderTargetView(rtv.Get(), color);
 }
 
+/*
+* Method for updating all "GameComponent" items in vector
+*/
 void Game::Update() {
 	for (auto component : components)
 		component->Update();
 }
 
+/*
+* Method for drawing all "GameComponent" items in vector
+*/
 void Game::Draw() {
 	for (auto component : components)
 		component->Draw();
@@ -109,12 +135,18 @@ void Game::RestoreTargets() {
 
 }
 
+/*
+* Method for actually presenting graphics
+*/
 void Game::EndFrame() {
 	context->OMSetRenderTargets(0, nullptr, nullptr);
 
 	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0); // Show what we've drawn
 }
 
+/*
+* Internal method, that updates all items and called each frame
+*/
 void Game::UpdateInternal() {
 	auto curTime = std::chrono::steady_clock::now();
 	float deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - *prevTime).count() / 1000000.0f;
@@ -147,7 +179,7 @@ void Game::UpdateInternal() {
 }
 
 void Game::Run(int screenWidth, int screenHeight) {
-	display = new DisplayWin32(name, screenWidth, screenHeight, WndProc);
+	display = std::make_shared<DisplayWin32>(name, screenWidth, screenHeight, WndProc);
 
 	PrepareResources();
 
@@ -210,8 +242,8 @@ void Game::DestroyResources() {
 }
 
 
-DisplayWin32& Game::GetDisplay() {
-	return *display;
+std::shared_ptr<DisplayWin32> Game::GetDisplay() {
+	return display;
 }
 
 HRESULT Game::GetRes() {
@@ -222,20 +254,20 @@ void Game::SetRes(HRESULT res) {
 	this->res = res;
 }
 
-Microsoft::WRL::ComPtr<ID3D11Device>& Game::GetDevice() {
+Microsoft::WRL::ComPtr<ID3D11Device> Game::GetDevice() {
 	return device;
 }
 
-ID3D11RenderTargetView* Game::GetRTV() {
+Microsoft::WRL::ComPtr<ID3D11RenderTargetView> Game::GetRTV() {
 	return rtv;
 }
 
-IDXGISwapChain* Game::GetSwapChain() {
+Microsoft::WRL::ComPtr <IDXGISwapChain> Game::GetSwapChain() {
 	return swapChain;
 }
 
-ID3D11DeviceContext& Game::GetContext() {
-	return *context;
+Microsoft::WRL::ComPtr <ID3D11DeviceContext> Game::GetContext() {
+	return context;
 }
 
 float Game::GetTotalTime() {

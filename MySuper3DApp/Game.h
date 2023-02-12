@@ -22,24 +22,31 @@ class GameComponent;
 
 class Game {
 private:
-	DisplayWin32* display;
-
-	LPCWSTR name;
-	Microsoft::WRL::ComPtr<ID3D11Device> device;
-	ID3D11DeviceContext* context;
-	IDXGISwapChain* swapChain;
-	D3D_FEATURE_LEVEL featureLevel[1]; // Array
-	DXGI_SWAP_CHAIN_DESC swapDesc;
-	HRESULT res;
-	ID3D11Texture2D* backTex;
-	ID3D11RenderTargetView* rtv; // Back buffer?
+	LPCWSTR	name; // Name of the game application
+	std::shared_ptr<DisplayWin32> display; // WinApi display
+	Microsoft::WRL::ComPtr<ID3D11Device> device; // The device interface represents a virtual adapter and it is used to create resources
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context; // Interface represents a device context which generates rendering commands
+	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain; // Interface implements one or more "IDXGISurface" for storing rendered data before presenting it to an output
+	DXGI_SWAP_CHAIN_DESC swapDesc; // Descriptor, that describes swap chain
+	HRESULT res; // Used for return codes from "Direct3D 11" functions
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backTex; // Pointer to the back buffer interface
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv; // Identifies the render-target subresources that can be accessed during rendering (Back buffer?)
 	D3D11_VIEWPORT viewport;
 
-	bool isExitRequested;
+	bool isExitRequested; // For main application cycle
 
-	Game(LPCWSTR name) {
-		this->name = name;
-	}
+	Game(LPCWSTR name);
+	void CreateBackBuffer();
+
+protected:
+	void UpdateInternal();
+	void DestroyResources();
+	void PrepareResources();
+	void Initialize();
+	void PrepareFrame();
+	void Update();
+	void Draw();
+	void EndFrame();
 
 public:
 	static Game* instance; // Singleton
@@ -51,36 +58,24 @@ public:
 
 
 	static Game* CreateInstance(LPCWSTR name);
-	static Game* GetInstance();
-	
-
-	void CreateBackBuffer();
-	void PrepareResources();
-	void Initialize();
-	void PrepareFrame();
-	void Update();
-	void Draw();
 	void RestoreTargets();
-	void EndFrame();
-	void UpdateInternal();
 	void Run(int screenWidth, int screenHeight);
 	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 	void Exit();
-	void DestroyResources();
 
 
-	DisplayWin32& GetDisplay();
+	std::shared_ptr<DisplayWin32> GetDisplay();
 
-	Microsoft::WRL::ComPtr<ID3D11Device>& GetDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> GetDevice();
 
-	ID3D11DeviceContext& GetContext();
+	Microsoft::WRL::ComPtr <ID3D11DeviceContext> GetContext();
 
-	IDXGISwapChain* GetSwapChain();
+	Microsoft::WRL::ComPtr <IDXGISwapChain> GetSwapChain();
 
 	HRESULT GetRes();
 	void SetRes(HRESULT res);
 
-	ID3D11RenderTargetView* GetRTV();
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> GetRTV();
 
 	float GetTotalTime();
 	void SetTotalTime(float totalTime);

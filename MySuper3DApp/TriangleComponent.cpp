@@ -10,7 +10,7 @@ void TriangleComponent::Initialize() {
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
-	Game::GetInstance()->SetRes(
+	Game::instance->SetRes(
 		D3DCompileFromFile(
 			L"./Shaders/MyVeryFirstShader.hlsl",
 			Shader_Macros /*macros*/,
@@ -25,7 +25,7 @@ void TriangleComponent::Initialize() {
 	);
 
 	// Compile vertex shader
-	Game::GetInstance()->SetRes(
+	Game::instance->SetRes(
 		D3DCompileFromFile(
 			L"./Shaders/MyVeryFirstShader.hlsl",
 			nullptr /*macros*/,
@@ -39,7 +39,7 @@ void TriangleComponent::Initialize() {
 		)
 	);
 
-	if (FAILED(Game::GetInstance()->GetRes())) {
+	if (FAILED(Game::instance->GetRes())) {
 		// If the shader failed to compile it should have written something to the error message.
 		if (errorVertexCode) {
 			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
@@ -48,18 +48,18 @@ void TriangleComponent::Initialize() {
 		}
 		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
-			MessageBox(Game::GetInstance()->GetDisplay().GetHWnd(), L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
+			MessageBox(Game::instance->GetDisplay()->GetHWnd(), L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
 
 		return;
 	}
 
-	Game::GetInstance()->GetDevice()->CreatePixelShader(
+	Game::instance->GetDevice()->CreatePixelShader(
 		pixelShaderByteCode->GetBufferPointer(),
 		pixelShaderByteCode->GetBufferSize(),
 		nullptr, &pixelShader
 	);
 
-	Game::GetInstance()->GetDevice()->CreateVertexShader(
+	Game::instance->GetDevice()->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr, &vertexShader
@@ -86,7 +86,7 @@ void TriangleComponent::Initialize() {
 		}
 	};
 
-	Game::GetInstance()->GetDevice()->CreateInputLayout(
+	Game::instance->GetDevice()->CreateInputLayout(
 		inputElements,
 		2,
 		vertexShaderByteCode->GetBufferPointer(),
@@ -122,7 +122,7 @@ void TriangleComponent::Initialize() {
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	Game::GetInstance()->GetDevice()->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
+	Game::instance->GetDevice()->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
 
 	int indeces[] = { 0, 1, 2, 1, 0, 3 };
 	indexBufDesc = {};
@@ -138,32 +138,33 @@ void TriangleComponent::Initialize() {
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	Game::GetInstance()->GetDevice()->CreateBuffer(&indexBufDesc, &indexData, &ib);
+	Game::instance->GetDevice()->CreateBuffer(&indexBufDesc, &indexData, &ib);
 
 	rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_NONE; // Try to change
 	rastDesc.FillMode = D3D11_FILL_SOLID; // Try to change
 
-	Game::GetInstance()->SetRes(Game::GetInstance()->GetDevice()->CreateRasterizerState(&rastDesc, &rastState));
-	Game::GetInstance()->GetContext().RSSetState(rastState);
+	Game::instance->SetRes(Game::instance->GetDevice()->CreateRasterizerState(&rastDesc, &rastState));
+	Game::instance->GetContext()->RSSetState(rastState);
 
 	strides[0] = 32;
 	offsets[0] = 0;
 }
 
 void TriangleComponent::Update() {
-	Game::GetInstance()->GetContext().IASetInputLayout(layout);
-	Game::GetInstance()->GetContext().IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Game::GetInstance()->GetContext().IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-	Game::GetInstance()->GetContext().IASetVertexBuffers(0, 1, &vb, strides, offsets);
-	Game::GetInstance()->GetContext().VSSetShader(vertexShader, nullptr, 0);
-	Game::GetInstance()->GetContext().PSSetShader(pixelShader, nullptr, 0);
+	Game::instance->GetContext()->IASetInputLayout(layout);
+	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Game::instance->GetContext()->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
+	Game::instance->GetContext()->IASetVertexBuffers(0, 1, &vb, strides, offsets);
 
-	Game::GetInstance()->GetContext().RSSetState(rastState);
+	Game::instance->GetContext()->VSSetShader(vertexShader, nullptr, 0);
+	Game::instance->GetContext()->PSSetShader(pixelShader, nullptr, 0);
+
+	Game::instance->GetContext()->RSSetState(rastState);
 }
 
 void TriangleComponent::Draw() {
-	Game::GetInstance()->GetContext().DrawIndexed(6, 0, 0); // Main function for draw (DrawCall)
+	Game::instance->GetContext()->DrawIndexed(6, 0, 0); // Main function for draw (DrawCall)
 }
 
 void TriangleComponent::Reload() {
