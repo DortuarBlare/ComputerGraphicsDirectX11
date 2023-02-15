@@ -1,12 +1,18 @@
 #include "TriangleComponent.h"
 
 TriangleComponent::TriangleComponent() {
+	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
+	pointsAmount = 8;
 }
 
 void TriangleComponent::Initialize() {
 	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
-	ID3DBlob* errorPixelCode;
+	ID3DBlob* errorPixelCode = nullptr;
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
@@ -19,7 +25,7 @@ void TriangleComponent::Initialize() {
 			"ps_5_0",
 			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 			0,
-			&pixelShaderByteCode,
+			pixelShaderByteCode.GetAddressOf(),
 			&errorPixelCode
 		)
 	);
@@ -34,7 +40,7 @@ void TriangleComponent::Initialize() {
 			"vs_5_0", // Shader target (Pixel / Vertex)
 			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Different flags (for example code translation)
 			0,
-			&vertexShaderByteCode,
+			vertexShaderByteCode.GetAddressOf(),
 			&errorVertexCode
 		)
 	);
@@ -56,13 +62,15 @@ void TriangleComponent::Initialize() {
 	Game::instance->GetDevice()->CreatePixelShader(
 		pixelShaderByteCode->GetBufferPointer(),
 		pixelShaderByteCode->GetBufferSize(),
-		nullptr, &pixelShader
+		nullptr,
+		pixelShader.GetAddressOf()
 	);
 
 	Game::instance->GetDevice()->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
-		nullptr, &vertexShader
+		nullptr,
+		vertexShader.GetAddressOf()
 	);
 
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
@@ -91,76 +99,69 @@ void TriangleComponent::Initialize() {
 		2,
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
-		&layout
+		layout.GetAddressOf()
 	);
 
 	// Creating set of points
-	pointsAmount = 8;
-	points = new DirectX::XMFLOAT4[pointsAmount];
-	points[0] = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	points[1] = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	points.push_back(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
-	points[2] = DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f);
-	points[3] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	points.push_back(DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 
-	points[4] = DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f);
-	points[5] = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	points.push_back(DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
-	points[6] = DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f);
-	points[7] = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	points.push_back(DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	vertexBufDesc = {};
-	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufDesc.CPUAccessFlags = 0;
-	vertexBufDesc.MiscFlags = 0;
-	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * pointsAmount;
+	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
+	vertexBufDesc.get()->BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufDesc.get()->CPUAccessFlags = 0;
+	vertexBufDesc.get()->MiscFlags = 0;
+	vertexBufDesc.get()->StructureByteStride = 0;
+	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * pointsAmount;
+	
+	vertexData.get()->pSysMem = points.data();
+	vertexData.get()->SysMemPitch = 0;
+	vertexData.get()->SysMemSlicePitch = 0;
 
-	vertexData = {};
-	vertexData.pSysMem = points;
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
-	Game::instance->GetDevice()->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
+	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vb.GetAddressOf());
 
 	int indeces[] = { 0, 1, 2, 1, 0, 3 };
-	indexBufDesc = {};
-	indexBufDesc.ByteWidth = sizeof(int) * std::size(indeces);
-	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufDesc.CPUAccessFlags = 0;
-	indexBufDesc.MiscFlags = 0;
-	indexBufDesc.StructureByteStride = 0;
+	indexBufDesc.get()->ByteWidth = sizeof(int) * std::size(indeces);
+	indexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
+	indexBufDesc.get()->BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufDesc.get()->CPUAccessFlags = 0;
+	indexBufDesc.get()->MiscFlags = 0;
+	indexBufDesc.get()->StructureByteStride = 0;
 
-	indexData = {};
-	indexData.pSysMem = indeces;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
+	indexData.get()->pSysMem = indeces;
+	indexData.get()->SysMemPitch = 0;
+	indexData.get()->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(&indexBufDesc, &indexData, &ib);
+	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), ib.GetAddressOf());
 
-	rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE; // Try to change
-	rastDesc.FillMode = D3D11_FILL_SOLID; // Try to change
+	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Try to change
+	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Try to change
 
-	Game::instance->SetRes(Game::instance->GetDevice()->CreateRasterizerState(&rastDesc, &rastState));
-	Game::instance->GetContext()->RSSetState(rastState);
+	Game::instance->SetRes(Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf()));
+	Game::instance->GetContext()->RSSetState(rastState.Get());
 
 	strides[0] = 32;
 	offsets[0] = 0;
 }
 
 void TriangleComponent::Update() {
-	Game::instance->GetContext()->IASetInputLayout(layout);
+	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Game::instance->GetContext()->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-	Game::instance->GetContext()->IASetVertexBuffers(0, 1, &vb, strides, offsets);
+	Game::instance->GetContext()->IASetIndexBuffer(ib.Get(), DXGI_FORMAT_R32_UINT, 0);
+	Game::instance->GetContext()->IASetVertexBuffers(0, 1, vb.GetAddressOf(), strides, offsets);
 
-	Game::instance->GetContext()->VSSetShader(vertexShader, nullptr, 0);
-	Game::instance->GetContext()->PSSetShader(pixelShader, nullptr, 0);
+	Game::instance->GetContext()->VSSetShader(vertexShader.Get(), nullptr, 0);
+	Game::instance->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-	Game::instance->GetContext()->RSSetState(rastState);
+	Game::instance->GetContext()->RSSetState(rastState.Get());
 }
 
 void TriangleComponent::Draw() {

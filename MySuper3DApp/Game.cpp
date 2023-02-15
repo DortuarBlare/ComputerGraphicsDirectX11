@@ -9,17 +9,44 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 	return Game::instance->MessageHandler(hwnd, umessage, wparam, lparam);
 }
 
-Game::Game(LPCWSTR name) {
+LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
+	switch (umessage) {
+	case WM_KEYDOWN: {
+		// If a key is pressed send it to the input object so it can record that state
+		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
+
+		// Handle ESC button
+		if (static_cast<unsigned int>(wparam) == 27)
+			PostQuitMessage(0);
+
+		return 0;
+	}
+	default: {
+		return DefWindowProc(hwnd, umessage, wparam, lparam);
+	}
+	}
+}
+
+Game::Game(LPCWSTR name, int screenWidth, int screenHeight) {
 	this->name = name;
+	totalTime = 0;
+	frameCount = 0;
+	isExitRequested = false;
+	startTime = std::make_shared<std::chrono::time_point<std::chrono::steady_clock>>();
+	prevTime = std::make_shared<std::chrono::time_point<std::chrono::steady_clock>>();
+
+	display = std::make_shared<DisplayWin32>(name, screenWidth, screenHeight, WndProc);
+	viewport = std::make_shared<D3D11_VIEWPORT>();
+	swapDesc = std::make_shared<DXGI_SWAP_CHAIN_DESC>();
 }
 
 /*
 * There is no public access to constructor because of "Singleton" pattern
 * Need to use this method to create Game::instance
 */
-Game* Game::CreateInstance(LPCWSTR name) {
+Game* Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight) {
 	if (!instance)
-		instance = new Game(name);
+		instance = new Game(name, screenWidth, screenHeight);
 
 	return instance;
 }
@@ -32,30 +59,36 @@ void Game::CreateBackBuffer() {
 * Method for preparing all "Game" resources
 */
 void Game::PrepareResources() {
-	swapDesc = {}; // Init swap chain descriptor
+	// Initialize viewport parameters
+	viewport.get()->TopLeftX = 0; // X position of the left hand side of the viewport
+	viewport.get()->TopLeftY = 0; // Y position of the top of the viewport
+	viewport.get()->Width = static_cast<float>(display->GetClientWidth()); // Width of the viewport
+	viewport.get()->Height = static_cast<float>(display->GetClientHeight()); // Height of the viewport
+	viewport.get()->MinDepth = 0; // Minimum depth of the viewport. Ranges between 0 and 1
+	viewport.get()->MaxDepth = 1.0f; // Maximum depth of the viewport. Ranges between 0 and 1
 
 	// BufferDesc describes the backbuffer display mode
-	swapDesc.BufferDesc.Width = display->GetClientWidth(); // Resolution width
-	swapDesc.BufferDesc.Height = display->GetClientHeight(); // Resolution height
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Display format (32-bit unsigned normalized integer format supporting 8 bits per channel, including the alpha channel)
-	swapDesc.BufferDesc.RefreshRate.Numerator = 60; // Refresh rate in hertz numerator
-	swapDesc.BufferDesc.RefreshRate.Denominator = 1; // Refresh rate in hertz denominator (for representing integer it = 1)
-	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Scanline drawing mode (indicating the method the raster uses to create an image on a surface)
-	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Scaling mode (indicating how an image is stretched to fit a given monitor's resolution)
+	swapDesc.get()->BufferDesc.Width = display->GetClientWidth(); // Resolution width
+	swapDesc.get()->BufferDesc.Height = display->GetClientHeight(); // Resolution height
+	swapDesc.get()->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Display format (32-bit unsigned normalized integer format supporting 8 bits per channel, including the alpha channel)
+	swapDesc.get()->BufferDesc.RefreshRate.Numerator = 60; // Refresh rate in hertz numerator
+	swapDesc.get()->BufferDesc.RefreshRate.Denominator = 1; // Refresh rate in hertz denominator (for representing integer it = 1)
+	swapDesc.get()->BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Scanline drawing mode (indicating the method the raster uses to create an image on a surface)
+	swapDesc.get()->BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Scaling mode (indicating how an image is stretched to fit a given monitor's resolution)
 
 	/* 
 	* SampleDesc describes multi - sampling parameters for a resource
 	* The default sampler mode, with no anti-aliasing, has a count of 1 and a quality level of 0
 	*/
-	swapDesc.SampleDesc.Count = 1; // Number of multisamples per pixel
-	swapDesc.SampleDesc.Quality = 0; // The image quality level. The higher the quality, the lower the performance
+	swapDesc.get()->SampleDesc.Count = 1; // Number of multisamples per pixel
+	swapDesc.get()->SampleDesc.Quality = 0; // The image quality level. The higher the quality, the lower the performance
 
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
-	swapDesc.BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
-	swapDesc.OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
-	swapDesc.Windowed = true; // Fullscreen or not
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
+	swapDesc.get()->BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
+	swapDesc.get()->BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
+	swapDesc.get()->OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
+	swapDesc.get()->Windowed = true; // Fullscreen or not
+	swapDesc.get()->SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
+	swapDesc.get()->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
 
 	const int featureLevelsNumber = 1;
 	D3D_FEATURE_LEVEL featureLevels[featureLevelsNumber] = { D3D_FEATURE_LEVEL_11_1 };
@@ -69,7 +102,7 @@ void Game::PrepareResources() {
 		featureLevels, // Determine the order of feature levels to attempt to create
 		featureLevelsNumber, // The number of elements in feature levels array
 		D3D11_SDK_VERSION,
-		&swapDesc,
+		swapDesc.get(),
 		&swapChain,
 		&device,
 		nullptr, // Feature level for device
@@ -79,19 +112,9 @@ void Game::PrepareResources() {
 	if (FAILED(res)) {
 		// Well, that was unexpected
 	}
-
-	//backTex = Microsoft::WRL::ComPtr<ID3D11Texture2D>();
-	//rtv = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>();
+	
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backTex.GetAddressOf()); // Accesses one of the buffers of the back buffer chain
 	res = device->CreateRenderTargetView(backTex.Get(), nullptr, rtv.GetAddressOf());
-
-	viewport = {};
-	viewport.Width = static_cast<float>(display->GetClientWidth());
-	viewport.Height = static_cast<float>(display->GetClientHeight());
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1.0f;
 }
 
 /*
@@ -108,8 +131,7 @@ void Game::PrepareFrame() {
 
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 
-	context->RSSetViewports(1, &viewport);
-	//context->RSSetState(rastState); // In TriangleComponent Update Method
+	context->RSSetViewports(1, viewport.get());
 
 	float color[] = { Game::instance->GetTotalTime(), 0.1f, 0.1f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), color);
@@ -178,21 +200,12 @@ void Game::UpdateInternal() {
 	EndFrame();
 }
 
-void Game::Run(int screenWidth, int screenHeight) {
-	display = std::make_shared<DisplayWin32>(name, screenWidth, screenHeight, WndProc);
-
+void Game::Run() {
 	PrepareResources();
-
 	Initialize();
 
-	isExitRequested = false;
-
-	startTime = new std::chrono::time_point<std::chrono::steady_clock>();
-	prevTime = new std::chrono::time_point<std::chrono::steady_clock>();
 	*startTime = std::chrono::steady_clock::now();
 	*prevTime = *startTime;
-	totalTime = 0;
-	frameCount = 0;
 	
 	MSG msg = {};
 	while (!isExitRequested) {
@@ -210,30 +223,11 @@ void Game::Run(int screenWidth, int screenHeight) {
 		UpdateInternal();
 	}
 	
-	delete startTime;
-	delete prevTime;
 	DestroyResources();
 }
 
-LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
-	switch (umessage) {
-	case WM_KEYDOWN: {
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
-
-		if (static_cast<unsigned int>(wparam) == 27)
-			PostQuitMessage(0);
-
-		return 0;
-	}
-	default: {
-		return DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
-	}
-}
-
 void Game::Exit() {
-
+	DestroyResources();
 }
 
 void Game::DestroyResources() {
