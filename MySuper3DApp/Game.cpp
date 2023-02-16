@@ -19,6 +19,8 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 		if (static_cast<unsigned int>(wparam) == 27)
 			PostQuitMessage(0);
 
+		// Make offsets by keys
+
 		return 0;
 	}
 	default: {

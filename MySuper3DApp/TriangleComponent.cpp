@@ -1,11 +1,16 @@
 #include "TriangleComponent.h"
 
 TriangleComponent::TriangleComponent() {
+	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
+
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
 	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
+
+	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
 	pointsAmount = 8;
 }
