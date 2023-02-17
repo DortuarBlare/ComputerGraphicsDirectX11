@@ -8,12 +8,11 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderByteCode;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 	std::shared_ptr<CD3D11_RASTERIZER_DESC> rastDesc;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
 
-	int pointsAmount;
 	std::vector<DirectX::XMFLOAT4> points;
 
 	UINT strides[1];
@@ -28,7 +27,7 @@ protected:
 
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf; // For render offset
 
 public:
 	TriangleComponent();

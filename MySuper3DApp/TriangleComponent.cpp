@@ -11,8 +11,6 @@ TriangleComponent::TriangleComponent() {
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	pointsAmount = 8;
 }
 
 void TriangleComponent::Initialize() {
@@ -108,24 +106,24 @@ void TriangleComponent::Initialize() {
 	);
 
 	// Creating set of points
-	points.push_back(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
-	points.push_back(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f));
-	points.push_back(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f));
-	points.push_back(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f));
-	points.push_back(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	points.push_back(DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
 	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc.get()->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufDesc.get()->CPUAccessFlags = 0;
 	vertexBufDesc.get()->MiscFlags = 0;
 	vertexBufDesc.get()->StructureByteStride = 0;
-	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * pointsAmount;
+	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 	
 	vertexData.get()->pSysMem = points.data();
 	vertexData.get()->SysMemPitch = 0;
@@ -146,6 +144,8 @@ void TriangleComponent::Initialize() {
 	indexData.get()->SysMemSlicePitch = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), ib.GetAddressOf());
+
+	// Create const buffer
 
 	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Try to change
 	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Try to change

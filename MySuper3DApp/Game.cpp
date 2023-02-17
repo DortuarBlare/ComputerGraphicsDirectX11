@@ -88,7 +88,7 @@ void Game::PrepareResources() {
 	swapDesc.get()->BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
 	swapDesc.get()->BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
 	swapDesc.get()->OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
-	swapDesc.get()->Windowed = true; // Fullscreen or not
+	swapDesc.get()->Windowed = true; // Windowed or not
 	swapDesc.get()->SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
 	swapDesc.get()->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
 
