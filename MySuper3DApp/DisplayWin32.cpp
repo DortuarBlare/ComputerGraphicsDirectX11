@@ -23,7 +23,13 @@ DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int clientWidth, int client
 	this->clientWidth = clientWidth;
 	this->clientHeight = clientHeight;
 
-	windowRect = { 0, 0, static_cast<LONG>(clientWidth), static_cast<LONG>(clientHeight) };
+	windowRect = {
+		0,
+		0,
+		static_cast<LONG>(clientWidth),
+		static_cast<LONG>(clientHeight)
+	};
+
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	auto dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_THICKFRAME;
@@ -39,13 +45,15 @@ DisplayWin32::DisplayWin32(LPCWSTR& applicationName, int clientWidth, int client
 		posX, posY,
 		windowRect.right - windowRect.left,
 		windowRect.bottom - windowRect.top,
-		nullptr, nullptr, hInstance, nullptr
+		nullptr,
+		nullptr,
+		hInstance,
+		nullptr
 	);
 
 	ShowWindow(hWnd, SW_SHOW);
 	SetForegroundWindow(hWnd);
 	SetFocus(hWnd);
-
 	ShowCursor(true);
 }
 

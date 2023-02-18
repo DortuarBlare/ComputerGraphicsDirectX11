@@ -15,13 +15,68 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 		// If a key is pressed send it to the input object so it can record that state
 		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
 
+		auto key = static_cast<unsigned int>(wparam);
+
 		// Handle ESC button
-		if (static_cast<unsigned int>(wparam) == 27)
+		if (key == 27)
 			PostQuitMessage(0);
 
 		// Make offsets by keys
+		if (key == 37)
+			offset -= {0.01f, 0.0f, 0.0f, 0.0f};
+		if (key == 39)
+			offset += {0.01f, 0.0f, 0.0f, 0.0f};
+		if (key == 38)
+			offset += {0.0f, 0.01f, 0.0f, 0.0f};
+		if (key == 40)
+			offset -= {0.0f, 0.01f, 0.0f, 0.0f};
 
 		return 0;
+	}
+	case WM_INPUT: {
+		UINT dwSize = 0;
+		GetRawInputData(reinterpret_cast<HRAWINPUT>(lparam), RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
+		LPBYTE lpb = new BYTE[dwSize];
+
+		if (lpb == nullptr) 
+			return 0;
+
+		if (GetRawInputData((HRAWINPUT)lparam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER)) != dwSize)
+			OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+
+		RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(lpb);
+
+		if (raw->header.dwType == RIM_TYPEKEYBOARD) {
+			//printf(" Kbd: make=%04i Flags:%04i Reserved:%04i ExtraInformation:%08i, msg=%04i VK=%i \n",
+			//	raw->data.keyboard.MakeCode,
+			//	raw->data.keyboard.Flags,
+			//	raw->data.keyboard.Reserved,
+			//	raw->data.keyboard.ExtraInformation,
+			//	raw->data.keyboard.Message,
+			//	raw->data.keyboard.VKey);
+
+			inputDevice.get()->OnKeyDown({
+				raw->data.keyboard.MakeCode,
+				raw->data.keyboard.Flags,
+				raw->data.keyboard.VKey,
+				raw->data.keyboard.Message
+				});
+		}
+		else if (raw->header.dwType == RIM_TYPEMOUSE) {
+			//printf(" Mouse: X=%04d Y:%04d \n", raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+			inputDevice->OnMouseMove({
+				raw->data.mouse.usFlags,
+				raw->data.mouse.usButtonFlags,
+				static_cast<int>(raw->data.mouse.ulExtraInformation),
+				static_cast<int>(raw->data.mouse.ulRawButtons),
+				static_cast<short>(raw->data.mouse.usButtonData),
+				raw->data.mouse.lLastX,
+				raw->data.mouse.lLastY
+				});
+		}
+
+		delete[] lpb;
+		return DefWindowProc(hwnd, umessage, wparam, lparam);
 	}
 	default: {
 		return DefWindowProc(hwnd, umessage, wparam, lparam);
@@ -101,10 +156,10 @@ void Game::PrepareResources() {
 		featureLevelsNumber, // The number of elements in feature levels array
 		D3D11_SDK_VERSION,
 		swapDesc.get(),
-		&swapChain,
-		&device,
+		swapChain.GetAddressOf(),
+		device.GetAddressOf(),
 		nullptr, // Feature level for device
-		&context
+		context.GetAddressOf()
 	);
 
 	if (FAILED(res)) {
@@ -113,6 +168,8 @@ void Game::PrepareResources() {
 	
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backTex.GetAddressOf()); // Accesses one of the buffers of the back buffer chain
 	res = device->CreateRenderTargetView(backTex.Get(), nullptr, rtv.GetAddressOf());
+
+	inputDevice = std::make_shared<InputDevice>();
 }
 
 /*
@@ -130,9 +187,8 @@ void Game::PrepareFrame() {
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 
 	context->RSSetViewports(1, viewport.get());
-
-	float color[] = { Game::instance->totalTime, 0.1f, 0.1f, 1.0f };
-	context->ClearRenderTargetView(rtv.Get(), color);
+	float backgroundColor[] = { 0.18f, 0.55f, 0.34f, 1.0f };
+	context->ClearRenderTargetView(rtv.Get(), backgroundColor);
 }
 
 /*

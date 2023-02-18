@@ -15,19 +15,20 @@ protected:
 
 	std::vector<DirectX::XMFLOAT4> points;
 
-	UINT strides[1];
-	UINT offsets[1];
 	std::shared_ptr<D3D11_BUFFER_DESC> vertexBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> vertexData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vb;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuf;
 
 	std::shared_ptr<D3D11_BUFFER_DESC> indexBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> indexData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> ib;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuf;
 
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf; // For render offset
+
+	UINT strides[1];
+	UINT offsets[1];
 
 public:
 	TriangleComponent();

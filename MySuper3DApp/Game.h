@@ -8,6 +8,9 @@
 #include <directxmath.h>
 #include "GameComponent.h"
 #include "DisplayWin32.h"
+#include "InputDevice.h"
+#include "SimpleMath.h"
+#include "SimpleMath.inl"
 #include <iostream>
 #include <chrono>
 #include <vector>
@@ -19,9 +22,10 @@
 
 class DisplayWin32;
 class GameComponent;
+class InputDevice;
 
 class Game {
-private:
+protected:
 	LPCWSTR	name; // Name of the game application
 	std::shared_ptr<DisplayWin32> display; // WinApi display
 	std::shared_ptr<D3D11_VIEWPORT> viewport; // Defines the dimensions of a viewport
@@ -31,6 +35,8 @@ private:
 	std::shared_ptr<DXGI_SWAP_CHAIN_DESC> swapDesc; // Descriptor, that describes swap chain
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backTex; // 2D texture interface manages texel data, which is structured memory
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv; // Identifies the render-target subresources that can be accessed during rendering (Back buffer?)
+
+	std::shared_ptr<InputDevice> inputDevice; // For input handling
 
 	bool isExitRequested; // For main application cycle
 
@@ -55,6 +61,7 @@ public:
 	float totalTime;
 	unsigned int frameCount;
 
+	DirectX::SimpleMath::Vector4 offset = {};
 
 	static Game* CreateInstance(LPCWSTR name, int screenWidth, int screenHeight);
 	void RestoreTargets();

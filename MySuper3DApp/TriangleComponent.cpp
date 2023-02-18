@@ -102,30 +102,30 @@ void TriangleComponent::Initialize() {
 	);
 
 	// Creating set of points
-	points.push_back(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.1f, 0.5f, 0.5f, 1.0f)); // Position
 	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(-0.1f, -0.5f, 0.5f, 1.0f)); // Position
 	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(0.1f, -0.5f, 0.5f, 1.0f)); // Position
 	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
-	points.push_back(DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f)); // Position
+	points.push_back(DirectX::XMFLOAT4(-0.1f, 0.5f, 0.5f, 1.0f)); // Position
 	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
+	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc.get()->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufDesc.get()->CPUAccessFlags = 0;
 	vertexBufDesc.get()->MiscFlags = 0;
 	vertexBufDesc.get()->StructureByteStride = 0;
-	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 	
 	vertexData.get()->pSysMem = points.data();
 	vertexData.get()->SysMemPitch = 0;
 	vertexData.get()->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vb.GetAddressOf());
+	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
 	int indeces[] = { 0, 1, 2, 1, 0, 3 };
 	indexBufDesc.get()->ByteWidth = sizeof(int) * std::size(indeces);
@@ -139,9 +139,17 @@ void TriangleComponent::Initialize() {
 	indexData.get()->SysMemPitch = 0;
 	indexData.get()->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), ib.GetAddressOf());
+	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
+	constBufDesc.get()->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
+	constBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
+	constBufDesc.get()->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDesc.get()->CPUAccessFlags = 0;
+	constBufDesc.get()->MiscFlags = 0;
+	constBufDesc.get()->StructureByteStride = 0;
+
+	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr/*constData.get()*/, constBuf.GetAddressOf());
 
 	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Try to change
 	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Try to change
@@ -149,20 +157,23 @@ void TriangleComponent::Initialize() {
 	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
-	strides[0] = 32; // Position and color in one vertex buffer, so 32
+	strides[0] = 32; // Position and color in one vertex buffer, so array with one value - 32 (2 float4)
 	offsets[0] = 0;
 }
 
 void TriangleComponent::Update() {
 	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Game::instance->GetContext()->IASetIndexBuffer(ib.Get(), DXGI_FORMAT_R32_UINT, 0);
-	Game::instance->GetContext()->IASetVertexBuffers(0, 1, vb.GetAddressOf(), strides, offsets);
+	Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
+	Game::instance->GetContext()->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
 
 	Game::instance->GetContext()->VSSetShader(vertexShader.Get(), nullptr, 0);
 	Game::instance->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
 
 	Game::instance->GetContext()->RSSetState(rastState.Get());
+
+	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &(Game::instance->offset), 0, 0);
+	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 }
 
 void TriangleComponent::Draw() {
