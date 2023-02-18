@@ -31,12 +31,10 @@ private:
 	std::shared_ptr<DXGI_SWAP_CHAIN_DESC> swapDesc; // Descriptor, that describes swap chain
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backTex; // 2D texture interface manages texel data, which is structured memory
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv; // Identifies the render-target subresources that can be accessed during rendering (Back buffer?)
-	HRESULT res; // Used for return codes from "Direct3D 11" functions
 
 	bool isExitRequested; // For main application cycle
 
 	Game(LPCWSTR name, int screenWidth, int screenHeight);
-	void CreateBackBuffer();
 
 protected:
 	void UpdateInternal();
@@ -53,6 +51,7 @@ public:
 	std::vector<GameComponent*> components;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;
+	HRESULT res; // Used for return codes from "Direct3D 11" functions
 	float totalTime;
 	unsigned int frameCount;
 
@@ -72,16 +71,7 @@ public:
 
 	Microsoft::WRL::ComPtr <IDXGISwapChain> GetSwapChain();
 
-	HRESULT GetRes();
-	void SetRes(HRESULT res);
-
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> GetRTV();
-
-	float GetTotalTime();
-	void SetTotalTime(float totalTime);
-
-	unsigned int GetFrameCount();
-	void SetFrameCount(unsigned int frameCount);
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

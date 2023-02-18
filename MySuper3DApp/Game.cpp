@@ -53,10 +53,6 @@ Game* Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight) {
 	return instance;
 }
 
-void Game::CreateBackBuffer() {
-	
-}
-
 /*
 * Method for preparing all "Game" resources
 */
@@ -135,7 +131,7 @@ void Game::PrepareFrame() {
 
 	context->RSSetViewports(1, viewport.get());
 
-	float color[] = { Game::instance->GetTotalTime(), 0.1f, 0.1f, 1.0f };
+	float color[] = { Game::instance->totalTime, 0.1f, 0.1f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), color);
 }
 
@@ -242,14 +238,6 @@ std::shared_ptr<DisplayWin32> Game::GetDisplay() {
 	return display;
 }
 
-HRESULT Game::GetRes() {
-	return res;
-}
-
-void Game::SetRes(HRESULT res) {
-	this->res = res;
-}
-
 Microsoft::WRL::ComPtr<ID3D11Device> Game::GetDevice() {
 	return device;
 }
@@ -264,20 +252,4 @@ Microsoft::WRL::ComPtr <IDXGISwapChain> Game::GetSwapChain() {
 
 Microsoft::WRL::ComPtr <ID3D11DeviceContext> Game::GetContext() {
 	return context;
-}
-
-float Game::GetTotalTime() {
-	return totalTime;
-}
-
-void Game::SetTotalTime(float totalTime) {
-	this->totalTime = totalTime;
-}
-
-unsigned int Game::GetFrameCount() {
-	return frameCount;
-}
-
-void Game::SetFrameCount(unsigned int frameCount) {
-	this->frameCount = frameCount;
 }

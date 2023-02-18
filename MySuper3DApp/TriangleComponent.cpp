@@ -19,36 +19,32 @@ void TriangleComponent::Initialize() {
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
-	Game::instance->SetRes(
-		D3DCompileFromFile(
-			L"./Shaders/MyVeryFirstShader.hlsl",
-			Shader_Macros /*macros*/,
-			nullptr /*include*/,
-			"PSMain",
-			"ps_5_0",
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-			0,
-			pixelShaderByteCode.GetAddressOf(),
-			&errorPixelCode
-		)
+	Game::instance->res = D3DCompileFromFile(
+		L"./Shaders/MyVeryFirstShader.hlsl",
+		Shader_Macros /*macros*/,
+		nullptr /*include*/,
+		"PSMain",
+		"ps_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		0,
+		pixelShaderByteCode.GetAddressOf(),
+		&errorPixelCode
 	);
 
 	// Compile vertex shader
-	Game::instance->SetRes(
-		D3DCompileFromFile(
-			L"./Shaders/MyVeryFirstShader.hlsl",
-			nullptr /*macros*/,
-			nullptr /*include*/,
-			"VSMain",
-			"vs_5_0", // Shader target (Pixel / Vertex)
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Different flags (for example code translation)
-			0,
-			vertexShaderByteCode.GetAddressOf(),
-			&errorVertexCode
-		)
+	Game::instance->res = D3DCompileFromFile(
+		L"./Shaders/MyVeryFirstShader.hlsl",
+		nullptr /*macros*/,
+		nullptr /*include*/,
+		"VSMain",
+		"vs_5_0", // Shader target (Pixel / Vertex)
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Different flags (for example code translation)
+		0,
+		vertexShaderByteCode.GetAddressOf(),
+		&errorVertexCode
 	);
 
-	if (FAILED(Game::instance->GetRes())) {
+	if (FAILED(Game::instance->res)) {
 		// If the shader failed to compile it should have written something to the error message.
 		if (errorVertexCode) {
 			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
@@ -78,13 +74,13 @@ void TriangleComponent::Initialize() {
 
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 		D3D11_INPUT_ELEMENT_DESC {
-			"POSITION",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			0,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0
+			"POSITION", // HLSL semantic associated with this element in a shader input-signature
+			0, // Semantic index modifies a semantic, with an integer index number
+			DXGI_FORMAT_R32G32B32A32_FLOAT, // Data type of the element data
+			0, // Integer value that identifies the input-assembler. Valid values are between 0 and 15
+			0, // Offset (in bytes) from the start of the vertex (Optional)
+			D3D11_INPUT_PER_VERTEX_DATA, // Identifies the input data class for a single input slot
+			0 // The number of instances to draw using the same per-instance data before advancing in the buffer by one element
 		},
 		D3D11_INPUT_ELEMENT_DESC {
 			"COLOR",
@@ -150,10 +146,10 @@ void TriangleComponent::Initialize() {
 	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Try to change
 	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Try to change
 
-	Game::instance->SetRes(Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf()));
+	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
-	strides[0] = 32;
+	strides[0] = 32; // Position and color in one vertex buffer, so 32
 	offsets[0] = 0;
 }
 
