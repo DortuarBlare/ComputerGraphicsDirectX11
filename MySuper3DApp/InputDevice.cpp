@@ -7,8 +7,7 @@
 using namespace DirectX::SimpleMath;
 
 
-InputDevice::InputDevice()
-{
+InputDevice::InputDevice() {
 	keys = new std::unordered_set<Keys>();
 	
 	RAWINPUTDEVICE Rid[2];

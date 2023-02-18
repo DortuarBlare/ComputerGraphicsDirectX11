@@ -27,22 +27,21 @@ class InputDevice;
 class Game {
 protected:
 	LPCWSTR	name; // Name of the game application
+	int clientWidth;
+	int clientHeight;
+	bool windowed;
+
 	std::shared_ptr<DisplayWin32> display; // WinApi display
 	std::shared_ptr<D3D11_VIEWPORT> viewport; // Defines the dimensions of a viewport
 	Microsoft::WRL::ComPtr<ID3D11Device> device; // The device interface represents a virtual adapter and it is used to create resources
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context; // Interface represents a device context which generates rendering commands
-	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain; // Interface implements one or more "IDXGISurface" for storing rendered data before presenting it to an output
 	std::shared_ptr<DXGI_SWAP_CHAIN_DESC> swapDesc; // Descriptor, that describes swap chain
+	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain; // Interface implements one or more "IDXGISurface" for storing rendered data before presenting it to an output
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backTex; // 2D texture interface manages texel data, which is structured memory
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv; // Identifies the render-target subresources that can be accessed during rendering (Back buffer?)
 
-	std::shared_ptr<InputDevice> inputDevice; // For input handling
+	Game(LPCWSTR name, int clientWidth, int clientHeight, bool windowed);
 
-	bool isExitRequested; // For main application cycle
-
-	Game(LPCWSTR name, int screenWidth, int screenHeight);
-
-protected:
 	void UpdateInternal();
 	void DestroyResources();
 	void PrepareResources();
@@ -55,19 +54,20 @@ protected:
 public:
 	static Game* instance; // Singleton
 	std::vector<GameComponent*> components;
+	std::shared_ptr<InputDevice> inputDevice; // For input handling
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;
 	HRESULT res; // Used for return codes from "Direct3D 11" functions
 	float totalTime;
+	float deltaTime;
 	unsigned int frameCount;
 
-	DirectX::SimpleMath::Vector4 offset = {};
-
-	static Game* CreateInstance(LPCWSTR name, int screenWidth, int screenHeight);
+	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 	void RestoreTargets();
 	void Run();
-	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 	void Exit();
+
+	virtual LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 
 	std::shared_ptr<DisplayWin32> GetDisplay();

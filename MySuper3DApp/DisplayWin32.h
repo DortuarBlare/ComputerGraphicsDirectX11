@@ -10,8 +10,8 @@ protected:
 	HINSTANCE hInstance;
 	HWND hWnd;
 	WNDCLASSEX wc;
-	int clientHeight;
 	int clientWidth;
+	int clientHeight;
 
 public:
 	DisplayWin32(LPCWSTR& applicationName, int clientWidth, int clientHeight, WNDPROC wndProc);

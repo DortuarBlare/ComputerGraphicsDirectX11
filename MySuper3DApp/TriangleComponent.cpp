@@ -1,6 +1,6 @@
 #include "TriangleComponent.h"
 
-TriangleComponent::TriangleComponent() {
+TriangleComponent::TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> offset) {
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -11,6 +11,8 @@ TriangleComponent::TriangleComponent() {
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	this->offset = offset;
 }
 
 void TriangleComponent::Initialize() {
@@ -88,9 +90,9 @@ void TriangleComponent::Initialize() {
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			0,
 			D3D11_APPEND_ALIGNED_ELEMENT,
-			D3D11_INPUT_PER_VERTEX_DATA, // Per vertex or per instance
+			D3D11_INPUT_PER_VERTEX_DATA,
 			0
-		}
+		},
 	};
 
 	Game::instance->GetDevice()->CreateInputLayout(
@@ -100,19 +102,6 @@ void TriangleComponent::Initialize() {
 		vertexShaderByteCode->GetBufferSize(),
 		layout.GetAddressOf()
 	);
-
-	// Creating set of points
-	points.push_back(DirectX::XMFLOAT4(0.1f, 0.5f, 0.5f, 1.0f)); // Position
-	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
-
-	points.push_back(DirectX::XMFLOAT4(-0.1f, -0.5f, 0.5f, 1.0f)); // Position
-	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
-
-	points.push_back(DirectX::XMFLOAT4(0.1f, -0.5f, 0.5f, 1.0f)); // Position
-	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
-
-	points.push_back(DirectX::XMFLOAT4(-0.1f, 0.5f, 0.5f, 1.0f)); // Position
-	points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color
 
 	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
@@ -127,15 +116,15 @@ void TriangleComponent::Initialize() {
 
 	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
-	int indeces[] = { 0, 1, 2, 1, 0, 3 };
-	indexBufDesc.get()->ByteWidth = sizeof(int) * std::size(indeces);
+	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3, 4, 5, 6, 5, 4, 7 });
+	indexBufDesc.get()->ByteWidth = sizeof(int) * indeces.size();
 	indexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.get()->BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufDesc.get()->CPUAccessFlags = 0;
 	indexBufDesc.get()->MiscFlags = 0;
 	indexBufDesc.get()->StructureByteStride = 0;
 
-	indexData.get()->pSysMem = indeces;
+	indexData.get()->pSysMem = indeces.data();
 	indexData.get()->SysMemPitch = 0;
 	indexData.get()->SysMemSlicePitch = 0;
 
@@ -172,12 +161,13 @@ void TriangleComponent::Update() {
 
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
-	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &(Game::instance->offset), 0, 0);
+	// Use constant buffer for offset
+	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, offset.get(), 0, 0);
 	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 }
 
 void TriangleComponent::Draw() {
-	Game::instance->GetContext()->DrawIndexed(6, 0, 0); // Main function for draw (DrawCall)
+	Game::instance->GetContext()->DrawIndexed(12, 0, 0); // Main function for draw (DrawCall)
 }
 
 void TriangleComponent::Reload() {

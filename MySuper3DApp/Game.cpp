@@ -21,16 +21,6 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 		if (key == 27)
 			PostQuitMessage(0);
 
-		// Make offsets by keys
-		if (key == 37)
-			offset -= {0.01f, 0.0f, 0.0f, 0.0f};
-		if (key == 39)
-			offset += {0.01f, 0.0f, 0.0f, 0.0f};
-		if (key == 38)
-			offset += {0.0f, 0.01f, 0.0f, 0.0f};
-		if (key == 40)
-			offset -= {0.0f, 0.01f, 0.0f, 0.0f};
-
 		return 0;
 	}
 	case WM_INPUT: {
@@ -84,15 +74,18 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 	}
 }
 
-Game::Game(LPCWSTR name, int screenWidth, int screenHeight) {
+Game::Game(LPCWSTR name, int clientWidth, int clientHeight, bool windowed) {
 	this->name = name;
+	this->clientWidth = clientWidth;
+	this->clientHeight = clientHeight;
+	this->windowed = windowed;
+
 	totalTime = 0;
+	deltaTime = 0;
 	frameCount = 0;
-	isExitRequested = false;
 	startTime = std::make_shared<std::chrono::time_point<std::chrono::steady_clock>>();
 	prevTime = std::make_shared<std::chrono::time_point<std::chrono::steady_clock>>();
 
-	display = std::make_shared<DisplayWin32>(name, screenWidth, screenHeight, WndProc);
 	viewport = std::make_shared<D3D11_VIEWPORT>();
 	swapDesc = std::make_shared<DXGI_SWAP_CHAIN_DESC>();
 }
@@ -101,17 +94,18 @@ Game::Game(LPCWSTR name, int screenWidth, int screenHeight) {
 * There is no public access to constructor because of "Singleton" pattern
 * Need to use this method to create Game::instance
 */
-Game* Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight) {
+void Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) {
 	if (!instance)
-		instance = new Game(name, screenWidth, screenHeight);
-
-	return instance;
+		instance = new Game(name, screenWidth, screenHeight, windowed);
 }
 
 /*
 * Method for preparing all "Game" resources
 */
 void Game::PrepareResources() {
+	display = std::make_shared<DisplayWin32>(name, clientWidth, clientHeight, WndProc);
+	inputDevice = std::make_shared<InputDevice>();
+
 	// Initialize viewport parameters
 	viewport.get()->TopLeftX = 0; // X position of the left hand side of the viewport
 	viewport.get()->TopLeftY = 0; // Y position of the top of the viewport
@@ -139,7 +133,7 @@ void Game::PrepareResources() {
 	swapDesc.get()->BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
 	swapDesc.get()->BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
 	swapDesc.get()->OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
-	swapDesc.get()->Windowed = true; // Windowed or not
+	swapDesc.get()->Windowed = windowed;
 	swapDesc.get()->SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
 	swapDesc.get()->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
 
@@ -168,15 +162,12 @@ void Game::PrepareResources() {
 	
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backTex.GetAddressOf()); // Accesses one of the buffers of the back buffer chain
 	res = device->CreateRenderTargetView(backTex.Get(), nullptr, rtv.GetAddressOf());
-
-	inputDevice = std::make_shared<InputDevice>();
 }
 
 /*
 * Method for initializing all "GameComponent" items in vector
 */
 void Game::Initialize() {
-	// Compile shaders
 	for (auto component : components)
 		component->Initialize();
 }
@@ -225,7 +216,7 @@ void Game::EndFrame() {
 */
 void Game::UpdateInternal() {
 	auto curTime = std::chrono::steady_clock::now();
-	float deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - *prevTime).count() / 1000000.0f;
+	deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - *prevTime).count() / 1000000.0f;
 	*prevTime = curTime;
 
 	totalTime += deltaTime;
@@ -262,19 +253,14 @@ void Game::Run() {
 	*prevTime = *startTime;
 	
 	MSG msg = {};
-	while (!isExitRequested) {
+	while (msg.message != WM_QUIT) {
 		// Handle the windows messages.
-		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-
-		// If windows signals to end the application then exit out.
-		if (msg.message == WM_QUIT) {
-			isExitRequested = true;
-		}
-
-		UpdateInternal();
+		else
+			UpdateInternal();
 	}
 	
 	DestroyResources();
