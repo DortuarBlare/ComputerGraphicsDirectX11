@@ -1,9 +1,9 @@
 #pragma once
-#include "GameComponent.h"
+#include "RenderComponent.h"
 
-class GameComponent;
+class RenderComponent;
 
-class TriangleComponent : public GameComponent {
+class TriangleRenderComponent : public RenderComponent {
 protected:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
@@ -25,7 +25,7 @@ protected:
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
-	std::shared_ptr<DirectX::SimpleMath::Vector4> offset; // For offset of rendering object
+	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset; // For offset of rendering object
 
 	std::vector<int> indeces; // Fill before Initialize()
 
@@ -35,10 +35,12 @@ protected:
 public:
 	std::vector<DirectX::XMFLOAT4> points; // Fill before Initialize()
 
-	TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> offset);
+	TriangleRenderComponent();
+	TriangleRenderComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
 
 	void Initialize();
 	void Update();
+	void FixedUpdate();
 	void Draw();
 	void Reload();
 	void DestroyResources();

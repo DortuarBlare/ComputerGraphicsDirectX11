@@ -1,12 +1,14 @@
 #include "Game.h"
 #include "PingPongGame.h"
-#include "TriangleComponent.h"
+#include "SquareRenderComponent.h"
 
 int main() {
+	//PingPongGame::CreateInstance(L"Ping Pong", 1920, 1080, false);
 	PingPongGame::CreateInstance(L"Ping Pong", 1280, 720, true);
 	PingPongGame* game = dynamic_cast<PingPongGame*>(Game::instance);
 	
-	TriangleComponent tc(game->leftPlayerOffset);
+	GameObject go1 = {};
+	SquareRenderComponent tc(game->leftPlayerOffset);
 
 	// First square
 	tc.points.push_back(DirectX::XMFLOAT4(-0.8f, 0.5f, 0.5f, 1.0f)); // Position Vertex 1
@@ -18,7 +20,10 @@ int main() {
 	tc.points.push_back(DirectX::XMFLOAT4(-1.0f, 0.5f, 0.5f, 1.0f)); // Position Vertex 4
 	tc.points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color Vertex 4
 
-	TriangleComponent tc2(game->rightPlayerOffset);
+	go1.components.push_back(&tc);
+
+	GameObject go2 = {};
+	SquareRenderComponent tc2(game->rightPlayerOffset);
 
 	// Second square
 	tc2.points.push_back(DirectX::XMFLOAT4(1.0f, 0.5f, 0.5f, 1.0f)); // Position Vertex 1
@@ -30,7 +35,9 @@ int main() {
 	tc2.points.push_back(DirectX::XMFLOAT4(0.8f, 0.5f, 0.5f, 1.0f)); // Position Vertex 4
 	tc2.points.push_back(DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)); // Color Vertex 4
 
-	PingPongGame::instance->components.push_back(&tc);
-	PingPongGame::instance->components.push_back(&tc2);
+	go1.components.push_back(&tc2);
+
+	PingPongGame::instance->gameObjects.push_back(&go1);
+	PingPongGame::instance->gameObjects.push_back(&go2);
 	PingPongGame::instance->Run();
 }

@@ -1,12 +1,16 @@
 #include "PingPongGame.h"
 
+/*
+* Call Game::MessageHandler for base logic
+* Handle player input specifically for this game
+*/
 LRESULT PingPongGame::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
 	Game::MessageHandler(hwnd, umessage, wparam, lparam);
 
 	switch (umessage) {
 	case WM_KEYDOWN: {
 		auto key = static_cast<unsigned int>(wparam);
-
+		
 		// Input of left player
 		HandleLeftPlayerKeyDown(key);
 
@@ -35,6 +39,10 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	rightPlayerOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
 }
 
+/*
+* Call Game::Update() for base logic
+* Handle input player here because of better time control
+*/
 void PingPongGame::Update() {
 	Game::Update();
 
@@ -59,6 +67,9 @@ void PingPongGame::Update() {
 		*rightPlayerOffset -= {0.0f, 0.25f * deltaTime, 0.0f, 0.0f};
 }
 
+/*
+* Handle left player input when he pressed control keys
+*/
 void PingPongGame::HandleLeftPlayerKeyDown(unsigned int key) {
 	if (!inputDevice)
 		return;
@@ -76,6 +87,9 @@ void PingPongGame::HandleLeftPlayerKeyDown(unsigned int key) {
 		inputDevice->AddPressedKey(Keys::S);
 }
 
+/*
+* Handle left player input when he stopped pressing control keys
+*/
 void PingPongGame::HandleLeftPlayerKeyUp(unsigned int key) {
 	if (key == 65)
 		inputDevice->RemovePressedKey(Keys::A);
@@ -90,6 +104,9 @@ void PingPongGame::HandleLeftPlayerKeyUp(unsigned int key) {
 		inputDevice->RemovePressedKey(Keys::S);
 }
 
+/*
+* Handle right player input when he pressed control keys
+*/
 void PingPongGame::HandleRightPlayerKeyDown(unsigned int key) {
 	if (!inputDevice)
 		return;
@@ -107,6 +124,9 @@ void PingPongGame::HandleRightPlayerKeyDown(unsigned int key) {
 		inputDevice->AddPressedKey(Keys::Down);
 }
 
+/*
+* Handle right player input when he stopped pressing control keys
+*/
 void PingPongGame::HandleRightPlayerKeyUp(unsigned int key) {
 	if (key == 37)
 		inputDevice->RemovePressedKey(Keys::Left);

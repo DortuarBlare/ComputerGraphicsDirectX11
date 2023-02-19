@@ -1,6 +1,6 @@
-#include "TriangleComponent.h"
+#include "TriangleRenderComponent.h"
 
-TriangleComponent::TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> offset) {
+TriangleRenderComponent::TriangleRenderComponent() {
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -12,7 +12,26 @@ TriangleComponent::TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	this->offset = offset;
+	renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
+
+	indeces.insert(indeces.end(), { 0, 1, 2 });
+}
+
+TriangleRenderComponent::TriangleRenderComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset) {
+	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
+
+	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	this->renderOffset = renderOffset;
+
+	indeces.insert(indeces.end(), { 0, 1, 2 });
 }
 
 /*
@@ -20,7 +39,7 @@ TriangleComponent::TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector
 * Creating pixel, shader and constant buffers
 * Configure rasterizer for the object
 */
-void TriangleComponent::Initialize() {
+void TriangleRenderComponent::Initialize() {
 	ID3DBlob* errorPixelCode = nullptr;
 	ID3DBlob* errorVertexCode = nullptr;
 
@@ -120,7 +139,6 @@ void TriangleComponent::Initialize() {
 
 	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
-	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3/*, 4, 5, 6, 5, 4, 7 */ }); // First 6 indeces - one square, second 6 indeces - another square
 	indexBufDesc->ByteWidth = sizeof(int) * indeces.size();
 	indexBufDesc->Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -157,15 +175,19 @@ void TriangleComponent::Initialize() {
 /*
 * Component updating on each frame
 */
-void TriangleComponent::Update() {
+void TriangleRenderComponent::Update() {
 	
+}
+
+void TriangleRenderComponent::FixedUpdate() {
+
 }
 
 /*
 * Draw on each frame (Drawcall)
 * It draws a square consisting of 2 triangles
 */
-void TriangleComponent::Draw() {
+void TriangleRenderComponent::Draw() {
 	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -177,7 +199,7 @@ void TriangleComponent::Draw() {
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
 	// Use constant buffer for offset
-	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, offset.get(), 0, 0);
+	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
 	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
 	Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
@@ -186,13 +208,13 @@ void TriangleComponent::Draw() {
 /*
 * There is still no understanding of what will happen here
 */
-void TriangleComponent::Reload() {
+void TriangleRenderComponent::Reload() {
 
 }
 
 /*
 * Call in the destructor if there is a need for it
 */
-void TriangleComponent::DestroyResources() {
+void TriangleRenderComponent::DestroyResources() {
 
 }

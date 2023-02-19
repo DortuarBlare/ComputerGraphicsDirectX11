@@ -13,7 +13,7 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 	switch (umessage) {
 	case WM_KEYDOWN: {
 		// If a key is pressed send it to the input object so it can record that state
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
+		//std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
 
 		auto key = static_cast<unsigned int>(wparam);
 
@@ -168,7 +168,7 @@ void Game::PrepareResources() {
 * Initialize all "GameComponent" items in vector
 */
 void Game::Initialize() {
-	for (auto component : components)
+	for (auto component : gameObjects)
 		component->Initialize();
 }
 
@@ -190,16 +190,16 @@ void Game::PrepareFrame() {
 * Update all "GameComponent" items in vector
 */
 void Game::Update() {
-	for (auto component : components)
-		component->Update();
+	for (auto gameObject : gameObjects)
+		gameObject->Update();
 }
 
 /*
 * Draw all "GameComponent" items in vector
 */
 void Game::Draw() {
-	for (auto component : components)
-		component->Draw();
+	for (auto gameObject : gameObjects)
+		gameObject->Draw();
 }
 
 /*
@@ -286,8 +286,8 @@ void Game::Exit() {
 }
 
 void Game::DestroyResources() {
-	for (auto component : components)
-		component->DestroyResources();
+	for (auto gameObject : gameObjects)
+		gameObject->DestroyResources();
 }
 
 

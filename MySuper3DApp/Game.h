@@ -6,14 +6,15 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
-#include "GameComponent.h"
-#include "DisplayWin32.h"
-#include "InputDevice.h"
 #include "SimpleMath.h"
 #include "SimpleMath.inl"
 #include <iostream>
 #include <chrono>
 #include <vector>
+
+#include "GameObject.h"
+#include "DisplayWin32.h"
+#include "InputDevice.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -21,7 +22,7 @@
 #pragma comment(lib, "dxguid.lib")
 
 class DisplayWin32;
-class GameComponent;
+class RenderComponent;
 class InputDevice;
 
 class Game {
@@ -53,7 +54,7 @@ protected:
 
 public:
 	static Game* instance; // Singleton
-	std::vector<GameComponent*> components;
+	std::vector<GameObject*> gameObjects;
 	std::shared_ptr<InputDevice> inputDevice; // For input handling
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;
