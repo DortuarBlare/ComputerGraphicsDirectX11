@@ -100,42 +100,42 @@ void Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool 
 }
 
 /*
-* Method for preparing all "Game" resources
+* Prepare all "Game" resources
 */
 void Game::PrepareResources() {
 	display = std::make_shared<DisplayWin32>(name, clientWidth, clientHeight, WndProc);
 	inputDevice = std::make_shared<InputDevice>();
 
 	// Initialize viewport parameters
-	viewport.get()->TopLeftX = 0; // X position of the left hand side of the viewport
-	viewport.get()->TopLeftY = 0; // Y position of the top of the viewport
-	viewport.get()->Width = static_cast<float>(display->GetClientWidth()); // Width of the viewport
-	viewport.get()->Height = static_cast<float>(display->GetClientHeight()); // Height of the viewport
-	viewport.get()->MinDepth = 0; // Minimum depth of the viewport. Ranges between 0 and 1
-	viewport.get()->MaxDepth = 1.0f; // Maximum depth of the viewport. Ranges between 0 and 1
+	viewport->TopLeftX = 0; // X position of the left hand side of the viewport
+	viewport->TopLeftY = 0; // Y position of the top of the viewport
+	viewport->Width = static_cast<float>(display->GetClientWidth()); // Width of the viewport
+	viewport->Height = static_cast<float>(display->GetClientHeight()); // Height of the viewport
+	viewport->MinDepth = 0; // Minimum depth of the viewport. Ranges between 0 and 1
+	viewport->MaxDepth = 1.0f; // Maximum depth of the viewport. Ranges between 0 and 1
 
 	// BufferDesc describes the backbuffer display mode
-	swapDesc.get()->BufferDesc.Width = display->GetClientWidth(); // Resolution width
-	swapDesc.get()->BufferDesc.Height = display->GetClientHeight(); // Resolution height
-	swapDesc.get()->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Display format (32-bit unsigned normalized integer format supporting 8 bits per channel, including the alpha channel)
-	swapDesc.get()->BufferDesc.RefreshRate.Numerator = 60; // Refresh rate in hertz numerator
-	swapDesc.get()->BufferDesc.RefreshRate.Denominator = 1; // Refresh rate in hertz denominator (for representing integer it = 1)
-	swapDesc.get()->BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Scanline drawing mode (indicating the method the raster uses to create an image on a surface)
-	swapDesc.get()->BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Scaling mode (indicating how an image is stretched to fit a given monitor's resolution)
+	swapDesc->BufferDesc.Width = display->GetClientWidth(); // Resolution width
+	swapDesc->BufferDesc.Height = display->GetClientHeight(); // Resolution height
+	swapDesc->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Display format (32-bit unsigned normalized integer format supporting 8 bits per channel, including the alpha channel)
+	swapDesc->BufferDesc.RefreshRate.Numerator = 60; // Refresh rate in hertz numerator
+	swapDesc->BufferDesc.RefreshRate.Denominator = 1; // Refresh rate in hertz denominator (for representing integer it = 1)
+	swapDesc->BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Scanline drawing mode (indicating the method the raster uses to create an image on a surface)
+	swapDesc->BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Scaling mode (indicating how an image is stretched to fit a given monitor's resolution)
 
 	/* 
 	* SampleDesc describes multi - sampling parameters for a resource
 	* The default sampler mode, with no anti-aliasing, has a count of 1 and a quality level of 0
 	*/
-	swapDesc.get()->SampleDesc.Count = 1; // Number of multisamples per pixel
-	swapDesc.get()->SampleDesc.Quality = 0; // The image quality level. The higher the quality, the lower the performance
+	swapDesc->SampleDesc.Count = 1; // Number of multisamples per pixel
+	swapDesc->SampleDesc.Quality = 0; // The image quality level. The higher the quality, the lower the performance
 
-	swapDesc.get()->BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
-	swapDesc.get()->BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
-	swapDesc.get()->OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
-	swapDesc.get()->Windowed = windowed;
-	swapDesc.get()->SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
-	swapDesc.get()->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
+	swapDesc->BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Describes the surface usage and CPU access options for the back buffer
+	swapDesc->BufferCount = 2; // Number of buffers in the swap chain (double or triple buffering)
+	swapDesc->OutputWindow = display->GetHWnd(); // Handle to the output window. This member must not be NULL.
+	swapDesc->Windowed = windowed;
+	swapDesc->SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Describes options for handling the contents of the presentation buffer after presenting a surface
+	swapDesc->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Options for swap-chain behavior
 
 	const int featureLevelsNumber = 1;
 	D3D_FEATURE_LEVEL featureLevels[featureLevelsNumber] = { D3D_FEATURE_LEVEL_11_1 };
@@ -165,13 +165,17 @@ void Game::PrepareResources() {
 }
 
 /*
-* Method for initializing all "GameComponent" items in vector
+* Initialize all "GameComponent" items in vector
 */
 void Game::Initialize() {
 	for (auto component : components)
 		component->Initialize();
 }
 
+/*
+* Prepare next frame
+* Clear states and render targets
+*/
 void Game::PrepareFrame() {
 	context->ClearState(); // Reset parameters to default
 
@@ -183,7 +187,7 @@ void Game::PrepareFrame() {
 }
 
 /*
-* Method for updating all "GameComponent" items in vector
+* Update all "GameComponent" items in vector
 */
 void Game::Update() {
 	for (auto component : components)
@@ -191,19 +195,22 @@ void Game::Update() {
 }
 
 /*
-* Method for drawing all "GameComponent" items in vector
+* Draw all "GameComponent" items in vector
 */
 void Game::Draw() {
 	for (auto component : components)
 		component->Draw();
 }
 
+/*
+* There is still no understanding of what will happen here
+*/
 void Game::RestoreTargets() {
 
 }
 
 /*
-* Method for actually presenting graphics
+* Presenting graphics
 */
 void Game::EndFrame() {
 	context->OMSetRenderTargets(0, nullptr, nullptr);
@@ -212,7 +219,9 @@ void Game::EndFrame() {
 }
 
 /*
-* Internal method, that updates all items and called each frame
+* Internal method
+* Update all items
+* Call each frame
 */
 void Game::UpdateInternal() {
 	auto curTime = std::chrono::steady_clock::now();
@@ -245,6 +254,9 @@ void Game::UpdateInternal() {
 	EndFrame();
 }
 
+/*
+* Main method for starting game with initialization
+*/
 void Game::Run() {
 	PrepareResources();
 	Initialize();
@@ -266,6 +278,9 @@ void Game::Run() {
 	DestroyResources();
 }
 
+/*
+* Exit game with destroying resources
+*/
 void Game::Exit() {
 	DestroyResources();
 }

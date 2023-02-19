@@ -71,15 +71,12 @@ void TriangleComponent::Initialize() {
 		pixelShader.GetAddressOf()
 	);
 
-
-
 	Game::instance->GetDevice()->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr,
 		vertexShader.GetAddressOf()
 	);
-
 
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 		D3D11_INPUT_ELEMENT_DESC {
@@ -102,7 +99,6 @@ void TriangleComponent::Initialize() {
 		},
 	};
 
-
 	Game::instance->GetDevice()->CreateInputLayout(
 		inputElements,
 		2,
@@ -110,47 +106,46 @@ void TriangleComponent::Initialize() {
 		vertexShaderByteCode->GetBufferSize(),
 		layout.GetAddressOf()
 	);
+	
+	vertexBufDesc->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
+	vertexBufDesc->Usage = D3D11_USAGE_DEFAULT;
+	vertexBufDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufDesc->CPUAccessFlags = 0;
+	vertexBufDesc->MiscFlags = 0;
+	vertexBufDesc->StructureByteStride = 0;
 
-
-	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
-	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
-	vertexBufDesc.get()->BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufDesc.get()->CPUAccessFlags = 0;
-	vertexBufDesc.get()->MiscFlags = 0;
-	vertexBufDesc.get()->StructureByteStride = 0;
-
-	vertexData.get()->pSysMem = points.data();
-	vertexData.get()->SysMemPitch = 0;
-	vertexData.get()->SysMemSlicePitch = 0;
+	vertexData->pSysMem = points.data();
+	vertexData->SysMemPitch = 0;
+	vertexData->SysMemSlicePitch = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
 	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3/*, 4, 5, 6, 5, 4, 7 */ }); // First 6 indeces - one square, second 6 indeces - another square
-	indexBufDesc.get()->ByteWidth = sizeof(int) * indeces.size();
-	indexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
-	indexBufDesc.get()->BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufDesc.get()->CPUAccessFlags = 0;
-	indexBufDesc.get()->MiscFlags = 0;
-	indexBufDesc.get()->StructureByteStride = 0;
+	indexBufDesc->ByteWidth = sizeof(int) * indeces.size();
+	indexBufDesc->Usage = D3D11_USAGE_DEFAULT;
+	indexBufDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufDesc->CPUAccessFlags = 0;
+	indexBufDesc->MiscFlags = 0;
+	indexBufDesc->StructureByteStride = 0;
 
-	indexData.get()->pSysMem = indeces.data();
-	indexData.get()->SysMemPitch = 0;
-	indexData.get()->SysMemSlicePitch = 0;
+	indexData->pSysMem = indeces.data();
+	indexData->SysMemPitch = 0;
+	indexData->SysMemSlicePitch = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
-	constBufDesc.get()->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
-	constBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
-	constBufDesc.get()->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBufDesc.get()->CPUAccessFlags = 0;
-	constBufDesc.get()->MiscFlags = 0;
-	constBufDesc.get()->StructureByteStride = 0;
+	constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
+	constBufDesc->Usage = D3D11_USAGE_DEFAULT;
+	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDesc->CPUAccessFlags = 0;
+	constBufDesc->MiscFlags = 0;
+	constBufDesc->StructureByteStride = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr/*constData.get()*/, constBuf.GetAddressOf());
 
-	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
-	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Solid or wireframe
+	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
+	rastDesc->FillMode = D3D11_FILL_SOLID; // Solid or wireframe
 
 	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
 	Game::instance->GetContext()->RSSetState(rastState.Get());

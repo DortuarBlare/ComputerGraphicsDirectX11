@@ -32,6 +32,9 @@ protected:
 	UINT strides[1];
 	UINT offsets[1];
 
+	//static ID3DBlob* errorPixelCode;
+	//static ID3DBlob* errorVertexCode;
+
 public:
 	std::vector<DirectX::XMFLOAT4> points; // Fill before Initialize()
 
