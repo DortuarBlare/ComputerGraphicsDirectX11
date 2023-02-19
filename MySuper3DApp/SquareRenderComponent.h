@@ -1,5 +1,6 @@
 #pragma once
 #include "TriangleRenderComponent.h"
+
 class SquareRenderComponent : public TriangleRenderComponent {
 public:
 	SquareRenderComponent();

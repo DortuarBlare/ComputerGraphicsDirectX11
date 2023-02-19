@@ -1,5 +1,7 @@
 #pragma once
 #include "Game.h"
+#include "GameObject.h"
+#include "SquareRenderComponent.h"
 
 class PingPongGame : public Game {
 private:
@@ -13,10 +15,13 @@ private:
 	void Update() override;
 
 public:
-	std::shared_ptr<DirectX::SimpleMath::Vector4> leftPlayerOffset;
-	std::shared_ptr<DirectX::SimpleMath::Vector4> rightPlayerOffset;
+	std::shared_ptr<GameObject> leftPlayer;
+	std::shared_ptr<GameObject> rightPlayer;
+
+	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) override;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
-	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) override;
+	void Run() override;
+	void ConfigureGameObjects();
 };

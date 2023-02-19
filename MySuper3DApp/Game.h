@@ -54,7 +54,7 @@ protected:
 
 public:
 	static Game* instance; // Singleton
-	std::vector<GameObject*> gameObjects;
+	std::vector<GameObject*> gameObjects; // Change to smart pointers
 	std::shared_ptr<InputDevice> inputDevice; // For input handling
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;
@@ -64,8 +64,9 @@ public:
 	unsigned int frameCount;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+
 	void RestoreTargets();
-	void Run();
+	virtual void Run();
 	void Exit();
 
 	virtual LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);

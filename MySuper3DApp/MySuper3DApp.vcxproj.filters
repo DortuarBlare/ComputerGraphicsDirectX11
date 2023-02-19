@@ -34,6 +34,18 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{64dadc8b-cf65-43ac-b6a3-c29aebfea055}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\GameObject">
+      <UniqueIdentifier>{01a6b855-7e87-4509-a039-7c39d0e1e6ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObject\Component">
+      <UniqueIdentifier>{b26d603a-07c7-4346-a89f-5e3529e0fcd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObject">
+      <UniqueIdentifier>{42652ea6-df64-4b58-a54f-c15461e15ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObject\Component">
+      <UniqueIdentifier>{b314ddce-5e48-4588-ae77-6ce1553dfe1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MySuper3DApp.cpp">
@@ -54,23 +66,23 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectComponent.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="PingPongGame.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectComponent.cpp">
+      <Filter>Source Files\Game\GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Source Files\Game\GameObject\Component</Filter>
+    </ClCompile>
     <ClCompile Include="TriangleRenderComponent.cpp">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files\Game\GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="SquareRenderComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game\GameObject\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,23 +104,23 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectComponent.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderComponent.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="PingPongGame.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="TriangleRenderComponent.h">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectComponent.h">
+      <Filter>Header Files\Game\GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Header Files\Game\GameObject\Component</Filter>
     </ClInclude>
     <ClInclude Include="SquareRenderComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game\GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleRenderComponent.h">
+      <Filter>Header Files\Game\GameObject\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

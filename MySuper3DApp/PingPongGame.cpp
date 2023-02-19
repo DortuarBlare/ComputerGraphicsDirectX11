@@ -35,8 +35,8 @@ LRESULT PingPongGame::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LP
 
 PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) :
 	Game(name, screenWidth, screenHeight, windowed) {
-	leftPlayerOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
-	rightPlayerOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
+	leftPlayer = std::make_shared<GameObject>();
+	rightPlayer = std::make_shared<GameObject>();
 }
 
 /*
@@ -48,23 +48,23 @@ void PingPongGame::Update() {
 
 	// Input of left player
 	if (inputDevice->IsKeyDown(Keys::A))
-		*leftPlayerOffset -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
+		*leftPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::D))
-		*leftPlayerOffset += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
+		*leftPlayer->position += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::W))
-		*leftPlayerOffset += {0.0f, 0.25f * deltaTime, 0.0f, 0.0f};
+		*leftPlayer->position += {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::S))
-		*leftPlayerOffset -= {0.0f, 0.25f * deltaTime, 0.0f, 0.0f};
+		*leftPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 
 	// Input of right player
 	if (inputDevice->IsKeyDown(Keys::Left))
-		*rightPlayerOffset -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
+		*rightPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::Right))
-		*rightPlayerOffset += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
+		*rightPlayer->position += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::Up))
-		*rightPlayerOffset += {0.0f, 0.25f * deltaTime, 0.0f, 0.0f};
+		*rightPlayer->position += {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::Down))
-		*rightPlayerOffset -= {0.0f, 0.25f * deltaTime, 0.0f, 0.0f};
+		*rightPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 }
 
 /*
@@ -148,4 +148,49 @@ void PingPongGame::HandleRightPlayerKeyUp(unsigned int key) {
 void PingPongGame::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) {
 	if (!instance)
 		instance = new PingPongGame(name, screenWidth, screenHeight, windowed);
+}
+
+/*
+* Configure game objects before run
+* Call Game::Run() for basic logic
+*/
+void PingPongGame::Run() {
+	ConfigureGameObjects();
+	Game::Run();
+}
+
+/*
+* Configure players game objects
+* Configure ball game object
+* Configure score game objects
+*/
+void PingPongGame::ConfigureGameObjects() {
+	SquareRenderComponent* leftPlayerRacket = new SquareRenderComponent(leftPlayer->position);
+	SquareRenderComponent* rightPlayerRacket = new SquareRenderComponent(rightPlayer->position);
+
+	leftPlayerRacket->points.insert(leftPlayerRacket->points.end(),
+		{
+			/* Vertex position						 */  /* Vertex color                           */
+			DirectX::XMFLOAT4(-0.8f, 0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-1.0f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-0.8f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-1.0f, 0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+		}
+	);
+
+	rightPlayerRacket->points.insert(rightPlayerRacket->points.end(),
+		{
+			/* Vertex position						 */ /* Vertex color                           */
+			DirectX::XMFLOAT4(1.0f, 0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(0.8f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(1.0f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(0.8f, 0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+		}
+	);
+
+	leftPlayer->components.push_back(leftPlayerRacket);
+	rightPlayer->components.push_back(rightPlayerRacket);
+
+	PingPongGame::instance->gameObjects.push_back(leftPlayer.get());
+	PingPongGame::instance->gameObjects.push_back(rightPlayer.get());
 }
