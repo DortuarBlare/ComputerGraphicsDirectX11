@@ -15,15 +15,19 @@ TriangleComponent::TriangleComponent(std::shared_ptr<DirectX::SimpleMath::Vector
 	this->offset = offset;
 }
 
+/*
+* Compiling pixel and vertex shaders
+* Creating pixel, shader and constant buffers
+* Configure rasterizer for the object
+*/
 void TriangleComponent::Initialize() {
-	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 	ID3DBlob* errorPixelCode = nullptr;
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
 	Game::instance->res = D3DCompileFromFile(
 		L"./Shaders/MyVeryFirstShader.hlsl",
-		Shader_Macros /*macros*/,
+		nullptr /*macros*/,
 		nullptr /*include*/,
 		"PSMain",
 		"ps_5_0",
@@ -67,12 +71,15 @@ void TriangleComponent::Initialize() {
 		pixelShader.GetAddressOf()
 	);
 
+
+
 	Game::instance->GetDevice()->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr,
 		vertexShader.GetAddressOf()
 	);
+
 
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 		D3D11_INPUT_ELEMENT_DESC {
@@ -95,6 +102,7 @@ void TriangleComponent::Initialize() {
 		},
 	};
 
+
 	Game::instance->GetDevice()->CreateInputLayout(
 		inputElements,
 		2,
@@ -103,20 +111,21 @@ void TriangleComponent::Initialize() {
 		layout.GetAddressOf()
 	);
 
+
 	vertexBufDesc.get()->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 	vertexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc.get()->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufDesc.get()->CPUAccessFlags = 0;
 	vertexBufDesc.get()->MiscFlags = 0;
 	vertexBufDesc.get()->StructureByteStride = 0;
-	
+
 	vertexData.get()->pSysMem = points.data();
 	vertexData.get()->SysMemPitch = 0;
 	vertexData.get()->SysMemSlicePitch = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
-	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3, 4, 5, 6, 5, 4, 7 });
+	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3/*, 4, 5, 6, 5, 4, 7 */ }); // First 6 indeces - one square, second 6 indeces - another square
 	indexBufDesc.get()->ByteWidth = sizeof(int) * indeces.size();
 	indexBufDesc.get()->Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.get()->BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -140,16 +149,19 @@ void TriangleComponent::Initialize() {
 
 	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr/*constData.get()*/, constBuf.GetAddressOf());
 
-	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Try to change
-	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Try to change
+	rastDesc.get()->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
+	rastDesc.get()->FillMode = D3D11_FILL_SOLID; // Solid or wireframe
 
 	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
-	strides[0] = 32; // Position and color in one vertex buffer, so array with one value - 32 (2 float4)
+	strides[0] = 32; // Position and color in one structure, so array with one value - 32 (2 float4)
 	offsets[0] = 0;
 }
 
+/*
+* Component updating on each frame
+*/
 void TriangleComponent::Update() {
 	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -166,14 +178,24 @@ void TriangleComponent::Update() {
 	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 }
 
+/*
+* Draw on each frame (Drawcall)
+* It draws a square consisting of 2 triangles
+*/
 void TriangleComponent::Draw() {
-	Game::instance->GetContext()->DrawIndexed(12, 0, 0); // Main function for draw (DrawCall)
+	Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
 }
 
+/*
+* There is still no understanding of what will happen here
+*/
 void TriangleComponent::Reload() {
 
 }
 
+/*
+* Call in the destructor if there is a need for it
+*/
 void TriangleComponent::DestroyResources() {
 
 }
