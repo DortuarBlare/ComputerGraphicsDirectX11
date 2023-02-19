@@ -47,7 +47,7 @@ protected:
 	void PrepareResources();
 	void Initialize();
 	void PrepareFrame();
-	void Update();
+	virtual void Update();
 	void Draw();
 	void EndFrame();
 

@@ -158,6 +158,14 @@ void TriangleComponent::Initialize() {
 * Component updating on each frame
 */
 void TriangleComponent::Update() {
+	
+}
+
+/*
+* Draw on each frame (Drawcall)
+* It draws a square consisting of 2 triangles
+*/
+void TriangleComponent::Draw() {
 	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -171,13 +179,7 @@ void TriangleComponent::Update() {
 	// Use constant buffer for offset
 	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, offset.get(), 0, 0);
 	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
-}
 
-/*
-* Draw on each frame (Drawcall)
-* It draws a square consisting of 2 triangles
-*/
-void TriangleComponent::Draw() {
 	Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
 }
 

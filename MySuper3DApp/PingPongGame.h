@@ -3,10 +3,14 @@
 
 class PingPongGame : public Game {
 private:
-	void HandleLeftPlayerInput(unsigned int key);
-	void HandleRightPlayerInput(unsigned int key);
+	void HandleLeftPlayerKeyDown(unsigned int key);
+	void HandleLeftPlayerKeyUp(unsigned int key);
+	void HandleRightPlayerKeyDown(unsigned int key);
+	void HandleRightPlayerKeyUp(unsigned int key);
 
 	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+
+	void Update() override;
 
 public:
 	std::shared_ptr<DirectX::SimpleMath::Vector4> leftPlayerOffset;

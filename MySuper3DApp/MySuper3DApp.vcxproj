@@ -149,6 +149,7 @@
     <ClInclude Include="TriangleComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Shaders\MyVeryFirstShader.hlsl">
       <FileType>Document</FileType>
     </None>
