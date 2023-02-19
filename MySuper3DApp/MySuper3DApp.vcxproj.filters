@@ -46,6 +46,15 @@
     <Filter Include="Header Files\Game\GameObject\Component">
       <UniqueIdentifier>{b314ddce-5e48-4588-ae77-6ce1553dfe1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\GameObject\Component\Render">
+      <UniqueIdentifier>{722cb657-2019-4323-8ecd-d3b1b2a200d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObject\Component\Physics">
+      <UniqueIdentifier>{1cfa0c06-cf91-4b6c-8ab3-19ecc7543a6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObject\Component\Render">
+      <UniqueIdentifier>{d1be8617-5c10-4aa9-bf62-50afd35f4bfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MySuper3DApp.cpp">
@@ -76,13 +85,13 @@
       <Filter>Source Files\Game\GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
-      <Filter>Source Files\Game\GameObject\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="TriangleRenderComponent.cpp">
-      <Filter>Source Files\Game\GameObject\Component</Filter>
+      <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
     <ClCompile Include="SquareRenderComponent.cpp">
-      <Filter>Source Files\Game\GameObject\Component</Filter>
+      <Filter>Source Files\Game\GameObject\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleRenderComponent.cpp">
+      <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,13 +123,13 @@
       <Filter>Header Files\Game\GameObject\Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
-      <Filter>Header Files\Game\GameObject\Component</Filter>
+      <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="SquareRenderComponent.h">
-      <Filter>Header Files\Game\GameObject\Component</Filter>
+      <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="TriangleRenderComponent.h">
-      <Filter>Header Files\Game\GameObject\Component</Filter>
+      <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
