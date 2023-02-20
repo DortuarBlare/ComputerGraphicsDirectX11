@@ -176,6 +176,7 @@ void Game::PrepareFrame() {
 
 /*
 * Update all "GameComponent" items in vector
+* For logic
 */
 void Game::Update() {
 	for (auto gameObject : gameObjects)
@@ -184,6 +185,15 @@ void Game::Update() {
 	// Handle ESC button
 	if (inputDevice->IsKeyDown(Keys::Escape))
 		PostQuitMessage(0);
+}
+
+/*
+* FixedUpdate all "GameComponent" items in vector
+* For physics
+*/
+void Game::FixedUpdate() {
+	for (auto gameObject : gameObjects)
+		gameObject->FixedUpdate();
 }
 
 /*

@@ -12,6 +12,7 @@ private:
 public:
 	std::shared_ptr<GameObject> leftPlayer;
 	std::shared_ptr<GameObject> rightPlayer;
+	std::shared_ptr<GameObject> ball;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 

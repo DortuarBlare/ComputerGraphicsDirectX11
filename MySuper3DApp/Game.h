@@ -49,6 +49,7 @@ protected:
 	void Initialize();
 	void PrepareFrame();
 	virtual void Update();
+	void FixedUpdate();
 	void Draw();
 	void EndFrame();
 

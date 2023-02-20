@@ -4,6 +4,7 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	Game(name, screenWidth, screenHeight, windowed) {
 	leftPlayer = std::make_shared<GameObject>();
 	rightPlayer = std::make_shared<GameObject>();
+	ball = std::make_shared<GameObject>();
 }
 
 /*
@@ -14,6 +15,7 @@ void PingPongGame::Update() {
 	Game::Update();
 
 	// Input of left player
+	// Change on internal logic in future
 	if (inputDevice->IsKeyDown(Keys::A))
 		*leftPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::D))
@@ -24,6 +26,7 @@ void PingPongGame::Update() {
 		*leftPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 
 	// Input of right player
+	// Change on internal logic in future
 	if (inputDevice->IsKeyDown(Keys::Left))
 		*rightPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::Right))
@@ -60,6 +63,7 @@ void PingPongGame::Run() {
 void PingPongGame::ConfigureGameObjects() {
 	SquareRenderComponent* leftPlayerRacket = new SquareRenderComponent(leftPlayer->position);
 	SquareRenderComponent* rightPlayerRacket = new SquareRenderComponent(rightPlayer->position);
+	SquareRenderComponent* ballMesh = new SquareRenderComponent();
 
 	leftPlayerRacket->points.insert(leftPlayerRacket->points.end(),
 		{
@@ -81,9 +85,22 @@ void PingPongGame::ConfigureGameObjects() {
 		}
 	);
 
+	ballMesh->points.insert(ballMesh->points.end(),
+		{
+			/* Vertex position						*/  /* Vertex color                           */
+			DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-0.06f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(0.0f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-0.06f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+		}
+	);
+
 	leftPlayer->components.push_back(leftPlayerRacket);
 	rightPlayer->components.push_back(rightPlayerRacket);
+	ball->components.push_back(ballMesh);
 
+	// Adding all game objects to Game::gameObjects for their initialization
 	PingPongGame::instance->gameObjects.push_back(leftPlayer.get());
 	PingPongGame::instance->gameObjects.push_back(rightPlayer.get());
+	PingPongGame::instance->gameObjects.push_back(ball.get());
 }
