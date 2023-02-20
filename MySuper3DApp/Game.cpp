@@ -11,18 +11,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 
 LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam) {
 	switch (umessage) {
-	case WM_KEYDOWN: {
-		// If a key is pressed send it to the input object so it can record that state
-		//std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
-
-		auto key = static_cast<unsigned int>(wparam);
-
-		// Handle ESC button
-		if (key == 27)
-			PostQuitMessage(0);
-
-		return 0;
-	}
 	case WM_INPUT: {
 		UINT dwSize = 0;
 		GetRawInputData(reinterpret_cast<HRAWINPUT>(lparam), RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
@@ -192,6 +180,10 @@ void Game::PrepareFrame() {
 void Game::Update() {
 	for (auto gameObject : gameObjects)
 		gameObject->Update();
+
+	// Handle ESC button
+	if (inputDevice->IsKeyDown(Keys::Escape))
+		PostQuitMessage(0);
 }
 
 /*

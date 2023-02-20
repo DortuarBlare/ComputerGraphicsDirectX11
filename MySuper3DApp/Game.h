@@ -69,7 +69,7 @@ public:
 	virtual void Run();
 	void Exit();
 
-	virtual LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
+	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 
 	std::shared_ptr<DisplayWin32> GetDisplay();
