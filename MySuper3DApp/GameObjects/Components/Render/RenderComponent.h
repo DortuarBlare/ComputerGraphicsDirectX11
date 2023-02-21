@@ -1,8 +1,5 @@
 #pragma once
-#include "Game.h"
-#include "GameObjectComponent.h"
-
-class Game;
+#include "../GameObjectComponent.h"
 
 class RenderComponent : public GameObjectComponent {
 protected:

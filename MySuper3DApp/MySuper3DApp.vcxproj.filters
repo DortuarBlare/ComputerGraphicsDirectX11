@@ -60,83 +60,89 @@
     <ClCompile Include="MySuper3DApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DisplayWin32.cpp">
+    <ClCompile Include="WinApi\DisplayWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Delegates.cpp">
+    <ClCompile Include="Input\Delegates.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="InputDevice.cpp">
+    <ClCompile Include="Input\InputDevice.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleMath.cpp">
+    <ClCompile Include="Math\SimpleMath.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Games\Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="PingPongGame.cpp">
+    <ClCompile Include="Games\PingPongGame.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
+    <ClCompile Include="GameObjects\GameObject.cpp">
       <Filter>Source Files\Game\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectComponent.cpp">
+    <ClCompile Include="GameObjects\Components\GameObjectComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
+    <ClCompile Include="GameObjects\Components\Render\RenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="SquareRenderComponent.cpp">
+    <ClCompile Include="GameObjects\Components\Render\SquareRenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="TriangleRenderComponent.cpp">
+    <ClCompile Include="GameObjects\Components\Render\TriangleRenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DisplayWin32.h">
+    <ClInclude Include="WinApi\DisplayWin32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Delegates.h">
+    <ClInclude Include="Input\Delegates.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Keys.h">
+    <ClInclude Include="Input\Keys.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="InputDevice.h">
+    <ClInclude Include="Input\InputDevice.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleMath.h">
+    <ClInclude Include="Math\SimpleMath.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Games\Game.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="PingPongGame.h">
+    <ClInclude Include="Games\PingPongGame.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="GameObjects\GameObject.h">
       <Filter>Header Files\Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectComponent.h">
+    <ClInclude Include="GameObjects\Components\GameObjectComponent.h">
       <Filter>Header Files\Game\GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComponent.h">
+    <ClInclude Include="GameObjects\Components\Render\RenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
-    <ClInclude Include="SquareRenderComponent.h">
+    <ClInclude Include="GameObjects\Components\Render\SquareRenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
-    <ClInclude Include="TriangleRenderComponent.h">
+    <ClInclude Include="GameObjects\Components\Render\TriangleRenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\MyVeryFirstShader.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="SimpleMath.inl">
+    <None Include="Math\SimpleMath.inl">
       <Filter>Header Files\Math</Filter>
     </None>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
-#include "Game.h"
-
-class Game;
+#include <windows.h>
+#include <WinUser.h>
+#include <wrl.h>
 
 class DisplayWin32 {
 protected:

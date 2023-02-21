@@ -1,29 +1,25 @@
 #pragma once
-#include <windows.h>
-#include <WinUser.h>
-#include <wrl.h>
 #include <d3d.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
-#include "SimpleMath.h"
-#include "SimpleMath.inl"
+#include "../Math/SimpleMath.h"
+#include "../Math/SimpleMath.inl"
 #include <iostream>
 #include <chrono>
 #include <vector>
 
-#include "GameObject.h"
-#include "DisplayWin32.h"
-#include "InputDevice.h"
+#include "../GameObjects/GameObject.h"
+#include "../WinApi/DisplayWin32.h"
+#include "../Input/InputDevice.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
-class DisplayWin32;
-class RenderComponent;
 class InputDevice;
+class GameObject;
 
 class Game {
 protected:

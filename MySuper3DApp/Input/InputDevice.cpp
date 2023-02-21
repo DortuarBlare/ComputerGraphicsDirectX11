@@ -1,11 +1,8 @@
 //#include "pch.h"
 #include "InputDevice.h"
 #include <iostream>
-#include "Game.h"
-
 
 using namespace DirectX::SimpleMath;
-
 
 InputDevice::InputDevice() {
 	keys = new std::unordered_set<Keys>();

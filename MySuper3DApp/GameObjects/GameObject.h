@@ -1,14 +1,7 @@
 #pragma once
-#include <vector>
-#include <iostream>
-#include <d3d.h>
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
-#include "SimpleMath.h"
-#include "SimpleMath.inl"
+#include "Components/GameObjectComponent.h"
 
-#include "GameObjectComponent.h"
+class GameObjectComponent;
 
 class GameObject {
 public:

@@ -1,7 +1,7 @@
 #pragma once
 #include "Game.h"
-#include "GameObject.h"
-#include "SquareRenderComponent.h"
+#include "../GameObjects/GameObject.h"
+#include "../GameObjects/Components/Render/SquareRenderComponent.h"
 
 class PingPongGame : public Game {
 private:

@@ -150,7 +150,7 @@ void RenderComponent::Initialize() {
 
 	// Create const buffer
 	constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
-	constBufDesc->Usage = D3D11_USAGE_DEFAULT;
+	constBufDesc->Usage = D3D11_USAGE_DEFAULT; // Dynamic for camera?
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufDesc->CPUAccessFlags = 0;
 	constBufDesc->MiscFlags = 0;
@@ -172,7 +172,8 @@ void RenderComponent::Initialize() {
 * Component updating on each frame
 */
 void RenderComponent::Update() {
-
+	// Matrix::CreateTranslation(Position * ...
+	// game.context.Map(constBuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &res)
 }
 
 void RenderComponent::FixedUpdate() {

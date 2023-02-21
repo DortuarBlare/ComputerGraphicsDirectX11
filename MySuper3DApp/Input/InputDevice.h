@@ -1,11 +1,10 @@
 #pragma once
-
-//#include "Exports.h"
-#include "Game.h"
+#include "../Math/SimpleMath.h"
 #include "Keys.h"
-#include "SimpleMath.h"
 #include "Delegates.h"
 #include <unordered_set>
+
+#include "../Games/Game.h"
 
 class Game;
 
