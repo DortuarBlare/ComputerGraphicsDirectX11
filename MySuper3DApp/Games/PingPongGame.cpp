@@ -85,13 +85,23 @@ void PingPongGame::ConfigureGameObjects() {
 		}
 	);
 
+	//ballMesh->points.insert(ballMesh->points.end(),
+	//	{
+	//		/* Vertex position						*/  /* Vertex color                           */
+	//		DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+	//		DirectX::XMFLOAT4(-0.06f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+	//		DirectX::XMFLOAT4(0.0f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+	//		DirectX::XMFLOAT4(-0.06f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+	//	}
+	//);
+
 	ballMesh->points.insert(ballMesh->points.end(),
 		{
-			/* Vertex position						*/  /* Vertex color                           */
-			DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-0.06f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(0.0f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-0.06f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+			/* Vertex position						   */  /* Vertex color                           */
+			DirectX::XMFLOAT4( 0.5f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4( 0.5f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
+			DirectX::XMFLOAT4(-0.5f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
 		}
 	);
 

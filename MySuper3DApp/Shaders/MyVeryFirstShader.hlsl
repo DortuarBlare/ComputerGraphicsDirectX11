@@ -13,7 +13,8 @@ struct ConstData {
 };
 
 struct ConstDataMatrix {
-    float4x4 offsetMatrix;
+    //float4x4 transform;
+    matrix transform;
 };
 
 cbuffer ConstBuf : register(b0) {
@@ -34,7 +35,8 @@ float4 PSMain(PS_IN input) : SV_Target {
 PS_IN VSMain(VS_IN input) {
     PS_IN output = (PS_IN) 0;
 	
-    output.pos = input.pos + constData.offset; // multiply (float4(input.pos.xyz, 1.0f), MeshData.Transform)
+    //output.pos = input.pos + constData.offset; // multiply (float4(input.pos.xyz, 1.0f), MeshData.Transform)
+    output.pos = mul(input.pos, constDataMatrix.transform); // Multiply on matrix
     output.col = input.col;
 	
     return output;

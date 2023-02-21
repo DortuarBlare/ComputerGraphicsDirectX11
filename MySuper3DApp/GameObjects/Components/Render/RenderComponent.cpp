@@ -149,14 +149,15 @@ void RenderComponent::Initialize() {
 	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
-	constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
+	//constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
+	constBufDesc->ByteWidth = sizeof(DirectX::XMMATRIX);
 	constBufDesc->Usage = D3D11_USAGE_DEFAULT; // Dynamic for camera?
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufDesc->CPUAccessFlags = 0;
 	constBufDesc->MiscFlags = 0;
 	constBufDesc->StructureByteStride = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr/*constData.get()*/, constBuf.GetAddressOf());
+	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr, constBuf.GetAddressOf());
 
 	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
 	rastDesc->FillMode = D3D11_FILL_SOLID; // Solid or wireframe
@@ -185,6 +186,13 @@ void RenderComponent::FixedUpdate() {
 * It draws a square consisting of 2 triangles
 */
 void RenderComponent::Draw() {
+	DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
+		DirectX::XMMatrixMultiply(
+			DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
+			DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
+		)
+	);
+
 	Game::instance->GetContext()->IASetInputLayout(layout.Get());
 	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -196,8 +204,9 @@ void RenderComponent::Draw() {
 	Game::instance->GetContext()->RSSetState(rastState.Get());
 
 	// Use constant buffer for offset
-	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
-	Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
+	//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
+	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &transform, 0, 0);
+	Game::instance->GetContext()->VSSetConstantBuffers(1, 1, constBuf.GetAddressOf());
 
 	Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
 }
