@@ -61,47 +61,39 @@ void PingPongGame::Run() {
 * Configure score game objects
 */
 void PingPongGame::ConfigureGameObjects() {
-	SquareRenderComponent* leftPlayerRacket = new SquareRenderComponent(leftPlayer->position);
-	SquareRenderComponent* rightPlayerRacket = new SquareRenderComponent(rightPlayer->position);
+	SquareRenderComponent* leftPlayerRacket = new SquareRenderComponent(D3D11_FILL_SOLID, leftPlayer->position);
+	SquareRenderComponent* rightPlayerRacket = new SquareRenderComponent(D3D11_FILL_SOLID, rightPlayer->position);
 	SquareRenderComponent* ballMesh = new SquareRenderComponent();
+	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
+	DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
 
 	leftPlayerRacket->points.insert(leftPlayerRacket->points.end(),
 		{
-			/* Vertex position						  */ /* Vertex color                           */
-			DirectX::XMFLOAT4(-0.8f,  0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-1.0f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-0.8f, -0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-1.0f,  0.5f, 0.5f, 1.0f), DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+			/* Vertex position						  */ /* Vertex color */
+			DirectX::XMFLOAT4(-0.8f,  0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.9f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.8f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.9f,  0.25f, 0.5f, 1.0f), racketColor
 		}
 	);
 
 	rightPlayerRacket->points.insert(rightPlayerRacket->points.end(),
 		{
-			/* Vertex position						 */  /* Vertex color                           */
-			DirectX::XMFLOAT4(1.0f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(0.8f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(1.0f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(0.8f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+			/* Vertex position						 */ /* Vertex color */
+			DirectX::XMFLOAT4(1.0f,  0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(0.9f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(1.0f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(0.9f,  0.25f, 0.5f, 1.0f), racketColor
 		}
 	);
 
-	//ballMesh->points.insert(ballMesh->points.end(),
-	//	{
-	//		/* Vertex position						*/  /* Vertex color                           */
-	//		DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-	//		DirectX::XMFLOAT4(-0.06f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-	//		DirectX::XMFLOAT4(0.0f, -0.1f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-	//		DirectX::XMFLOAT4(-0.06f, 0.0f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
-	//	}
-	//);
-
 	ballMesh->points.insert(ballMesh->points.end(),
 		{
-			/* Vertex position						   */  /* Vertex color                           */
-			DirectX::XMFLOAT4( 0.5f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4( 0.5f, -0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f,  0.5f, 0.5f, 1.0f),  DirectX::XMFLOAT4(0.67f, 0.9f, 0.76f, 1.0f)
+			/* Vertex position						   */ /* Vertex color */
+			DirectX::XMFLOAT4( 0.025f,  0.025f, 0.5f, 1.0f),  ballColor,
+			DirectX::XMFLOAT4(-0.025f, -0.025f, 0.5f, 1.0f),  ballColor,
+			DirectX::XMFLOAT4( 0.025f, -0.025f, 0.5f, 1.0f),  ballColor,
+			DirectX::XMFLOAT4(-0.025f,  0.025f, 0.5f, 1.0f),  ballColor
 		}
 	);
 

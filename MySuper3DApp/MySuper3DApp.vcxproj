@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\Components\Colliders\BoxColliderComponent.cpp" />
+    <ClCompile Include="GameObjects\Components\Colliders\ColliderComponent.cpp" />
     <ClCompile Include="GameObjects\Camera.cpp" />
     <ClCompile Include="Input\Delegates.cpp" />
     <ClCompile Include="WinApi\DisplayWin32.cpp" />
@@ -142,6 +144,8 @@
     <ClCompile Include="GameObjects\Components\Render\TriangleRenderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObjects\Components\Colliders\BoxColliderComponent.h" />
+    <ClInclude Include="GameObjects\Components\Colliders\ColliderComponent.h" />
     <ClInclude Include="GameObjects\Camera.h" />
     <ClInclude Include="Input\Delegates.h" />
     <ClInclude Include="WinApi\DisplayWin32.h" />

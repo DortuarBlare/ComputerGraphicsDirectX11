@@ -9,6 +9,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
 
+	D3D11_FILL_MODE fillMode;
 	std::shared_ptr<CD3D11_RASTERIZER_DESC> rastDesc;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 
@@ -34,7 +35,7 @@ public:
 	std::vector<DirectX::XMFLOAT4> points; // Fill before Initialize()
 
 	RenderComponent();
-	RenderComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
+	RenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
 
 	void Initialize();
 	void Update();

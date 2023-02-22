@@ -1,14 +1,8 @@
 #pragma once
-#include "../../Games/Game.h"
+#include "../GameObjectComponent.h"
 
-class Game;
-
-class GameObjectComponent {
+class ColliderComponent : public GameObjectComponent {
 public:
-	bool enabled = true;
-
-	virtual ~GameObjectComponent() = default;
-
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
 	virtual void FixedUpdate() = 0;

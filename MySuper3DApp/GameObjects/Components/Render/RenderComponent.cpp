@@ -1,6 +1,7 @@
 #include "RenderComponent.h"
 
 RenderComponent::RenderComponent() {
+	fillMode = D3D11_FILL_SOLID;
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -15,7 +16,8 @@ RenderComponent::RenderComponent() {
 	renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
 }
 
-RenderComponent::RenderComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset) {
+RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset) {
+	this->fillMode = fillMode;
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -160,7 +162,7 @@ void RenderComponent::Initialize() {
 	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr, constBuf.GetAddressOf());
 
 	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
-	rastDesc->FillMode = D3D11_FILL_SOLID; // Solid or wireframe
+	rastDesc->FillMode = fillMode; // Solid or wireframe
 
 	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
 	Game::instance->GetContext()->RSSetState(rastState.Get());
@@ -186,29 +188,32 @@ void RenderComponent::FixedUpdate() {
 * It draws a square consisting of 2 triangles
 */
 void RenderComponent::Draw() {
-	DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
-		DirectX::XMMatrixMultiply(
-			DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
-			DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
-		)
-	);
+	if (enabled) {
+		// Scaling for correct display on the X axis
+		DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
+			DirectX::XMMatrixMultiply(
+				DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
+				DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
+			)
+		);
 
-	Game::instance->GetContext()->IASetInputLayout(layout.Get());
-	Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
-	Game::instance->GetContext()->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
+		Game::instance->GetContext()->IASetInputLayout(layout.Get());
+		Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
+		Game::instance->GetContext()->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
 
-	Game::instance->GetContext()->VSSetShader(vertexShader.Get(), nullptr, 0);
-	Game::instance->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
+		Game::instance->GetContext()->VSSetShader(vertexShader.Get(), nullptr, 0);
+		Game::instance->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-	Game::instance->GetContext()->RSSetState(rastState.Get());
+		Game::instance->GetContext()->RSSetState(rastState.Get());
 
-	// Use constant buffer for offset
-	//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
-	Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &transform, 0, 0);
-	Game::instance->GetContext()->VSSetConstantBuffers(1, 1, constBuf.GetAddressOf());
+		// Use constant buffer for offset
+		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
+		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &transform, 0, 0);
+		Game::instance->GetContext()->VSSetConstantBuffers(1, 1, constBuf.GetAddressOf());
 
-	Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
+		Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
+	}
 }
 
 /*

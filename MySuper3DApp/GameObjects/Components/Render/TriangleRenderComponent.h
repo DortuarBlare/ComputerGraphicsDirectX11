@@ -6,5 +6,5 @@ class RenderComponent;
 class TriangleRenderComponent : public RenderComponent {
 public:
 	TriangleRenderComponent();
-	TriangleRenderComponent(std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
+	TriangleRenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
 };
