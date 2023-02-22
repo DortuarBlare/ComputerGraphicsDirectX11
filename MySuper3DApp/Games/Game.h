@@ -51,7 +51,7 @@ protected:
 
 public:
 	static Game* instance; // Singleton
-	std::vector<GameObject*> gameObjects; // Change to smart pointers
+	std::vector<std::shared_ptr<GameObject>> gameObjects; // Change to smart pointers
 	std::shared_ptr<InputDevice> inputDevice; // For input handling
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;

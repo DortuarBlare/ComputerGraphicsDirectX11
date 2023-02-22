@@ -8,6 +8,16 @@ public:
 	std::shared_ptr<DirectX::SimpleMath::Vector4> position; // In the future move to Transform class
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
 
+	bool wantsToMoveLeft = false;
+	bool wantsToMoveRight = false;
+	bool wantsToMoveUp = false;
+	bool wantsToMoveDown = false;
+
+	bool canMoveLeft = false;
+	bool canMoveRight = false;
+	bool canMoveUp = false;
+	bool canMoveDown = false;
+
 	GameObject();
 	GameObject(DirectX::SimpleMath::Vector4 position);
 	virtual ~GameObject() = default;
@@ -21,8 +31,8 @@ public:
 
 	void AddComponent(std::shared_ptr<GameObjectComponent> component);
 
-	void MoveLeft();
+	/*void MoveLeft();
 	void MoveRight();
 	void MoveUp();
-	void MoveDown();
+	void MoveDown();*/
 };

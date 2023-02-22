@@ -87,7 +87,7 @@
     <ClCompile Include="GameObjects\Components\Render\RenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Components\Render\SquareRenderComponent.cpp">
+    <ClCompile Include="GameObjects\Components\Render\RectangleRenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\Components\Render\TriangleRenderComponent.cpp">
@@ -134,7 +134,7 @@
     <ClInclude Include="GameObjects\Components\Render\RenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Components\Render\SquareRenderComponent.h">
+    <ClInclude Include="GameObjects\Components\Render\RectangleRenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Components\Render\TriangleRenderComponent.h">

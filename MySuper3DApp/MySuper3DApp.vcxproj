@@ -140,7 +140,7 @@
     <ClCompile Include="MySuper3DApp.cpp" />
     <ClCompile Include="Games\PingPongGame.cpp" />
     <ClCompile Include="Math\SimpleMath.cpp" />
-    <ClCompile Include="GameObjects\Components\Render\SquareRenderComponent.cpp" />
+    <ClCompile Include="GameObjects\Components\Render\RectangleRenderComponent.cpp" />
     <ClCompile Include="GameObjects\Components\Render\TriangleRenderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,7 +157,7 @@
     <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Games\PingPongGame.h" />
     <ClInclude Include="Math\SimpleMath.h" />
-    <ClInclude Include="GameObjects\Components\Render\SquareRenderComponent.h" />
+    <ClInclude Include="GameObjects\Components\Render\RectangleRenderComponent.h" />
     <ClInclude Include="GameObjects\Components\Render\TriangleRenderComponent.h" />
   </ItemGroup>
   <ItemGroup>

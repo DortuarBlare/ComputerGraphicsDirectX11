@@ -9,7 +9,6 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
 
-	D3D11_FILL_MODE fillMode;
 	std::shared_ptr<CD3D11_RASTERIZER_DESC> rastDesc;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 
@@ -24,20 +23,26 @@ protected:
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
-	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset; // For offset of rendering object
 
-	std::vector<int> indeces; // Fill before Initialize()
+	std::vector<int> indeces;
+	std::vector<DirectX::XMFLOAT4> points;
+
+	DirectX::XMFLOAT4 fillColor;
+	D3D11_FILL_MODE fillMode;
+	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset; // For offset of rendering object
 
 	UINT strides[1];
 	UINT offsets[1];
 
 public:
-	std::vector<DirectX::XMFLOAT4> points; // Fill before Initialize()
-
 	RenderComponent();
-	RenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset);
+	RenderComponent(
+		DirectX::XMFLOAT4 fillColor,
+		D3D11_FILL_MODE fillMode,
+		std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset
+	);
 
-	void Initialize();
+	virtual void Initialize();
 	void Update();
 	void FixedUpdate();
 	void Draw();

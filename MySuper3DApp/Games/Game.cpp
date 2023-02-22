@@ -249,6 +249,8 @@ void Game::UpdateInternal() {
 
 	Update();
 
+	FixedUpdate(); // Change for fixed calls per second
+
 	Draw();
 
 	RestoreTargets();

@@ -1,7 +1,10 @@
 #include "RenderComponent.h"
 
 RenderComponent::RenderComponent() {
+	fillColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	fillMode = D3D11_FILL_SOLID;
+	renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
+
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -12,12 +15,13 @@ RenderComponent::RenderComponent() {
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
 }
 
-RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset) {
+RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode, std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset) {
+	this->fillColor = fillColor;
 	this->fillMode = fillMode;
+	this->renderOffset = renderOffset;
+
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
 	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
@@ -28,8 +32,6 @@ RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode, std::shared_ptr<Direc
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	this->renderOffset = renderOffset;
 }
 
 /*

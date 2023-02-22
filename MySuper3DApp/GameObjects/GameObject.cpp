@@ -50,6 +50,10 @@ void GameObject::DestroyResources() {
 
 
 void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
-	component->owner = std::make_unique<GameObject>(*this);
+	for (auto& gameObject : Game::instance->gameObjects) {
+		if (gameObject.get() == this)
+			component->owner = gameObject;
+	}
+
 	components.push_back(component);
 }
