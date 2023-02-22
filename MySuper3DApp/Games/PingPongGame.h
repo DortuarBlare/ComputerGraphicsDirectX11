@@ -1,12 +1,12 @@
 #pragma once
 #include "Game.h"
-#include "../GameObjects/GameObject.h"
 #include "../GameObjects/Components/Render/SquareRenderComponent.h"
 
 class PingPongGame : public Game {
 private:
 	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
+	void ConfigureGameObjects();
 	void Update() override;
 
 public:
@@ -17,5 +17,4 @@ public:
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
 	void Run() override;
-	void ConfigureGameObjects();
 };

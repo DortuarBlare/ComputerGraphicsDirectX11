@@ -2,10 +2,11 @@
 #include "../../Games/Game.h"
 
 class Game;
+class GameObject;
 
 class GameObjectComponent {
 public:
-
+	std::unique_ptr<GameObject> owner;
 	bool enabled = true;
 
 	virtual ~GameObjectComponent() = default;

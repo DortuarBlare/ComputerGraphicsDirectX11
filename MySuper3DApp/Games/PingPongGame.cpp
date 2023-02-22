@@ -25,12 +25,12 @@ void PingPongGame::Update() {
 	if (inputDevice->IsKeyDown(Keys::S))
 		*leftPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 
-	std::cout
+	/*std::cout
 		<< "Left player position: "
 		<< leftPlayer->position->x << " "
 		<< leftPlayer->position->y << " "
 		<< leftPlayer->position->z <<
-		std::endl;
+		std::endl;*/
 
 	// Input of right player
 	// Change on internal logic in future
@@ -43,12 +43,12 @@ void PingPongGame::Update() {
 	if (inputDevice->IsKeyDown(Keys::Down))
 		*rightPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 
-	std::cout
+	/*std::cout
 		<< "Right player position: "
 		<< rightPlayer->position->x << " "
 		<< rightPlayer->position->y << " "
 		<< rightPlayer->position->z <<
-		std::endl;
+		std::endl;*/
 }
 
 /*
@@ -83,21 +83,21 @@ void PingPongGame::ConfigureGameObjects() {
 
 	leftPlayerRacket->points.insert(leftPlayerRacket->points.end(),
 		{
-			/* Vertex position						   */ /* Vertex color */
-			DirectX::XMFLOAT4(-0.8f,  0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(-0.9f, -0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(-0.8f, -0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(-0.9f,  0.25f, 0.5f, 1.0f), racketColor
+			/* Vertex position						    */ /* Vertex color */
+			DirectX::XMFLOAT4( 0.05f,  0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.05f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4( 0.05f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.05f,  0.25f, 0.5f, 1.0f), racketColor
 		}
 	);
 
 	rightPlayerRacket->points.insert(rightPlayerRacket->points.end(),
 		{
-			/* Vertex position						 */ /* Vertex color */
-			DirectX::XMFLOAT4(1.0f,  0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(0.9f, -0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(1.0f, -0.25f, 0.5f, 1.0f), racketColor,
-			DirectX::XMFLOAT4(0.9f,  0.25f, 0.5f, 1.0f), racketColor
+			/* Vertex position						    */ /* Vertex color */
+			DirectX::XMFLOAT4( 0.05f,  0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.05f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4( 0.05f, -0.25f, 0.5f, 1.0f), racketColor,
+			DirectX::XMFLOAT4(-0.05f,  0.25f, 0.5f, 1.0f), racketColor
 		}
 	);
 
@@ -111,9 +111,9 @@ void PingPongGame::ConfigureGameObjects() {
 		}
 	);
 
-	leftPlayer->components.push_back(leftPlayerRacket);
-	rightPlayer->components.push_back(rightPlayerRacket);
-	ball->components.push_back(ballMesh);
+	leftPlayer->AddComponent(leftPlayerRacket);
+	rightPlayer->AddComponent(rightPlayerRacket);
+	ball->AddComponent(ballMesh);
 
 	// Adding all game objects to Game::gameObjects for their initialization
 	PingPongGame::instance->gameObjects.push_back(leftPlayer.get());

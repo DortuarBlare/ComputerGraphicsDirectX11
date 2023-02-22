@@ -19,6 +19,8 @@ public:
 	virtual void Reload();
 	virtual void DestroyResources();
 
+	void AddComponent(std::shared_ptr<GameObjectComponent> component);
+
 	void MoveLeft();
 	void MoveRight();
 	void MoveUp();

@@ -8,6 +8,7 @@ GameObject::GameObject(DirectX::SimpleMath::Vector4 position) {
 	this->position = std::make_shared<DirectX::SimpleMath::Vector4>(position);
 }
 
+
 void GameObject::Initialize() {
 	for (auto& component : components)
 		component->Initialize();
@@ -45,4 +46,10 @@ void GameObject::Reload() {
 void GameObject::DestroyResources() {
 	for (auto& component : components)
 		component->DestroyResources();
+}
+
+
+void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
+	component->owner = std::make_unique<GameObject>(*this);
+	components.push_back(component);
 }
