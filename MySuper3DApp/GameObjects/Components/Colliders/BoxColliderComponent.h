@@ -8,4 +8,11 @@ private:
 public:
 	BoxColliderComponent();
 	BoxColliderComponent(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 extents);
+
+	void Initialize();
+	void Update();
+	void FixedUpdate();
+	void Draw();
+	void Reload();
+	void DestroyResources();
 };

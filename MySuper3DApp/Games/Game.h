@@ -56,8 +56,8 @@ public:
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> prevTime;
 	HRESULT res; // Used for return codes from "Direct3D 11" functions
-	float totalTime;
-	float deltaTime;
+	float totalTime; // Better move to some "Time" class
+	float deltaTime; // Better move to some "Time" class
 	unsigned int frameCount;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);

@@ -240,7 +240,7 @@ void Game::UpdateInternal() {
 
 		WCHAR text[256];
 		swprintf_s(text, TEXT("FPS: %f"), fps);
-		SetWindowText(display->GetHWnd(), text);
+		SetWindowText(display->GetHWnd(), text); // Change to players score
 
 		frameCount = 0;
 	}

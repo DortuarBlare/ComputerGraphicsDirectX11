@@ -5,6 +5,7 @@ class Game;
 
 class GameObjectComponent {
 public:
+
 	bool enabled = true;
 
 	virtual ~GameObjectComponent() = default;

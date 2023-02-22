@@ -25,6 +25,13 @@ void PingPongGame::Update() {
 	if (inputDevice->IsKeyDown(Keys::S))
 		*leftPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 
+	std::cout
+		<< "Left player position: "
+		<< leftPlayer->position->x << " "
+		<< leftPlayer->position->y << " "
+		<< leftPlayer->position->z <<
+		std::endl;
+
 	// Input of right player
 	// Change on internal logic in future
 	if (inputDevice->IsKeyDown(Keys::Left))
@@ -35,6 +42,13 @@ void PingPongGame::Update() {
 		*rightPlayer->position += {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
 	if (inputDevice->IsKeyDown(Keys::Down))
 		*rightPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
+
+	std::cout
+		<< "Right player position: "
+		<< rightPlayer->position->x << " "
+		<< rightPlayer->position->y << " "
+		<< rightPlayer->position->z <<
+		std::endl;
 }
 
 /*
@@ -61,15 +75,15 @@ void PingPongGame::Run() {
 * Configure score game objects
 */
 void PingPongGame::ConfigureGameObjects() {
-	SquareRenderComponent* leftPlayerRacket = new SquareRenderComponent(D3D11_FILL_SOLID, leftPlayer->position);
-	SquareRenderComponent* rightPlayerRacket = new SquareRenderComponent(D3D11_FILL_SOLID, rightPlayer->position);
-	SquareRenderComponent* ballMesh = new SquareRenderComponent();
+	std::shared_ptr<SquareRenderComponent> leftPlayerRacket = std::make_shared<SquareRenderComponent>(D3D11_FILL_SOLID, leftPlayer->position);
+	std::shared_ptr<SquareRenderComponent> rightPlayerRacket = std::make_shared<SquareRenderComponent>(D3D11_FILL_SOLID, rightPlayer->position);
+	std::shared_ptr<SquareRenderComponent> ballMesh = std::make_shared<SquareRenderComponent>();
 	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
 	DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
 
 	leftPlayerRacket->points.insert(leftPlayerRacket->points.end(),
 		{
-			/* Vertex position						  */ /* Vertex color */
+			/* Vertex position						   */ /* Vertex color */
 			DirectX::XMFLOAT4(-0.8f,  0.25f, 0.5f, 1.0f), racketColor,
 			DirectX::XMFLOAT4(-0.9f, -0.25f, 0.5f, 1.0f), racketColor,
 			DirectX::XMFLOAT4(-0.8f, -0.25f, 0.5f, 1.0f), racketColor,
@@ -89,7 +103,7 @@ void PingPongGame::ConfigureGameObjects() {
 
 	ballMesh->points.insert(ballMesh->points.end(),
 		{
-			/* Vertex position						   */ /* Vertex color */
+			/* Vertex position						      */  /* Vertex color */
 			DirectX::XMFLOAT4( 0.025f,  0.025f, 0.5f, 1.0f),  ballColor,
 			DirectX::XMFLOAT4(-0.025f, -0.025f, 0.5f, 1.0f),  ballColor,
 			DirectX::XMFLOAT4( 0.025f, -0.025f, 0.5f, 1.0f),  ballColor,
