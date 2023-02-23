@@ -32,11 +32,11 @@ void RectangleRenderComponent::Initialize() {
 void RectangleRenderComponent::ConfigureRectangle() {
 	points.insert(points.end(),
 		{
-			/* Vertex position																			   */ /* Vertex color */
-			DirectX::XMFLOAT4(renderOffset->x + extents.x / 2,  renderOffset->y + extents.y / 2, 0.5f, 1.0f), fillColor,
-			DirectX::XMFLOAT4(renderOffset->x - extents.x / 2,  renderOffset->y - extents.y / 2, 0.5f, 1.0f), fillColor,
-			DirectX::XMFLOAT4(renderOffset->x + extents.x / 2,  renderOffset->y - extents.y / 2, 0.5f, 1.0f), fillColor,
-			DirectX::XMFLOAT4(renderOffset->x - extents.x / 2,  renderOffset->y + extents.y / 2, 0.5f, 1.0f), fillColor
+			/* Vertex position																			           */ /* Vertex color */
+			DirectX::XMFLOAT4(renderOffset->x + extents.x/* / 2*/,  renderOffset->y + extents.y/* / 2*/, 0.0f, 1.0f), fillColor,
+			DirectX::XMFLOAT4(renderOffset->x - extents.x/* / 2*/,  renderOffset->y - extents.y/* / 2*/, 0.0f, 1.0f), fillColor,
+			DirectX::XMFLOAT4(renderOffset->x + extents.x/* / 2*/,  renderOffset->y - extents.y/* / 2*/, 0.0f, 1.0f), fillColor,
+			DirectX::XMFLOAT4(renderOffset->x - extents.x/* / 2*/,  renderOffset->y + extents.y/* / 2*/, 0.0f, 1.0f), fillColor
 		}
 	);
 }

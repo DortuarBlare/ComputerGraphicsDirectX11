@@ -7,8 +7,10 @@ class PingPongGame : public Game {
 private:
 	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
-	void ConfigureGameObjects();
+	void Initialize() override;
 	void Update() override;
+
+	void ConfigureGameObjects();
 
 public:
 	std::shared_ptr<GameObject> leftPlayer;

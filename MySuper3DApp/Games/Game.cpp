@@ -249,7 +249,7 @@ void Game::UpdateInternal() {
 
 	Update();
 
-	FixedUpdate(); // Change for fixed calls per second
+	FixedUpdate(); // Change for fixed calls
 
 	Draw();
 

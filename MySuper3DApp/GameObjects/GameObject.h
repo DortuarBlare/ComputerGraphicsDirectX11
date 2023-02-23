@@ -30,9 +30,24 @@ public:
 	virtual void DestroyResources();
 
 	void AddComponent(std::shared_ptr<GameObjectComponent> component);
+	
+	template<typename T>
+	std::optional<T> getComponent();
 
 	/*void MoveLeft();
 	void MoveRight();
 	void MoveUp();
 	void MoveDown();*/
 };
+
+template<typename T>
+inline std::optional<T> GameObject::getComponent() {
+	for (auto& component : components) {
+		T* result = dynamic_cast<T*>(component.get());
+
+		if (result)
+			return *result;
+	}
+
+	return {};
+}

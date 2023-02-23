@@ -8,6 +8,15 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	centralInvisibleWall = std::make_shared<GameObject>();
 }
 
+void PingPongGame::Initialize() {
+	Game::Initialize();
+
+	*leftPlayer->position -= {0.5f, 0.0f, 0.0f, 0.0f};
+	*rightPlayer->position += {0.5f, 0.0f, 0.0f, 0.0f};
+	leftPlayer->getComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
+	rightPlayer->getComponent<BoxColliderComponent>().value().GetCenter().x += 0.5f;
+}
+
 /*
 * Call Game::Update() for base logic
 * Handle input player here because of better time control
@@ -15,17 +24,7 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 void PingPongGame::Update() {
 	Game::Update();
 
-	// Input of left player
-	// Change on internal logic in future
-	/*if (inputDevice->IsKeyDown(Keys::A))
-		*leftPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::D))
-		*leftPlayer->position += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::W))
-		*leftPlayer->position += {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::S))
-		*leftPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};*/
-
+	// Left player handle input
 	if (inputDevice->IsKeyDown(Keys::A))
 		leftPlayer->wantsToMoveLeft = true;
 	else 
@@ -46,24 +45,8 @@ void PingPongGame::Update() {
 	else
 		leftPlayer->wantsToMoveDown = false;
 
-	/*std::cout
-		<< "Left player position: "
-		<< leftPlayer->position->x << " "
-		<< leftPlayer->position->y << " "
-		<< leftPlayer->position->z <<
-		std::endl;*/
 
-	// Input of right player
-	// Change on internal logic in future
-	/*if (inputDevice->IsKeyDown(Keys::Left))
-		*rightPlayer->position -= {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::Right))
-		*rightPlayer->position += {0.25f * deltaTime, 0.0f, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::Up))
-		*rightPlayer->position += {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};
-	if (inputDevice->IsKeyDown(Keys::Down))
-		*rightPlayer->position -= {0.0f, 0.5f * deltaTime, 0.0f, 0.0f};*/
-
+	// Right player handle input
 	if (inputDevice->IsKeyDown(Keys::Left))
 		rightPlayer->wantsToMoveLeft = true;
 	else
@@ -83,13 +66,6 @@ void PingPongGame::Update() {
 		rightPlayer->wantsToMoveDown = true;
 	else
 		rightPlayer->wantsToMoveDown = false;
-
-	/*std::cout
-		<< "Right player position: "
-		<< rightPlayer->position->x << " "
-		<< rightPlayer->position->y << " "
-		<< rightPlayer->position->z <<
-		std::endl;*/
 }
 
 /*
@@ -120,21 +96,18 @@ void PingPongGame::ConfigureGameObjects() {
 	DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
 	DirectX::XMFLOAT4 debugColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-	*leftPlayer->position -= {0.5f, 0.0f, 0.0f, 0.0f};
-	*rightPlayer->position += {0.5f, 0.0f, 0.0f, 0.0f};
-
 	std::shared_ptr<RectangleRenderComponent> leftPlayerRacket =
 		std::make_shared<RectangleRenderComponent>(
 			racketColor,
 			D3D11_FILL_SOLID,
 			leftPlayer->position,
-			DirectX::XMFLOAT3(0.1f, 0.5f, 0.0f)
+			DirectX::XMFLOAT3(0.05f, 0.25f, 0.0f)
 		);
 
 	std::shared_ptr<BoxColliderComponent> leftPlayerRacketCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(leftPlayer->position->x, leftPlayer->position->y, 0.0f),
-			DirectX::XMFLOAT3(0.1f, 0.5f, 0.0f)
+			DirectX::XMFLOAT3(0.05f, 0.25f, 0.0f)
 		);
 
 	std::shared_ptr<RectangleRenderComponent> leftPlayerRacketDebugCollision = 
@@ -151,13 +124,13 @@ void PingPongGame::ConfigureGameObjects() {
 			racketColor,
 			D3D11_FILL_SOLID,
 			rightPlayer->position,
-			DirectX::XMFLOAT3(0.1f, 0.5f, 0.0f)
+			DirectX::XMFLOAT3(0.05f, 0.25f, 0.0f)
 		);
 
 	std::shared_ptr<BoxColliderComponent> rightPlayerRacketCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(rightPlayer->position->x, rightPlayer->position->y, 0.0f),
-			DirectX::XMFLOAT3(0.1f, 0.5f, 0.0f)
+			DirectX::XMFLOAT3(0.05f, 0.25f, 0.0f)
 		);
 
 	std::shared_ptr<RectangleRenderComponent> rightPlayerRacketDebugCollision =
@@ -174,13 +147,14 @@ void PingPongGame::ConfigureGameObjects() {
 			ballColor,
 			D3D11_FILL_SOLID,
 			ball->position,
-			DirectX::XMFLOAT3(0.05f, 0.05f, 0.0f)
+			DirectX::XMFLOAT3(0.025f, 0.025f, 0.0f)
 		);
+
 
 	std::shared_ptr<BoxColliderComponent> centralInvisibleWallCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
-			DirectX::XMFLOAT3(0.1f, 3.0f, 0.0f)
+			DirectX::XMFLOAT3(0.05f, 1.5f, 0.0f)
 		);
 
 	std::shared_ptr<RectangleRenderComponent> centralInvisibleWallDebugCollision =

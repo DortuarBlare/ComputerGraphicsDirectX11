@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <optional>
 
 #include "../GameObjects/GameObject.h"
 #include "../WinApi/DisplayWin32.h"
@@ -27,7 +28,7 @@ protected:
 	int clientWidth;
 	int clientHeight;
 	bool windowed;
-
+	
 	std::shared_ptr<DisplayWin32> display; // WinApi display
 	std::shared_ptr<D3D11_VIEWPORT> viewport; // Defines the dimensions of a viewport
 	Microsoft::WRL::ComPtr<ID3D11Device> device; // The device interface represents a virtual adapter and it is used to create resources
@@ -42,7 +43,7 @@ protected:
 	void UpdateInternal();
 	void DestroyResources();
 	void PrepareResources();
-	void Initialize();
+	virtual void Initialize();
 	void PrepareFrame();
 	virtual void Update();
 	void FixedUpdate();
