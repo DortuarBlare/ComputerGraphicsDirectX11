@@ -6,6 +6,10 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	rightPlayer = std::make_shared<GameObject>();
 	ball = std::make_shared<GameObject>();
 	centralInvisibleWall = std::make_shared<GameObject>();
+	upInvisibleWall = std::make_shared<GameObject>();
+	downInvisibleWall = std::make_shared<GameObject>();
+	leftInvisibleWall = std::make_shared<GameObject>();
+	rightInvisibleWall = std::make_shared<GameObject>();
 }
 
 void PingPongGame::Initialize() {
@@ -15,6 +19,18 @@ void PingPongGame::Initialize() {
 	*rightPlayer->position += {0.5f, 0.0f, 0.0f, 0.0f};
 	leftPlayer->getComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
 	rightPlayer->getComponent<BoxColliderComponent>().value().GetCenter().x += 0.5f;
+
+	*upInvisibleWall->position += {0.0f, 1.0f, 0.0f, 0.0f};
+	upInvisibleWall->getComponent<BoxColliderComponent>().value().GetCenter().y += 1.0f;
+
+	*downInvisibleWall->position -= {0.0f, 1.0f, 0.0f, 0.0f};
+	downInvisibleWall->getComponent<BoxColliderComponent>().value().GetCenter().y -= 1.0f;
+
+	*leftInvisibleWall->position -= {1.0f, 0.0f, 0.0f, 0.0f};
+	leftInvisibleWall->getComponent<BoxColliderComponent>().value().GetCenter().x -= 1.0f;
+
+	*rightInvisibleWall->position += {1.0f, 0.0f, 0.0f, 0.0f};
+	rightInvisibleWall->getComponent<BoxColliderComponent>().value().GetCenter().x += 1.0f;
 }
 
 /*
@@ -90,6 +106,7 @@ void PingPongGame::Run() {
 * Configure players game objects
 * Configure ball game object
 * Configure score game objects
+* Before PingPongGame::Initialize()
 */
 void PingPongGame::ConfigureGameObjects() {
 	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
@@ -154,7 +171,7 @@ void PingPongGame::ConfigureGameObjects() {
 	std::shared_ptr<BoxColliderComponent> centralInvisibleWallCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
-			DirectX::XMFLOAT3(0.05f, 1.5f, 0.0f)
+			DirectX::XMFLOAT3(0.025f, 1.5f, 0.0f)
 		);
 
 	std::shared_ptr<RectangleRenderComponent> centralInvisibleWallDebugCollision =
@@ -165,11 +182,73 @@ void PingPongGame::ConfigureGameObjects() {
 			centralInvisibleWallCollision->GetExtents()
 		);
 
+
+	std::shared_ptr<BoxColliderComponent> upInvisibleWallCollision =
+		std::make_shared<BoxColliderComponent>(
+			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+			DirectX::XMFLOAT3(1.5f, 0.025f, 0.0f)
+		);
+
+	std::shared_ptr<RectangleRenderComponent> upInvisibleWallDebugCollision =
+		std::make_shared<RectangleRenderComponent>(
+			debugColor,
+			D3D11_FILL_WIREFRAME,
+			upInvisibleWall->position,
+			upInvisibleWallCollision->GetExtents()
+		);
+
+	std::shared_ptr<BoxColliderComponent> downInvisibleWallCollision =
+		std::make_shared<BoxColliderComponent>(
+			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+			DirectX::XMFLOAT3(1.5f, 0.025f, 0.0f)
+		);
+
+	std::shared_ptr<RectangleRenderComponent> downInvisibleWallDebugCollision =
+		std::make_shared<RectangleRenderComponent>(
+			debugColor,
+			D3D11_FILL_WIREFRAME,
+			downInvisibleWall->position,
+			downInvisibleWallCollision->GetExtents()
+		);
+
+	std::shared_ptr<BoxColliderComponent> leftInvisibleWallCollision =
+		std::make_shared<BoxColliderComponent>(
+			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+			DirectX::XMFLOAT3(0.025f, 1.5f, 0.0f)
+		);
+
+	std::shared_ptr<RectangleRenderComponent> leftInvisibleWallDebugCollision =
+		std::make_shared<RectangleRenderComponent>(
+			debugColor,
+			D3D11_FILL_WIREFRAME,
+			leftInvisibleWall->position,
+			leftInvisibleWallCollision->GetExtents()
+		);
+
+	std::shared_ptr<BoxColliderComponent> rightInvisibleWallCollision =
+		std::make_shared<BoxColliderComponent>(
+			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+			DirectX::XMFLOAT3(0.025f, 1.5f, 0.0f)
+		);
+
+	std::shared_ptr<RectangleRenderComponent> rightInvisibleWallDebugCollision =
+		std::make_shared<RectangleRenderComponent>(
+			debugColor,
+			D3D11_FILL_WIREFRAME,
+			rightInvisibleWall->position,
+			rightInvisibleWallCollision->GetExtents()
+		);
+	
+
 	// Adding all game objects to Game::gameObjects for their initialization
 	PingPongGame::instance->gameObjects.push_back(leftPlayer);
 	PingPongGame::instance->gameObjects.push_back(rightPlayer);
 	PingPongGame::instance->gameObjects.push_back(ball);
 	PingPongGame::instance->gameObjects.push_back(centralInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(upInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(downInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(leftInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(rightInvisibleWall);
 
 	leftPlayer->AddComponent(leftPlayerRacket);
 	leftPlayer->AddComponent(leftPlayerRacketCollision);
@@ -183,4 +262,16 @@ void PingPongGame::ConfigureGameObjects() {
 
 	centralInvisibleWall->AddComponent(centralInvisibleWallCollision);
 	centralInvisibleWall->AddComponent(centralInvisibleWallDebugCollision);
+
+	upInvisibleWall->AddComponent(upInvisibleWallCollision);
+	upInvisibleWall->AddComponent(upInvisibleWallDebugCollision);
+
+	downInvisibleWall->AddComponent(downInvisibleWallCollision);
+	downInvisibleWall->AddComponent(downInvisibleWallDebugCollision);
+
+	leftInvisibleWall->AddComponent(leftInvisibleWallCollision);
+	leftInvisibleWall->AddComponent(leftInvisibleWallDebugCollision);
+
+	rightInvisibleWall->AddComponent(rightInvisibleWallCollision);
+	rightInvisibleWall->AddComponent(rightInvisibleWallDebugCollision);
 }

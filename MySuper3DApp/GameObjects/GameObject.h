@@ -7,16 +7,12 @@ class GameObject {
 public:
 	std::shared_ptr<DirectX::SimpleMath::Vector4> position; // In the future move to Transform class
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
+	float velocity = 0.25f; // In the future move to Rigidbody class
 
 	bool wantsToMoveLeft = false;
 	bool wantsToMoveRight = false;
 	bool wantsToMoveUp = false;
 	bool wantsToMoveDown = false;
-
-	bool canMoveLeft = false;
-	bool canMoveRight = false;
-	bool canMoveUp = false;
-	bool canMoveDown = false;
 
 	GameObject();
 	GameObject(DirectX::SimpleMath::Vector4 position);
@@ -33,11 +29,6 @@ public:
 	
 	template<typename T>
 	std::optional<T> getComponent();
-
-	/*void MoveLeft();
-	void MoveRight();
-	void MoveUp();
-	void MoveDown();*/
 };
 
 template<typename T>
@@ -49,5 +40,5 @@ inline std::optional<T> GameObject::getComponent() {
 			return *result;
 	}
 
-	return {};
+	return std::nullopt;
 }

@@ -17,34 +17,34 @@ void BoxColliderComponent::Update() {
 }
 
 void BoxColliderComponent::FixedUpdate() {
-	std::cout << std::endl <<
+	/*std::cout << std::endl <<
 		"---------------------------------------------------------------------------------------" << std::endl <<
 		"GameObject: " << owner << " ||| "
 		"GameObject Position: " << owner->position->x << " " << owner->position->y << " " << owner->position->z << " " <<
-		std::endl;
-
+		std::endl;*/
+	
 	if (owner->wantsToMoveLeft) {
 		if (!Intersects(DirectX::SimpleMath::Vector3::Left)) {
-			*owner->position -= {0.25f * Game::instance->deltaTime, 0.0f, 0.0f, 0.0f};
-			boundingBox->Center.x -= 0.25f * Game::instance->deltaTime;
+			*owner->position -= {owner->velocity * Game::instance->deltaTime, 0.0f, 0.0f, 0.0f};
+			boundingBox->Center.x -= owner->velocity * Game::instance->deltaTime;
 		}
 	}
 	if (owner->wantsToMoveRight) {
 		if (!Intersects(DirectX::SimpleMath::Vector3::Right)) {
-			*owner->position += {0.25f * Game::instance->deltaTime, 0.0f, 0.0f, 0.0f};
-			boundingBox->Center.x += 0.25f * Game::instance->deltaTime;
+			*owner->position += {owner->velocity * Game::instance->deltaTime, 0.0f, 0.0f, 0.0f};
+			boundingBox->Center.x += owner->velocity * Game::instance->deltaTime;
 		}
 	}
 	if (owner->wantsToMoveUp) {
 		if (!Intersects(DirectX::SimpleMath::Vector3::Up)) {
-			*owner->position += {0.0f, 0.25f * Game::instance->deltaTime, 0.0f, 0.0f};
-			boundingBox->Center.y += 0.25f * Game::instance->deltaTime;
+			*owner->position += {0.0f, owner->velocity * 2.0f * Game::instance->deltaTime, 0.0f, 0.0f};
+			boundingBox->Center.y += owner->velocity * 2.0f * Game::instance->deltaTime;
 		}
 	}
 	if (owner->wantsToMoveDown) {
 		if (!Intersects(DirectX::SimpleMath::Vector3::Down)) {
-			*owner->position -= {0.0f, 0.25f * Game::instance->deltaTime, 0.0f, 0.0f};
-			boundingBox->Center.y -= 0.25f * Game::instance->deltaTime;
+			*owner->position -= {0.0f, owner->velocity * 2.0f * Game::instance->deltaTime, 0.0f, 0.0f};
+			boundingBox->Center.y -= owner->velocity * 2.0f * Game::instance->deltaTime;
 		}
 	}
 }
@@ -62,53 +62,71 @@ void BoxColliderComponent::DestroyResources() {
 }
 
 bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 direction) {
-	DirectX::SimpleMath::Vector3 point(boundingBox->Center);
-
-	if (direction == DirectX::SimpleMath::Vector3::Left) {
-		point.x -= boundingBox->Extents.x / 2;
-		std::cout << "Point.x -=" << std::endl;
-	}
-	else if (direction == DirectX::SimpleMath::Vector3::Right) {
-		point.x += boundingBox->Extents.x / 2;
-		std::cout << "Point.x +=" << std::endl;
-	}
-	else if (direction == DirectX::SimpleMath::Vector3::Up) {
-		point.y += boundingBox->Extents.y / 2;
-		std::cout << "Point.y -=" << std::endl;
-	}
-	else if (direction == DirectX::SimpleMath::Vector3::Down) {
-		point.y -= boundingBox->Extents.y / 2;
-		std::cout << "Point.y +=" << std::endl;
-	}
-
-	DirectX::SimpleMath::Ray ray(point, direction);
+	//DirectX::SimpleMath::Vector3 point(boundingBox->Center);
+	//
+	//if (direction == DirectX::SimpleMath::Vector3::Left)
+	//	point.x -= boundingBox->Extents.x;
+	//else if (direction == DirectX::SimpleMath::Vector3::Right)
+	//	point.x += boundingBox->Extents.x;
+	//else if (direction == DirectX::SimpleMath::Vector3::Up)
+	//	point.y += boundingBox->Extents.y;
+	//else if (direction == DirectX::SimpleMath::Vector3::Down)
+	//	point.y -= boundingBox->Extents.y;
+	//
+	//DirectX::SimpleMath::Ray ray(point, direction);
+	//
+	//for (auto& gameObject : Game::instance->gameObjects) {
+	//	if (gameObject != owner) {
+	//		for (auto& collider : gameObject->components) {
+	//			BoxColliderComponent* bcc = dynamic_cast<BoxColliderComponent*>(collider.get());
+	//			float outDistance;
+	//
+	//			if (bcc) {
+	//				if (ray.Intersects(*bcc->boundingBox, outDistance)) {
+	//					if (outDistance <= 0.005f) {
+	//						/*std::cout <<
+	//							"BoxColliderComponent: " << this << " ||| " <<
+	//							"BoundingBox position: " << boundingBox->Center.x << " " << boundingBox->Center.y << " " << boundingBox->Center.z <<" ||| " <<
+	//							"BoundingBox extents: " << boundingBox->Extents.x << " " << boundingBox->Extents.y << " " << boundingBox->Extents.z << std::endl <<
+	//
+	//							"Ray position: " << ray.position.x << " " << ray.position.y << " " << ray.position.z << " ||| " <<
+	//							"Ray direction: " << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << " ||| " <<
+	//							"Intersects distance: " << outDistance << std::endl <<
+	//
+	//							"BoxColliderComponent2: " << bcc << " ||| " <<
+	//							"BoundingBox2 position: " << bcc->boundingBox->Center.x << " " << bcc->boundingBox->Center.y << " " << bcc->boundingBox->Center.z << " ||| " <<
+	//							"BoundingBox2 extents: " << bcc->boundingBox->Extents.x << " " << bcc->boundingBox->Extents.y << " " << bcc->boundingBox->Extents.z << std::endl <<
+	//							"---------------------------------------------------------------------------------------" << std::endl <<
+	//							std::endl;*/
+	//						return true;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
 	for (auto& gameObject : Game::instance->gameObjects) {
 		if (gameObject != owner) {
-			for (auto& collider : gameObject->components) {
-				BoxColliderComponent* bcc = dynamic_cast<BoxColliderComponent*>(collider.get());
-				float outDistance;
+			std::optional<BoxColliderComponent> secondBox = gameObject->getComponent<BoxColliderComponent>();
 
-				if (bcc) {
-					if (ray.Intersects(*bcc->boundingBox, outDistance)) {
-						if (outDistance <= 0.005f/*0.01f*/) {
-							std::cout <<
-								"BoxColliderComponent: " << this << " ||| " <<
-								"BoundingBox position: " << boundingBox->Center.x << " " << boundingBox->Center.y << " " << boundingBox->Center.z <<" ||| " <<
-								"BoundingBox extents: " << boundingBox->Extents.x << " " << boundingBox->Extents.y << " " << boundingBox->Extents.z << std::endl <<
+			if (secondBox.has_value()) {
+				DirectX::BoundingBox boundingBoxWithOffset(boundingBox->Center, boundingBox->Extents);
+				boundingBoxWithOffset.Center.x += direction.x / 100;
+				boundingBoxWithOffset.Center.y += direction.y / 100;
 
-								"Ray position: " << ray.position.x << " " << ray.position.y << " " << ray.position.z << " ||| " <<
-								"Ray direction: " << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << " ||| " <<
-								"Intersects distance: " << outDistance << std::endl <<
+				if (boundingBoxWithOffset.Intersects(*secondBox.value().boundingBox)) {
+					/*std::cout <<
+							"BoxColliderComponent: " << this << " ||| " <<
+							"BoundingBox position: " << boundingBox->Center.x << " " << boundingBox->Center.y << " " << boundingBox->Center.z <<" ||| " <<
+							"BoundingBox extents: " << boundingBox->Extents.x << " " << boundingBox->Extents.y << " " << boundingBox->Extents.z << std::endl <<
 
-								"BoxColliderComponent2: " << bcc << " ||| " <<
-								"BoundingBox2 position: " << bcc->boundingBox->Center.x << " " << bcc->boundingBox->Center.y << " " << bcc->boundingBox->Center.z << " ||| " <<
-								"BoundingBox2 extents: " << bcc->boundingBox->Extents.x << " " << bcc->boundingBox->Extents.y << " " << bcc->boundingBox->Extents.z << std::endl <<
-								"---------------------------------------------------------------------------------------" << std::endl <<
-								std::endl;
-							return true;
-						}
-					}
+							"BoxColliderComponent2: " << bcc << " ||| " <<
+							"BoundingBox2 position: " << bcc->boundingBox->Center.x << " " << bcc->boundingBox->Center.y << " " << bcc->boundingBox->Center.z << " ||| " <<
+							"BoundingBox2 extents: " << bcc->boundingBox->Extents.x << " " << bcc->boundingBox->Extents.y << " " << bcc->boundingBox->Extents.z << std::endl <<
+							"---------------------------------------------------------------------------------------" << std::endl <<
+							std::endl;*/
+					return true;
 				}
 			}
 		}

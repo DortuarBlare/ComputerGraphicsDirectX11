@@ -41,6 +41,11 @@ public:
 		D3D11_FILL_MODE fillMode,
 		std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset
 	);
+	RenderComponent(
+		DirectX::XMFLOAT4 fillColor,
+		D3D11_FILL_MODE fillMode,
+		DirectX::SimpleMath::Vector4 renderOffset
+	);
 
 	virtual void Initialize();
 	void Update();

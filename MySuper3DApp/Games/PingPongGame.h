@@ -17,6 +17,10 @@ public:
 	std::shared_ptr<GameObject> rightPlayer;
 	std::shared_ptr<GameObject> ball;
 	std::shared_ptr<GameObject> centralInvisibleWall;
+	std::shared_ptr<GameObject> upInvisibleWall;
+	std::shared_ptr<GameObject> downInvisibleWall;
+	std::shared_ptr<GameObject> leftInvisibleWall;
+	std::shared_ptr<GameObject> rightInvisibleWall;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 

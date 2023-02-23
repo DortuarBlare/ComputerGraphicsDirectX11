@@ -34,6 +34,23 @@ RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fi
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 }
 
+RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode, DirectX::SimpleMath::Vector4 renderOffset) {
+	this->fillColor = fillColor;
+	this->fillMode = fillMode;
+	this->renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>(renderOffset);
+
+	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
+
+	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+}
+
 /*
 * Compiling pixel and vertex shaders
 * Creating pixel, shader and constant buffers
@@ -155,7 +172,7 @@ void RenderComponent::Initialize() {
 	// Create const buffer
 	//constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
 	constBufDesc->ByteWidth = sizeof(DirectX::XMMATRIX);
-	constBufDesc->Usage = D3D11_USAGE_DEFAULT; // Dynamic for camera?
+	constBufDesc->Usage = D3D11_USAGE_DEFAULT; // D3D11_USAGE_DYNAMIC with matrix? 
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufDesc->CPUAccessFlags = 0;
 	constBufDesc->MiscFlags = 0;
@@ -194,7 +211,8 @@ void RenderComponent::Draw() {
 		// Scaling for correct display on the X axis
 		DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
 			DirectX::XMMatrixMultiply(
-				DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
+				//DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
+				DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f),
 				DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
 			)
 		);
