@@ -40,15 +40,15 @@ protected:
 
 	Game(LPCWSTR name, int clientWidth, int clientHeight, bool windowed);
 
-	void UpdateInternal();
-	void DestroyResources();
-	void PrepareResources();
+	virtual void UpdateInternal();
+	virtual void DestroyResources();
+	virtual void PrepareResources();
 	virtual void Initialize();
-	void PrepareFrame();
+	virtual void PrepareFrame();
 	virtual void Update();
-	void FixedUpdate();
-	void Draw();
-	void EndFrame();
+	virtual void FixedUpdate();
+	virtual void Draw();
+	virtual void EndFrame();
 
 public:
 	static Game* instance; // Singleton

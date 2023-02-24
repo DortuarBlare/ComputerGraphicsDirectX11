@@ -233,17 +233,17 @@ void Game::UpdateInternal() {
 	totalTime += deltaTime;
 	frameCount++;
 
-	if (totalTime > 1.0f) {
+	/*if (totalTime > 1.0f) {
 		float fps = frameCount / totalTime;
 
 		totalTime -= 1.0f;
 
 		WCHAR text[256];
 		swprintf_s(text, TEXT("FPS: %f"), fps);
-		SetWindowText(display->GetHWnd(), text); // Change to players score
+		SetWindowText(display->GetHWnd(), text);
 
 		frameCount = 0;
-	}
+	}*/
 
 	PrepareFrame();
 

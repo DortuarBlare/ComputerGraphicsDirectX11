@@ -2,9 +2,14 @@
 
 PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) :
 	Game(name, screenWidth, screenHeight, windowed) {
+	leftPlayerScore = 0;
+	rightPlayerScore = 0;
 	leftPlayer = std::make_shared<GameObject>();
+	leftPlayer->velocity = 0.4f;
 	rightPlayer = std::make_shared<GameObject>();
+	rightPlayer->velocity = 0.4f;
 	ball = std::make_shared<GameObject>();
+	ballDirection = DirectX::SimpleMath::Vector4(-1.0f, 0.0f, 0.0f, 0.0f);
 	centralInvisibleWall = std::make_shared<GameObject>();
 	upInvisibleWall = std::make_shared<GameObject>();
 	downInvisibleWall = std::make_shared<GameObject>();
@@ -82,6 +87,67 @@ void PingPongGame::Update() {
 		rightPlayer->wantsToMoveDown = true;
 	else
 		rightPlayer->wantsToMoveDown = false;
+
+	
+
+	if (ball->position->x < -1.0f) {
+		rightPlayerScore++;
+		RestartRound();
+	}
+	else if (ball->position->x > 1.0f) {
+		leftPlayerScore++;
+		RestartRound();
+	}
+
+	if (totalTime > 1.0f) {
+		totalTime -= 1.0f;
+
+		WCHAR text[100];
+		swprintf_s(text, TEXT("Left player score: %i ||| Right player score: %i"), leftPlayerScore, rightPlayerScore);
+		SetWindowText(display->GetHWnd(), text);
+	}
+}
+
+/*
+* Call Game::FixedUpdate() for base physics
+* Handle some unique physics here
+*/
+void PingPongGame::FixedUpdate() {
+	Game::FixedUpdate();
+
+	if (ball->getComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Left)) {
+		ball->velocity *= 1.1f;
+		ballDirection.x *= -1;
+
+		if (leftPlayer->position->y < ball->position->y)
+			ballDirection.y = 1;
+		else
+			ballDirection.y = -1;
+	}
+	else if (ball->getComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Right)) {
+		ball->velocity *= 1.1f;
+		ballDirection.x *= -1;
+
+		if (rightPlayer->position->y < ball->position->y)
+			ballDirection.y = 1;
+		else
+			ballDirection.y = -1;
+	}
+	else if (ball->getComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up)) {
+		//ballDirection.x *= -1;
+		ballDirection.y = -1;
+	}
+	else if (ball->getComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down)) {
+		//ballDirection.x *= -1;
+		ballDirection.y = 1;
+	}
+
+	*ball->position = *ball->position + ballDirection * ball->velocity * Game::instance->deltaTime;
+	ball->getComponent<BoxColliderComponent>().value().GetCenter().x = ball->position->x;
+	ball->getComponent<BoxColliderComponent>().value().GetCenter().y = ball->position->y;
+
+	//*ball->position -= {ball->velocity * Game::instance->deltaTime, 0.0f, 0.0f, 0.0f};
+	//ball->getComponent<BoxColliderComponent>().value().GetCenter().x -= ball->velocity * Game::instance->deltaTime;
 }
 
 /*
@@ -100,6 +166,13 @@ void PingPongGame::CreateInstance(LPCWSTR name, int screenWidth, int screenHeigh
 void PingPongGame::Run() {
 	ConfigureGameObjects();
 	Game::Run();
+}
+
+void PingPongGame::RestartRound() {
+	ball->velocity = 0.25f;
+	*ball->position = DirectX::SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+	ball->getComponent<BoxColliderComponent>().value().GetCenter().x = ball->position->x;
+	ball->getComponent<BoxColliderComponent>().value().GetCenter().y = ball->position->y;
 }
 
 /*
@@ -165,6 +238,20 @@ void PingPongGame::ConfigureGameObjects() {
 			D3D11_FILL_SOLID,
 			ball->position,
 			DirectX::XMFLOAT3(0.025f, 0.025f, 0.0f)
+		);
+
+	std::shared_ptr<BoxColliderComponent> ballCollision =
+		std::make_shared<BoxColliderComponent>(
+			DirectX::XMFLOAT3(ball->position->x, ball->position->y, 0.0f),
+			DirectX::XMFLOAT3(0.025f, 0.025f, 0.0f)
+		);
+
+	std::shared_ptr<RectangleRenderComponent> ballDebugCollision =
+		std::make_shared<RectangleRenderComponent>(
+			debugColor,
+			D3D11_FILL_WIREFRAME,
+			ball->position,
+			ballCollision->GetExtents()
 		);
 
 
@@ -244,11 +331,12 @@ void PingPongGame::ConfigureGameObjects() {
 	PingPongGame::instance->gameObjects.push_back(leftPlayer);
 	PingPongGame::instance->gameObjects.push_back(rightPlayer);
 	PingPongGame::instance->gameObjects.push_back(ball);
-	PingPongGame::instance->gameObjects.push_back(centralInvisibleWall);
+	//PingPongGame::instance->gameObjects.push_back(centralInvisibleWall);
 	PingPongGame::instance->gameObjects.push_back(upInvisibleWall);
 	PingPongGame::instance->gameObjects.push_back(downInvisibleWall);
-	PingPongGame::instance->gameObjects.push_back(leftInvisibleWall);
-	PingPongGame::instance->gameObjects.push_back(rightInvisibleWall);
+	//PingPongGame::instance->gameObjects.push_back(leftInvisibleWall);
+	//PingPongGame::instance->gameObjects.push_back(rightInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(ball);
 
 	leftPlayer->AddComponent(leftPlayerRacket);
 	leftPlayer->AddComponent(leftPlayerRacketCollision);
@@ -259,6 +347,8 @@ void PingPongGame::ConfigureGameObjects() {
 	rightPlayer->AddComponent(rightPlayerRacketDebugCollision);
 
 	ball->AddComponent(ballMesh);
+	ball->AddComponent(ballCollision);
+	ball->AddComponent(ballDebugCollision);
 
 	centralInvisibleWall->AddComponent(centralInvisibleWallCollision);
 	centralInvisibleWall->AddComponent(centralInvisibleWallDebugCollision);
