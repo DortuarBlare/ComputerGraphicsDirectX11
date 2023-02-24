@@ -11,5 +11,8 @@ public:
 	PingPongGameObject();
 	PingPongGameObject(DirectX::SimpleMath::Vector4 position);
 
-	void Translate(DirectX::SimpleMath::Vector4 newPosition) override;
+	void FixedUpdate() override;
+
+	void SetPosition(DirectX::SimpleMath::Vector4 newPosition) override;
+	void Translate(DirectX::SimpleMath::Vector4 translation) override;
 };

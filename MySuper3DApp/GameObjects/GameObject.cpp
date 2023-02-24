@@ -58,6 +58,13 @@ void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
 	components.push_back(component);
 }
 
-void GameObject::Translate(DirectX::SimpleMath::Vector4 newPosition) {
+void GameObject::SetPosition(DirectX::SimpleMath::Vector4 newPosition) {
 	*position = newPosition;
+}
+
+/*
+* Moves the position in the direction and distance of "translation"
+*/
+void GameObject::Translate(DirectX::SimpleMath::Vector4 translation) {
+	*position += translation;
 }

@@ -21,7 +21,7 @@ public:
 	std::shared_ptr<PingPongGameObject> leftPlayer;
 	std::shared_ptr<PingPongGameObject> rightPlayer;
 	std::shared_ptr<PingPongGameObject> ball;
-	DirectX::SimpleMath::Vector4 ballDirection;
+	DirectX::SimpleMath::Vector4 ballDirection; // Move to the rigidbody in the future
 	std::shared_ptr<GameObject> centralInvisibleWall;
 	std::shared_ptr<GameObject> upInvisibleWall;
 	std::shared_ptr<GameObject> downInvisibleWall;

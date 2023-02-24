@@ -133,21 +133,12 @@ void PingPongGame::FixedUpdate() {
 		else
 			ballDirection.y = -1;
 	}
-	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up)) {
-		//ballDirection.x *= -1;
+	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up))
 		ballDirection.y = -1;
-	}
-	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down)) {
-		//ballDirection.x *= -1;
+	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down))
 		ballDirection.y = 1;
-	}
 
-	//GameObject forContinuousCollision;
-
-	/**ball->position = *ball->position + ballDirection * ball->velocity * Game::instance->deltaTime;
-	ball->GetComponent<BoxColliderComponent>().value().GetCenter().x = ball->position->x;
-	ball->GetComponent<BoxColliderComponent>().value().GetCenter().y = ball->position->y;*/
-	ball->Translate(*ball->position + ballDirection * ball->velocity * Game::instance->deltaTime);
+	ball->Translate(ballDirection * ball->velocity * Game::instance->deltaTime);
 }
 
 /*
@@ -170,9 +161,7 @@ void PingPongGame::Run() {
 
 void PingPongGame::RestartRound() {
 	ball->velocity = 0.25f;
-	*ball->position = DirectX::SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-	ball->GetComponent<BoxColliderComponent>().value().GetCenter().x = ball->position->x;
-	ball->GetComponent<BoxColliderComponent>().value().GetCenter().y = ball->position->y;
+	ball->SetPosition({ 0.0f, 0.0f, 0.0f, 0.0f });
 }
 
 /*
@@ -284,6 +273,7 @@ void PingPongGame::ConfigureGameObjects() {
 			upInvisibleWallCollision->GetExtents()
 		);
 
+
 	std::shared_ptr<BoxColliderComponent> downInvisibleWallCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
@@ -298,6 +288,7 @@ void PingPongGame::ConfigureGameObjects() {
 			downInvisibleWallCollision->GetExtents()
 		);
 
+
 	std::shared_ptr<BoxColliderComponent> leftInvisibleWallCollision =
 		std::make_shared<BoxColliderComponent>(
 			DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
@@ -311,6 +302,7 @@ void PingPongGame::ConfigureGameObjects() {
 			leftInvisibleWall->position,
 			leftInvisibleWallCollision->GetExtents()
 		);
+
 
 	std::shared_ptr<BoxColliderComponent> rightInvisibleWallCollision =
 		std::make_shared<BoxColliderComponent>(

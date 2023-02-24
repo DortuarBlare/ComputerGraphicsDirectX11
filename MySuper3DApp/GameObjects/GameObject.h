@@ -15,7 +15,7 @@ public:
 	bool wantsToMoveDown = false;
 
 	GameObject();
-	GameObject(DirectX::SimpleMath::Vector4 position);
+	GameObject(DirectX::SimpleMath::Vector4 translation);
 	virtual ~GameObject() = default;
 
 	virtual void Initialize();
@@ -30,7 +30,8 @@ public:
 	template<typename T>
 	std::optional<T> GetComponent();
 
-	virtual void Translate(DirectX::SimpleMath::Vector4 newPosition);
+	virtual void SetPosition(DirectX::SimpleMath::Vector4 newPosition);
+	virtual void Translate(DirectX::SimpleMath::Vector4 translation);
 };
 
 template<typename T>
