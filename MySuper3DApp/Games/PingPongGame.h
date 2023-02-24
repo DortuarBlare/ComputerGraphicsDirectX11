@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "../GameObjects/PingPongGameObject.h"
 #include "../GameObjects/Components/Render/RectangleRenderComponent.h"
 #include "../GameObjects/Components/Colliders/BoxColliderComponent.h"
 
@@ -17,9 +18,9 @@ private:
 	void ConfigureGameObjects();
 
 public:
-	std::shared_ptr<GameObject> leftPlayer;
-	std::shared_ptr<GameObject> rightPlayer;
-	std::shared_ptr<GameObject> ball;
+	std::shared_ptr<PingPongGameObject> leftPlayer;
+	std::shared_ptr<PingPongGameObject> rightPlayer;
+	std::shared_ptr<PingPongGameObject> ball;
 	DirectX::SimpleMath::Vector4 ballDirection;
 	std::shared_ptr<GameObject> centralInvisibleWall;
 	std::shared_ptr<GameObject> upInvisibleWall;

@@ -108,7 +108,7 @@ bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 direction) {
 
 	for (auto& gameObject : Game::instance->gameObjects) {
 		if (gameObject != owner) {
-			std::optional<BoxColliderComponent> secondBox = gameObject->getComponent<BoxColliderComponent>();
+			std::optional<BoxColliderComponent> secondBox = gameObject->GetComponent<BoxColliderComponent>();
 
 			if (secondBox.has_value()) {
 				DirectX::BoundingBox boundingBoxWithOffset(boundingBox->Center, boundingBox->Extents);

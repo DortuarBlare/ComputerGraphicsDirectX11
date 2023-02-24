@@ -57,3 +57,7 @@ void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
 
 	components.push_back(component);
 }
+
+void GameObject::Translate(DirectX::SimpleMath::Vector4 newPosition) {
+	*position = newPosition;
+}
