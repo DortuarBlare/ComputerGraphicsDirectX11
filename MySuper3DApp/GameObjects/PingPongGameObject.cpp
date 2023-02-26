@@ -2,7 +2,7 @@
 
 PingPongGameObject::PingPongGameObject() : GameObject() {}
 
-PingPongGameObject::PingPongGameObject(DirectX::SimpleMath::Vector4 position) : GameObject(position) {}
+PingPongGameObject::PingPongGameObject(DirectX::SimpleMath::Vector4 position) : GameObject(position, {}) {}
 
 
 void PingPongGameObject::FixedUpdate() {
@@ -34,6 +34,31 @@ void PingPongGameObject::FixedUpdate() {
 	}
 }
 
+
+void PingPongGameObject::Reflect(BoxColliderComponent forNormalVector) {
+	DirectX::SimpleMath::Vector4 normalVector = {};
+
+	if (forNormalVector.GetCenter().x > position->x) {
+		normalVector = {
+			position->x + (forNormalVector.GetCenter().x + forNormalVector.GetExtents().x * 2),
+			position->y - forNormalVector.GetCenter().y,
+			0.0f,
+			0.0f
+		};
+		normalVector.Normalize();
+	}
+	else if (forNormalVector.GetCenter().x < position->x) {
+		normalVector = {
+			position->x - (forNormalVector.GetCenter().x - forNormalVector.GetExtents().x * 2),
+			position->y - forNormalVector.GetCenter().y,
+			0.0f,
+			0.0f
+		};
+		normalVector.Normalize();
+	}
+	
+	*direction = DirectX::SimpleMath::Vector4::Reflect(*direction, normalVector);
+}
 
 void PingPongGameObject::SetPosition(DirectX::SimpleMath::Vector4 newPosition) {
 	GameObject::SetPosition(newPosition);

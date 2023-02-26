@@ -18,7 +18,7 @@ public:
 	void Reload();
 	void DestroyResources();
 
-	bool Intersects(DirectX::SimpleMath::Vector3 direction);
+	bool Intersects(DirectX::SimpleMath::Vector3 translation);
 	bool Intersects(DirectX::SimpleMath::Vector3 direction, float outDistance);
 
 	DirectX::XMFLOAT3& GetCenter();

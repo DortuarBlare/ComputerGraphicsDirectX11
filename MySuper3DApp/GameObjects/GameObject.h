@@ -5,9 +5,13 @@ class GameObjectComponent;
 
 class GameObject {
 public:
-	std::shared_ptr<DirectX::SimpleMath::Vector4> position; // In the future move to Transform class
+	std::shared_ptr<DirectX::SimpleMath::Vector4> position; // Move to Transform class later
+
+	float velocity = 0.25f; // Move to the rigidbody later
+	std::shared_ptr<DirectX::SimpleMath::Vector4> direction; // Move to the rigidbody later
+
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
-	float velocity = 0.25f; // In the future move to Rigidbody class
+
 
 	bool wantsToMoveLeft = false;
 	bool wantsToMoveRight = false;
@@ -15,7 +19,7 @@ public:
 	bool wantsToMoveDown = false;
 
 	GameObject();
-	GameObject(DirectX::SimpleMath::Vector4 translation);
+	GameObject(DirectX::SimpleMath::Vector4 translation, DirectX::SimpleMath::Vector4 direction);
 	virtual ~GameObject() = default;
 
 	virtual void Initialize();

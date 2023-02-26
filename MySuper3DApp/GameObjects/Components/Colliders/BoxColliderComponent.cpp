@@ -32,15 +32,15 @@ void BoxColliderComponent::DestroyResources() {
 
 }
 
-bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 direction) {
+bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 translation) {
 	for (auto& gameObject : Game::instance->gameObjects) {
 		if (gameObject != owner) {
 			std::optional<BoxColliderComponent> secondBox = gameObject->GetComponent<BoxColliderComponent>();
 
 			if (secondBox.has_value()) {
 				DirectX::BoundingBox boundingBoxWithOffset(boundingBox->Center, boundingBox->Extents);
-				boundingBoxWithOffset.Center.x += direction.x / 100;
-				boundingBoxWithOffset.Center.y += direction.y / 100;
+				boundingBoxWithOffset.Center.x += translation.x / 100;
+				boundingBoxWithOffset.Center.y += translation.y / 100;
 
 				if (boundingBoxWithOffset.Intersects(*secondBox.value().boundingBox)) {
 					/*std::cout <<

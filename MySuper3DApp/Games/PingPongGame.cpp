@@ -9,12 +9,11 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	rightPlayer = std::make_shared<PingPongGameObject>();
 	rightPlayer->velocity = 0.4f;
 	ball = std::make_shared<PingPongGameObject>();
-	ballDirection = DirectX::SimpleMath::Vector4(-1.0f, 0.0f, 0.0f, 0.0f);
-	centralInvisibleWall = std::make_shared<GameObject>();
-	upInvisibleWall = std::make_shared<GameObject>();
-	downInvisibleWall = std::make_shared<GameObject>();
-	leftInvisibleWall = std::make_shared<GameObject>();
-	rightInvisibleWall = std::make_shared<GameObject>();
+	centralInvisibleWall = std::make_shared<PingPongGameObject>();
+	upInvisibleWall = std::make_shared<PingPongGameObject>();
+	downInvisibleWall = std::make_shared<PingPongGameObject>();
+	leftInvisibleWall = std::make_shared<PingPongGameObject>();
+	rightInvisibleWall = std::make_shared<PingPongGameObject>();
 }
 
 void PingPongGame::Initialize() {
@@ -117,28 +116,18 @@ void PingPongGame::FixedUpdate() {
 
 	if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Left)) {
 		ball->velocity *= 1.1f;
-		ballDirection.x *= -1;
-
-		if (leftPlayer->position->y < ball->position->y)
-			ballDirection.y = 1;
-		else
-			ballDirection.y = -1;
+		ball->Reflect(*leftPlayer->collider);
 	}
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Right)) {
 		ball->velocity *= 1.1f;
-		ballDirection.x *= -1;
-
-		if (rightPlayer->position->y < ball->position->y)
-			ballDirection.y = 1;
-		else
-			ballDirection.y = -1;
+		ball->Reflect(*rightPlayer->collider);
 	}
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up))
-		ballDirection.y = -1;
+		ball->Reflect(*upInvisibleWall->collider);
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down))
-		ballDirection.y = 1;
+		ball->Reflect(*downInvisibleWall->collider);
 
-	ball->Translate(ballDirection * ball->velocity * Game::instance->deltaTime);
+	ball->Translate(*ball->direction * ball->velocity * Game::instance->deltaTime);
 }
 
 /*
@@ -165,10 +154,8 @@ void PingPongGame::RestartRound() {
 }
 
 /*
-* Configure players game objects
-* Configure ball game object
-* Configure score game objects
-* Before PingPongGame::Initialize()
+* Configure all ping pong game objects
+* Need to call before PingPongGame::Initialize()
 */
 void PingPongGame::ConfigureGameObjects() {
 	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
@@ -189,7 +176,7 @@ void PingPongGame::ConfigureGameObjects() {
 			DirectX::XMFLOAT3(0.05f, 0.25f, 0.0f)
 		);
 
-	std::shared_ptr<RectangleRenderComponent> leftPlayerRacketDebugCollision = 
+	std::shared_ptr<RectangleRenderComponent> leftPlayerRacketDebugCollision =
 		std::make_shared<RectangleRenderComponent>(
 			debugColor,
 			D3D11_FILL_WIREFRAME,
@@ -317,7 +304,7 @@ void PingPongGame::ConfigureGameObjects() {
 			rightInvisibleWall->position,
 			rightInvisibleWallCollision->GetExtents()
 		);
-	
+
 
 	// Adding all game objects to Game::gameObjects for their initialization
 	PingPongGame::instance->gameObjects.push_back(leftPlayer);
@@ -346,19 +333,25 @@ void PingPongGame::ConfigureGameObjects() {
 	ball->collider = ballCollision;
 	ball->AddComponent(ballCollision);
 	ball->AddComponent(ballDebugCollision);
+	ball->direction->x = -1.0f;
 
 	centralInvisibleWall->AddComponent(centralInvisibleWallCollision);
+	centralInvisibleWall->collider = centralInvisibleWallCollision;
 	centralInvisibleWall->AddComponent(centralInvisibleWallDebugCollision);
 
 	upInvisibleWall->AddComponent(upInvisibleWallCollision);
+	upInvisibleWall->collider = upInvisibleWallCollision;
 	upInvisibleWall->AddComponent(upInvisibleWallDebugCollision);
 
 	downInvisibleWall->AddComponent(downInvisibleWallCollision);
+	downInvisibleWall->collider = downInvisibleWallCollision;
 	downInvisibleWall->AddComponent(downInvisibleWallDebugCollision);
 
 	leftInvisibleWall->AddComponent(leftInvisibleWallCollision);
+	leftInvisibleWall->collider = leftInvisibleWallCollision;
 	leftInvisibleWall->AddComponent(leftInvisibleWallDebugCollision);
 
 	rightInvisibleWall->AddComponent(rightInvisibleWallCollision);
+	rightInvisibleWall->collider = rightInvisibleWallCollision;
 	rightInvisibleWall->AddComponent(rightInvisibleWallDebugCollision);
 }

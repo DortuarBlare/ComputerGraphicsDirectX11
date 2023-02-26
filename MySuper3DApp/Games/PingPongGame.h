@@ -21,12 +21,11 @@ public:
 	std::shared_ptr<PingPongGameObject> leftPlayer;
 	std::shared_ptr<PingPongGameObject> rightPlayer;
 	std::shared_ptr<PingPongGameObject> ball;
-	DirectX::SimpleMath::Vector4 ballDirection; // Move to the rigidbody in the future
-	std::shared_ptr<GameObject> centralInvisibleWall;
-	std::shared_ptr<GameObject> upInvisibleWall;
-	std::shared_ptr<GameObject> downInvisibleWall;
-	std::shared_ptr<GameObject> leftInvisibleWall;
-	std::shared_ptr<GameObject> rightInvisibleWall;
+	std::shared_ptr<PingPongGameObject> centralInvisibleWall;
+	std::shared_ptr<PingPongGameObject> upInvisibleWall;
+	std::shared_ptr<PingPongGameObject> downInvisibleWall;
+	std::shared_ptr<PingPongGameObject> leftInvisibleWall;
+	std::shared_ptr<PingPongGameObject> rightInvisibleWall;
 
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
