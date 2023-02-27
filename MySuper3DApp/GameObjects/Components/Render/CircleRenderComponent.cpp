@@ -19,15 +19,15 @@ void CircleRenderComponent::Initialize() {
 }
 
 void CircleRenderComponent::ConfigureCircle() {
-	int pointsAmount = 360;
+	int pointsAmount = 30;
 	points.push_back(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	points.push_back(fillColor);
 
 	for (int i = 1; i <= pointsAmount; i++) {
 		points.push_back(
 			DirectX::XMFLOAT4(
-				radius * DirectX::XMScalarCos(DirectX::XM_PI * 2 * (static_cast<float>(i - 1) / pointsAmount)),
-				radius * DirectX::XMScalarSin(DirectX::XM_PI * 2 * (static_cast<float>(i - 1) / pointsAmount)),
+				radius * DirectX::XMScalarSin(DirectX::XM_PI * 2 * (static_cast<float>(i) / pointsAmount)),
+				radius * DirectX::XMScalarCos(DirectX::XM_PI * 2 * (static_cast<float>(i) / pointsAmount)),
 				0.0f,
 				1.0f
 			)
@@ -35,8 +35,11 @@ void CircleRenderComponent::ConfigureCircle() {
 		points.push_back(fillColor);
 	}
 
-	for (int i = 0; i < pointsAmount; i += 2) {
-		indeces.insert(indeces.end(), { 0, i + 1, i + 2 });
+	for (int i = 1; i <= pointsAmount; i++) {
+		if (i == pointsAmount)
+			indeces.insert(indeces.end(), { 0, i, 1 });
+		else 
+			indeces.insert(indeces.end(), { 0, i, i + 1 });
 	}
 
 }

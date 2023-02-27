@@ -50,7 +50,7 @@ void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
 	// Collider is located on the left
 	else if (boxCollider.GetCenter().x < position->x) {
 		normalVector = {
-			position->x - (/*boxCollider.GetCenter().x + */boxCollider.GetExtents().x * 2),
+			position->x - (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
 			boxCollider.GetCenter().y,
 			0.0f,
 			0.0f
