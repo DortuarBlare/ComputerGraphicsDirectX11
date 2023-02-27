@@ -24,7 +24,7 @@ protected:
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
 
-	std::vector<int> indeces;
+	std::vector<unsigned int> indeces;
 	std::vector<DirectX::XMFLOAT4> points;
 
 	DirectX::XMFLOAT4 fillColor;

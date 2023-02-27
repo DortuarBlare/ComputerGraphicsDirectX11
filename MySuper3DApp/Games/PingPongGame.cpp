@@ -220,7 +220,8 @@ void PingPongGame::ConfigureGameObjects() {
 			ballColor,
 			D3D11_FILL_SOLID,
 			ball->position,
-			0.025f
+			0.025f, // Radius
+			30 // Points amount
 		);
 
 	std::shared_ptr<BoxColliderComponent> ballCollision =

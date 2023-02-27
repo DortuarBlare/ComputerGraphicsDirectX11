@@ -2,15 +2,18 @@
 
 CircleRenderComponent::CircleRenderComponent() : RenderComponent() {
 	radius = 0.0f;
+	pointsAmount = 0;
 }
 
 CircleRenderComponent::CircleRenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
 	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset,
-	float radius
+	float radius,
+	unsigned int pointsAmount
 ) : RenderComponent(fillColor, fillMode, renderOffset) {
 	this->radius = radius;
+	this->pointsAmount = pointsAmount;
 }
 
 void CircleRenderComponent::Initialize() {
@@ -19,7 +22,6 @@ void CircleRenderComponent::Initialize() {
 }
 
 void CircleRenderComponent::ConfigureCircle() {
-	int pointsAmount = 30;
 	points.push_back(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	points.push_back(fillColor);
 
@@ -35,11 +37,8 @@ void CircleRenderComponent::ConfigureCircle() {
 		points.push_back(fillColor);
 	}
 
-	for (int i = 1; i <= pointsAmount; i++) {
-		if (i == pointsAmount)
-			indeces.insert(indeces.end(), { 0, i, 1 });
-		else 
-			indeces.insert(indeces.end(), { 0, i, i + 1 });
+	for (unsigned int i = 1; i < pointsAmount; i++) {
+		indeces.insert(indeces.end(), { 0, i, i + 1 });
 	}
-
+	indeces.insert(indeces.end(), { 0, pointsAmount, 1 });
 }

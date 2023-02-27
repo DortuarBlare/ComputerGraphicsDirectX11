@@ -21,7 +21,6 @@ RectangleRenderComponent::RectangleRenderComponent(
 	DirectX::XMFLOAT3 extents
 ) : RenderComponent(fillColor, fillMode, renderOffset) {
 	this->extents = extents;
-	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3 });
 }
 
 RectangleRenderComponent::RectangleRenderComponent(
@@ -31,7 +30,6 @@ RectangleRenderComponent::RectangleRenderComponent(
 	DirectX::XMFLOAT3 extents
 ) : RenderComponent(fillColor, fillMode, renderOffset) {
 	this->extents = extents;
-	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3 });
 }
 
 void RectangleRenderComponent::Initialize() {
@@ -49,4 +47,6 @@ void RectangleRenderComponent::ConfigureRectangle() {
 			DirectX::XMFLOAT4(renderOffset->x - extents.x,  renderOffset->y + extents.y, 0.0f, 1.0f), fillColor
 		}
 	);
+
+	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3 });
 }
