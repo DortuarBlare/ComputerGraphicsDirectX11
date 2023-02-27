@@ -35,22 +35,24 @@ void PingPongGameObject::FixedUpdate() {
 }
 
 
-void PingPongGameObject::Reflect(BoxColliderComponent forNormalVector) {
+void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
 	DirectX::SimpleMath::Vector4 normalVector = {};
 
-	if (forNormalVector.GetCenter().x > position->x) {
+	// Collider is located on the right
+	if (boxCollider.GetCenter().x > position->x) {
 		normalVector = {
-			position->x + (forNormalVector.GetCenter().x + forNormalVector.GetExtents().x * 2),
-			position->y - forNormalVector.GetCenter().y,
+			position->x + (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
+			position->y - boxCollider.GetCenter().y,
 			0.0f,
 			0.0f
 		};
 		normalVector.Normalize();
 	}
-	else if (forNormalVector.GetCenter().x < position->x) {
+	// Collider is located on the left
+	else if (boxCollider.GetCenter().x < position->x) {
 		normalVector = {
-			position->x - (forNormalVector.GetCenter().x - forNormalVector.GetExtents().x * 2),
-			position->y - forNormalVector.GetCenter().y,
+			position->x + (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
+			position->y - boxCollider.GetCenter().y,
 			0.0f,
 			0.0f
 		};

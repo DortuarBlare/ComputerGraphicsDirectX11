@@ -13,7 +13,7 @@ public:
 
 	void FixedUpdate() override;
 
-	void Reflect(BoxColliderComponent forNormalVector);
+	void Reflect(BoxColliderComponent boxCollider);
 	void SetPosition(DirectX::SimpleMath::Vector4 newPosition) override;
 	void Translate(DirectX::SimpleMath::Vector4 translation) override;
 };

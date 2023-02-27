@@ -8,6 +8,8 @@ private:
 	DirectX::SimpleMath::Vector3 PointOnBounds(DirectX::SimpleMath::Vector3 direction);
 
 public:
+	std::vector<std::shared_ptr<GameObject>> noCollisionGameObjects;
+
 	BoxColliderComponent();
 	BoxColliderComponent(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 extents);
 

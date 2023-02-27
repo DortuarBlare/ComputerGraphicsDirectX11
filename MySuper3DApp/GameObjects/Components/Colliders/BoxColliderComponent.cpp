@@ -34,7 +34,13 @@ void BoxColliderComponent::DestroyResources() {
 
 bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 translation) {
 	for (auto& gameObject : Game::instance->gameObjects) {
-		if (gameObject != owner) {
+		std::shared_ptr<GameObject> noCollisionGameObject = nullptr;
+		auto it = std::find(noCollisionGameObjects.begin(), noCollisionGameObjects.end(), gameObject);
+
+		if (it != noCollisionGameObjects.end())
+			noCollisionGameObject = *it;
+
+		if (gameObject != owner && gameObject != noCollisionGameObject) {
 			std::optional<BoxColliderComponent> secondBox = gameObject->GetComponent<BoxColliderComponent>();
 
 			if (secondBox.has_value()) {
@@ -68,7 +74,13 @@ bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 direction, fl
 	DirectX::SimpleMath::Ray ray(rayPosition, direction);
 	
 	for (auto& gameObject : Game::instance->gameObjects) {
-		if (gameObject != owner) {
+		std::shared_ptr<GameObject> noCollisionGameObject = nullptr;
+		auto it = std::find(noCollisionGameObjects.begin(), noCollisionGameObjects.end(), gameObject);
+
+		if (it != noCollisionGameObjects.end())
+			noCollisionGameObject = *it;
+
+		if (gameObject != owner && gameObject != noCollisionGameObject) {
 			std::optional<BoxColliderComponent> secondBox = gameObject->GetComponent<BoxColliderComponent>();
 
 			if (secondBox.has_value()) {

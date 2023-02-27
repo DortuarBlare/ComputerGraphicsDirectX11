@@ -310,11 +310,11 @@ void PingPongGame::ConfigureGameObjects() {
 	PingPongGame::instance->gameObjects.push_back(leftPlayer);
 	PingPongGame::instance->gameObjects.push_back(rightPlayer);
 	PingPongGame::instance->gameObjects.push_back(ball);
-	//PingPongGame::instance->gameObjects.push_back(centralInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(centralInvisibleWall);
 	PingPongGame::instance->gameObjects.push_back(upInvisibleWall);
 	PingPongGame::instance->gameObjects.push_back(downInvisibleWall);
-	//PingPongGame::instance->gameObjects.push_back(leftInvisibleWall);
-	//PingPongGame::instance->gameObjects.push_back(rightInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(leftInvisibleWall);
+	PingPongGame::instance->gameObjects.push_back(rightInvisibleWall);
 
 	leftPlayer->mesh = leftPlayerMesh;
 	leftPlayer->AddComponent(leftPlayerMesh);
@@ -333,6 +333,9 @@ void PingPongGame::ConfigureGameObjects() {
 	ball->collider = ballCollision;
 	ball->AddComponent(ballCollision);
 	ball->AddComponent(ballDebugCollision);
+	ball->collider->noCollisionGameObjects.push_back(centralInvisibleWall);
+	ball->collider->noCollisionGameObjects.push_back(leftInvisibleWall);
+	ball->collider->noCollisionGameObjects.push_back(rightInvisibleWall);
 	ball->direction->x = -1.0f;
 
 	centralInvisibleWall->AddComponent(centralInvisibleWallCollision);
