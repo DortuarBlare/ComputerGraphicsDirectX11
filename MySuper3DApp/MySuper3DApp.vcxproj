@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\Components\Render\CircleRenderComponent.cpp" />
     <ClCompile Include="GameObjects\Components\Colliders\BoxColliderComponent.cpp" />
     <ClCompile Include="GameObjects\Components\Colliders\ColliderComponent.cpp" />
     <ClCompile Include="GameObjects\Camera.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="GameObjects\Components\Render\TriangleRenderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObjects\Components\Render\CircleRenderComponent.h" />
     <ClInclude Include="GameObjects\Components\Colliders\BoxColliderComponent.h" />
     <ClInclude Include="GameObjects\Components\Colliders\ColliderComponent.h" />
     <ClInclude Include="GameObjects\Camera.h" />

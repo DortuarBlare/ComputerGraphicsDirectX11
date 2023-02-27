@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "../GameObjects/PingPongGameObject.h"
 #include "../GameObjects/Components/Render/RectangleRenderComponent.h"
+#include "../GameObjects/Components/Render/CircleRenderComponent.h"
 #include "../GameObjects/Components/Colliders/BoxColliderComponent.h"
 
 class PingPongGame : public Game {

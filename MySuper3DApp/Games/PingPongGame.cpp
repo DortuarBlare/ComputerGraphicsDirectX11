@@ -5,9 +5,9 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	leftPlayerScore = 0;
 	rightPlayerScore = 0;
 	leftPlayer = std::make_shared<PingPongGameObject>();
-	leftPlayer->velocity = 0.4f;
+	leftPlayer->velocity = 0.75f;
 	rightPlayer = std::make_shared<PingPongGameObject>();
-	rightPlayer->velocity = 0.4f;
+	rightPlayer->velocity = 0.75f;
 	ball = std::make_shared<PingPongGameObject>();
 	centralInvisibleWall = std::make_shared<PingPongGameObject>();
 	upInvisibleWall = std::make_shared<PingPongGameObject>();
@@ -117,10 +117,12 @@ void PingPongGame::FixedUpdate() {
 	if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Left)) {
 		ball->velocity *= 1.1f;
 		ball->Reflect(*leftPlayer->collider);
+		std::cout << "Ball hit left player" << std::endl;
 	}
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Right)) {
 		ball->velocity *= 1.1f;
 		ball->Reflect(*rightPlayer->collider);
+		std::cout << "Ball hit right player" << std::endl;
 	}
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up))
 		ball->Reflect(*upInvisibleWall->collider);
@@ -148,7 +150,12 @@ void PingPongGame::Run() {
 	Game::Run();
 }
 
+/*
+* Set default values of all dynamic game objects
+*/
 void PingPongGame::RestartRound() {
+	leftPlayer->velocity = 0.75f;
+	rightPlayer->velocity = 0.75f;
 	ball->velocity = 0.25f;
 	ball->SetPosition({ 0.0f, 0.0f, 0.0f, 0.0f });
 }
@@ -159,7 +166,8 @@ void PingPongGame::RestartRound() {
 */
 void PingPongGame::ConfigureGameObjects() {
 	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
-	DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
+	//DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
+	DirectX::XMFLOAT4 ballColor(1.0f, 0.0f, 0.0f, 1.0f);
 	DirectX::XMFLOAT4 debugColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 	std::shared_ptr<RectangleRenderComponent> leftPlayerMesh =
@@ -208,12 +216,12 @@ void PingPongGame::ConfigureGameObjects() {
 		);
 
 
-	std::shared_ptr<RectangleRenderComponent> ballMesh =
-		std::make_shared<RectangleRenderComponent>(
+	std::shared_ptr<CircleRenderComponent> ballMesh =
+		std::make_shared<CircleRenderComponent>(
 			ballColor,
 			D3D11_FILL_SOLID,
 			ball->position,
-			DirectX::XMFLOAT3(0.025f, 0.025f, 0.0f)
+			0.1f
 		);
 
 	std::shared_ptr<BoxColliderComponent> ballCollision =
@@ -328,7 +336,7 @@ void PingPongGame::ConfigureGameObjects() {
 	rightPlayer->AddComponent(rightPlayerRacketCollision);
 	rightPlayer->AddComponent(rightPlayerRacketDebugCollision);
 
-	ball->mesh = ballMesh;
+	ball->circleMesh = ballMesh;
 	ball->AddComponent(ballMesh);
 	ball->collider = ballCollision;
 	ball->AddComponent(ballCollision);

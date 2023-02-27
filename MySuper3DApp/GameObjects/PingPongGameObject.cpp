@@ -41,24 +41,24 @@ void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
 	// Collider is located on the right
 	if (boxCollider.GetCenter().x > position->x) {
 		normalVector = {
-			position->x + (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
-			position->y - boxCollider.GetCenter().y,
-			0.0f,
-			0.0f
+		position->x + (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
+		boxCollider.GetCenter().y,
+		0.0f,
+		0.0f
 		};
-		normalVector.Normalize();
 	}
 	// Collider is located on the left
 	else if (boxCollider.GetCenter().x < position->x) {
 		normalVector = {
-			position->x + (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
-			position->y - boxCollider.GetCenter().y,
+			position->x - (/*boxCollider.GetCenter().x + */boxCollider.GetExtents().x * 2),
+			boxCollider.GetCenter().y,
 			0.0f,
 			0.0f
 		};
-		normalVector.Normalize();
+		//normalVector *= -1;
 	}
-	
+	normalVector.Normalize();
+	std::cout << "Reflect normal: " << normalVector.x << ' ' << normalVector.y << std::endl;
 	*direction = DirectX::SimpleMath::Vector4::Reflect(*direction, normalVector);
 }
 
