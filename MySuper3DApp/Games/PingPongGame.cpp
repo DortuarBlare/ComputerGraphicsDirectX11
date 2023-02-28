@@ -4,11 +4,11 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 	Game(name, screenWidth, screenHeight, windowed) {
 	leftPlayerScore = 0;
 	rightPlayerScore = 0;
-	leftPlayer = std::make_shared<PingPongGameObject>();
+	leftPlayer = std::make_shared<PingPongRacket>();
 	leftPlayer->velocity = 0.75f;
-	rightPlayer = std::make_shared<PingPongGameObject>();
+	rightPlayer = std::make_shared<PingPongRacket>();
 	rightPlayer->velocity = 0.75f;
-	ball = std::make_shared<PingPongGameObject>();
+	ball = std::make_shared<PingPongBall>();
 	centralInvisibleWall = std::make_shared<PingPongGameObject>();
 	upInvisibleWall = std::make_shared<PingPongGameObject>();
 	downInvisibleWall = std::make_shared<PingPongGameObject>();
@@ -336,7 +336,7 @@ void PingPongGame::ConfigureGameObjects() {
 	rightPlayer->AddComponent(rightPlayerRacketCollision);
 	rightPlayer->AddComponent(rightPlayerRacketDebugCollision);
 
-	ball->circleMesh = ballMesh;
+	ball->mesh = ballMesh;
 	ball->AddComponent(ballMesh);
 	ball->collider = ballCollision;
 	ball->AddComponent(ballCollision);

@@ -6,8 +6,6 @@
 
 class PingPongGameObject : public GameObject {
 public:
-	std::shared_ptr<RectangleRenderComponent> mesh;
-	std::shared_ptr<CircleRenderComponent> circleMesh;
 	std::shared_ptr<BoxColliderComponent> collider;
 
 	PingPongGameObject();

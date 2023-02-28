@@ -134,6 +134,8 @@
     <ClCompile Include="GameObjects\Camera.cpp" />
     <ClCompile Include="Input\Delegates.cpp" />
     <ClCompile Include="GameObjects\PingPongGameObject.cpp" />
+    <ClCompile Include="GameObjects\PingPongRacket.cpp" />
+    <ClCompile Include="GameObjects\PingPongBall.cpp" />
     <ClCompile Include="WinApi\DisplayWin32.cpp" />
     <ClCompile Include="Games\Game.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
@@ -153,6 +155,8 @@
     <ClInclude Include="GameObjects\Camera.h" />
     <ClInclude Include="Input\Delegates.h" />
     <ClInclude Include="GameObjects\PingPongGameObject.h" />
+    <ClInclude Include="GameObjects\PingPongRacket.h" />
+    <ClInclude Include="GameObjects\PingPongBall.h" />
     <ClInclude Include="WinApi\DisplayWin32.h" />
     <ClInclude Include="Games\Game.h" />
     <ClInclude Include="GameObjects\GameObject.h" />

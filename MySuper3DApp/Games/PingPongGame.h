@@ -1,6 +1,7 @@
 #pragma once
 #include "Game.h"
-#include "../GameObjects/PingPongGameObject.h"
+#include "../GameObjects/PingPongRacket.h"
+#include "../GameObjects/PingPongBall.h"
 #include "../GameObjects/Components/Render/RectangleRenderComponent.h"
 #include "../GameObjects/Components/Render/CircleRenderComponent.h"
 #include "../GameObjects/Components/Colliders/BoxColliderComponent.h"
@@ -19,9 +20,9 @@ private:
 	void ConfigureGameObjects();
 
 public:
-	std::shared_ptr<PingPongGameObject> leftPlayer;
-	std::shared_ptr<PingPongGameObject> rightPlayer;
-	std::shared_ptr<PingPongGameObject> ball;
+	std::shared_ptr<PingPongRacket> leftPlayer;
+	std::shared_ptr<PingPongRacket> rightPlayer;
+	std::shared_ptr<PingPongBall> ball;
 	std::shared_ptr<PingPongGameObject> centralInvisibleWall;
 	std::shared_ptr<PingPongGameObject> upInvisibleWall;
 	std::shared_ptr<PingPongGameObject> downInvisibleWall;
