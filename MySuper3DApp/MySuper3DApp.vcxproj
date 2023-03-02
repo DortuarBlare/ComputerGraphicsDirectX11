@@ -136,6 +136,7 @@
     <ClCompile Include="GameObjects\PingPongGameObject.cpp" />
     <ClCompile Include="GameObjects\PingPongRacket.cpp" />
     <ClCompile Include="GameObjects\PingPongBall.cpp" />
+    <ClCompile Include="GameObjects\Components\TransformComponent.cpp" />
     <ClCompile Include="WinApi\DisplayWin32.cpp" />
     <ClCompile Include="Games\Game.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="GameObjects\PingPongGameObject.h" />
     <ClInclude Include="GameObjects\PingPongRacket.h" />
     <ClInclude Include="GameObjects\PingPongBall.h" />
+    <ClInclude Include="GameObjects\Components\TransformComponent.h" />
     <ClInclude Include="WinApi\DisplayWin32.h" />
     <ClInclude Include="Games\Game.h" />
     <ClInclude Include="GameObjects\GameObject.h" />

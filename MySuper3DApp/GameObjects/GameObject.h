@@ -12,12 +12,6 @@ public:
 
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
 
-
-	bool wantsToMoveLeft = false;
-	bool wantsToMoveRight = false;
-	bool wantsToMoveUp = false;
-	bool wantsToMoveDown = false;
-
 	GameObject();
 	GameObject(DirectX::SimpleMath::Vector4 translation, DirectX::SimpleMath::Vector4 direction);
 	virtual ~GameObject() = default;

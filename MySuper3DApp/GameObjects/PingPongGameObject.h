@@ -11,7 +11,7 @@ public:
 	PingPongGameObject();
 	PingPongGameObject(DirectX::SimpleMath::Vector4 position);
 
-	void FixedUpdate() override;
+	virtual void FixedUpdate();
 
 	void Reflect(BoxColliderComponent boxCollider);
 	void SetPosition(DirectX::SimpleMath::Vector4 newPosition) override;

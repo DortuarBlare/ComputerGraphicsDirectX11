@@ -5,34 +5,7 @@ PingPongGameObject::PingPongGameObject() : GameObject() {}
 PingPongGameObject::PingPongGameObject(DirectX::SimpleMath::Vector4 position) : GameObject(position, {}) {}
 
 
-void PingPongGameObject::FixedUpdate() {
-	if (wantsToMoveLeft) {
-		if (!collider->Intersects(DirectX::SimpleMath::Vector3::Left)) {
-			DirectX::SimpleMath::Vector4 translateDirection = DirectX::SimpleMath::Vector4::UnitX;
-			translateDirection *= -1;
-			Translate(translateDirection * velocity * Game::instance->deltaTime);
-		}
-	}
-	if (wantsToMoveRight) {
-		if (!collider->Intersects(DirectX::SimpleMath::Vector3::Right)) {
-			DirectX::SimpleMath::Vector4 translateDirection = DirectX::SimpleMath::Vector4::UnitX;
-			Translate(translateDirection * velocity * Game::instance->deltaTime);
-		}
-	}
-	if (wantsToMoveUp) {
-		if (!collider->Intersects(DirectX::SimpleMath::Vector3::Up)) {
-			DirectX::SimpleMath::Vector4 translateDirection = DirectX::SimpleMath::Vector4::UnitY;
-			Translate(translateDirection * velocity * Game::instance->deltaTime);
-		}
-	}
-	if (wantsToMoveDown) {
-		if (!collider->Intersects(DirectX::SimpleMath::Vector3::Down)) {
-			DirectX::SimpleMath::Vector4 translateDirection = DirectX::SimpleMath::Vector4::UnitY;
-			translateDirection *= -1;
-			Translate(translateDirection * velocity * Game::instance->deltaTime);
-		}
-	}
-}
+void PingPongGameObject::FixedUpdate() {}
 
 
 void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
@@ -50,15 +23,16 @@ void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
 	// Collider is located on the left
 	else if (boxCollider.GetCenter().x < position->x) {
 		normalVector = {
-			position->x - (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2),
+			abs(position->x - (boxCollider.GetCenter().x + boxCollider.GetExtents().x * 2)),
 			boxCollider.GetCenter().y,
 			0.0f,
 			0.0f
 		};
-		//normalVector *= -1;
 	}
 	normalVector.Normalize();
+
 	std::cout << "Reflect normal: " << normalVector.x << ' ' << normalVector.y << std::endl;
+
 	*direction = DirectX::SimpleMath::Vector4::Reflect(*direction, normalVector);
 }
 

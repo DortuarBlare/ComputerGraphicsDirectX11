@@ -44,51 +44,39 @@ void PingPongGame::Initialize() {
 void PingPongGame::Update() {
 	Game::Update();
 
+
 	// Left player handle input
+	*leftPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
+
 	if (inputDevice->IsKeyDown(Keys::A))
-		leftPlayer->wantsToMoveLeft = true;
-	else 
-		leftPlayer->wantsToMoveLeft = false;
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
 
 	if (inputDevice->IsKeyDown(Keys::D))
-		leftPlayer->wantsToMoveRight = true;
-	else
-		leftPlayer->wantsToMoveRight = false;
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
 
 	if (inputDevice->IsKeyDown(Keys::W))
-		leftPlayer->wantsToMoveUp = true;
-	else
-		leftPlayer->wantsToMoveUp = false;
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
 
 	if (inputDevice->IsKeyDown(Keys::S))
-		leftPlayer->wantsToMoveDown = true;
-	else
-		leftPlayer->wantsToMoveDown = false;
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
 
 
 	// Right player handle input
+	*rightPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
+
 	if (inputDevice->IsKeyDown(Keys::Left))
-		rightPlayer->wantsToMoveLeft = true;
-	else
-		rightPlayer->wantsToMoveLeft = false;
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
 
 	if (inputDevice->IsKeyDown(Keys::Right))
-		rightPlayer->wantsToMoveRight = true;
-	else
-		rightPlayer->wantsToMoveRight = false;
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
 
 	if (inputDevice->IsKeyDown(Keys::Up))
-		rightPlayer->wantsToMoveUp = true;
-	else
-		rightPlayer->wantsToMoveUp = false;
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
 
 	if (inputDevice->IsKeyDown(Keys::Down))
-		rightPlayer->wantsToMoveDown = true;
-	else
-		rightPlayer->wantsToMoveDown = false;
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
 
 	
-
 	if (ball->position->x < -1.0f) {
 		rightPlayerScore++;
 		RestartRound();
@@ -97,6 +85,7 @@ void PingPongGame::Update() {
 		leftPlayerScore++;
 		RestartRound();
 	}
+
 
 	if (totalTime > 1.0f) {
 		totalTime -= 1.0f;

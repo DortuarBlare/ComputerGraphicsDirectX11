@@ -228,7 +228,6 @@ void RenderComponent::Draw() {
 		Game::instance->GetContext()->RSSetState(rastState.Get());
 
 		// Use constant buffer for offset
-		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, renderOffset.get(), 0, 0);
 		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &transform, 0, 0);
 		Game::instance->GetContext()->VSSetConstantBuffers(1, 1, constBuf.GetAddressOf());
 
