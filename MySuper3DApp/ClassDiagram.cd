@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CircleRenderComponent" Collapsed="true">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAQAAAAAAAAAAAACAAAAAAQgAAAAAAAA=</HashCode>
+      <FileName>CircleRenderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoxColliderComponent" Collapsed="true">
+    <Position X="0.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAAwEAAAAAAAIAKABAAAAgCAAAAAAAAIA=</HashCode>
+      <FileName>BoxColliderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColliderComponent" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAAwAAAAAAAAAAAABAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>ColliderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PingPongGameObject" Collapsed="true">
+    <Position X="5.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAgAAAAAAAAAAAAABAAAAAgAAAAAEEAAAAAA=</HashCode>
+      <FileName>PingPongGameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PingPongRacket" Collapsed="true">
+    <Position X="3.75" Y="8" Width="1.5" />
+    <InheritanceLine Type="PingPongGameObject" FixedFromPoint="true">
+      <Path>
+        <Point X="5.375" Y="7.191" />
+        <Point X="5.375" Y="7.625" />
+        <Point X="4.5" Y="7.625" />
+        <Point X="4.5" Y="8" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAABAAAAABAAgAAAAAA=</HashCode>
+      <FileName>PingPongRacket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PingPongBall" Collapsed="true">
+    <Position X="6.75" Y="8" Width="1.5" />
+    <InheritanceLine Type="PingPongGameObject" FixedFromPoint="true">
+      <Path>
+        <Point X="6.688" Y="7.191" />
+        <Point X="6.688" Y="7.625" />
+        <Point X="7.5" Y="7.625" />
+        <Point X="7.5" Y="8" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PingPongBall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TransformComponent" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAkAAAwAAAAAAABAAAABAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>TransformComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DisplayWin32" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAEAAAABABABgAAIAAAAAAAAAQAAAIAAAAAAAA=</HashCode>
+      <FileName>DisplayWin32.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="5.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASCBAACAgEAByBEJAMgABCFAwlEABgAIiAQAABAEEI=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PingPongGame" Collapsed="true">
+    <Position X="5.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgwAhQAAAgAAAQgBAADCAAAAIAgAAAAAAAAAAAAgABI=</HashCode>
+      <FileName>PingPongGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="5.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAAAgAIIwAAAACABAAAAABEAgAACAQEAAIAAAA=</HashCode>
+      <FileName>GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObjectComponent" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAgwAAAACAAAAAAABAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>GameObjectComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenderComponent" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgACFAgQgAyAAEAEgEAAJAABWCAgACAJADAAAAgA=</HashCode>
+      <FileName>RenderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RectangleRenderComponent" Collapsed="true">
+    <Position X="5.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAgAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RectangleRenderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TriangleRenderComponent" Collapsed="true">
+    <Position X="7.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TriangleRenderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

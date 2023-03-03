@@ -1,0 +1,20 @@
+#pragma once
+#include "pch.h"
+
+class DisplayWin32 {
+protected:
+	LPCWSTR applicationName;
+	RECT windowRect;
+	HINSTANCE hInstance;
+	HWND hWnd;
+	WNDCLASSEX wc;
+	int clientWidth;
+	int clientHeight;
+
+public:
+	DisplayWin32(LPCWSTR& applicationName, int clientWidth, int clientHeight, WNDPROC wndProc);
+
+	int GetClientWidth();
+	int GetClientHeight();
+	HWND& GetHWnd();
+};
