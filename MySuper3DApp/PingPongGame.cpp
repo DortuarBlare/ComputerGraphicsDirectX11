@@ -21,21 +21,21 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 void PingPongGame::Initialize() {
 	Game::Initialize();
 
-	*leftPlayer->transform->localPosition -= {0.5f, 0.0f, 0.0f, 0.0f};
-	*rightPlayer->transform->localPosition += {0.5f, 0.0f, 0.0f, 0.0f};
+	*leftPlayer->transform->localPosition -= {0.5f, 0.0f, 0.0f};
+	*rightPlayer->transform->localPosition += {0.5f, 0.0f, 0.0f};
 	leftPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
 	rightPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x += 0.5f;
 
-	*upInvisibleWall->transform->localPosition += {0.0f, 1.0f, 0.0f, 0.0f};
+	*upInvisibleWall->transform->localPosition += {0.0f, 1.0f, 0.0f};
 	upInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y += 1.0f;
 
-	*downInvisibleWall->transform->localPosition -= {0.0f, 1.0f, 0.0f, 0.0f};
+	*downInvisibleWall->transform->localPosition -= {0.0f, 1.0f, 0.0f};
 	downInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y -= 1.0f;
 
-	*leftInvisibleWall->transform->localPosition -= {1.0f, 0.0f, 0.0f, 0.0f};
+	*leftInvisibleWall->transform->localPosition -= {1.0f, 0.0f, 0.0f};
 	leftInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 1.0f;
 
-	*rightInvisibleWall->transform->localPosition += {1.0f, 0.0f, 0.0f, 0.0f};
+	*rightInvisibleWall->transform->localPosition += {1.0f, 0.0f, 0.0f};
 	rightInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x += 1.0f;
 }
 
@@ -148,7 +148,7 @@ void PingPongGame::RestartRound() {
 	leftPlayer->velocity = 0.75f;
 	rightPlayer->velocity = 0.75f;
 	ball->velocity = 0.25f;
-	ball->SetPosition({ 0.0f, 0.0f, 0.0f, 0.0f });
+	ball->SetPosition({ 0.0f, 0.0f, 0.0f });
 }
 
 /*

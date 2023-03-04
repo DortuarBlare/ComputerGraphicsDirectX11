@@ -9,7 +9,7 @@ CircleRenderComponent::CircleRenderComponent() : RenderComponent() {
 CircleRenderComponent::CircleRenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
-	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset,
+	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset,
 	float radius,
 	unsigned int pointsAmount
 ) : RenderComponent(fillColor, fillMode, renderOffset) {

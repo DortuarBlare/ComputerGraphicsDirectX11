@@ -8,5 +8,5 @@ public:
 	std::shared_ptr<CircleRenderComponent> mesh;
 
 	PingPongBall();
-	PingPongBall(DirectX::SimpleMath::Vector4 position);
+	PingPongBall(DirectX::SimpleMath::Vector3 position);
 };

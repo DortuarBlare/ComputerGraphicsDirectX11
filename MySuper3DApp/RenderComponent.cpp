@@ -4,7 +4,7 @@
 RenderComponent::RenderComponent() {
 	fillColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	fillMode = D3D11_FILL_SOLID;
-	renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>();
+	renderOffset = std::make_shared<DirectX::SimpleMath::Vector3>();
 
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
@@ -21,7 +21,7 @@ RenderComponent::RenderComponent() {
 RenderComponent::RenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
-	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset
+	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset
 ) {
 	this->fillColor = fillColor;
 	this->fillMode = fillMode;
@@ -42,11 +42,11 @@ RenderComponent::RenderComponent(
 RenderComponent::RenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
-	DirectX::SimpleMath::Vector4 renderOffset
+	DirectX::SimpleMath::Vector3 renderOffset
 ) {
 	this->fillColor = fillColor;
 	this->fillMode = fillMode;
-	this->renderOffset = std::make_shared<DirectX::SimpleMath::Vector4>(renderOffset);
+	this->renderOffset = std::make_shared<DirectX::SimpleMath::Vector3>(renderOffset);
 
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 

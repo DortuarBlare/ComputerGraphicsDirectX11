@@ -18,7 +18,7 @@ RectangleRenderComponent::RectangleRenderComponent(
 RectangleRenderComponent::RectangleRenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
-	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset,
+	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset,
 	DirectX::XMFLOAT3 extents
 ) : RenderComponent(fillColor, fillMode, renderOffset) {
 	this->extents = extents;
@@ -27,7 +27,7 @@ RectangleRenderComponent::RectangleRenderComponent(
 RectangleRenderComponent::RectangleRenderComponent(
 	DirectX::XMFLOAT4 fillColor,
 	D3D11_FILL_MODE fillMode,
-	DirectX::SimpleMath::Vector4 renderOffset,
+	DirectX::SimpleMath::Vector3 renderOffset,
 	DirectX::XMFLOAT3 extents
 ) : RenderComponent(fillColor, fillMode, renderOffset) {
 	this->extents = extents;

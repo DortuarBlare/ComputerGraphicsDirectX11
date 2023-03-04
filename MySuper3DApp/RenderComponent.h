@@ -30,7 +30,7 @@ protected:
 
 	DirectX::XMFLOAT4 fillColor;
 	D3D11_FILL_MODE fillMode;
-	std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset;
+	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset;
 
 	UINT strides[1];
 	UINT offsets[1];
@@ -40,12 +40,12 @@ public:
 	RenderComponent(
 		DirectX::XMFLOAT4 fillColor,
 		D3D11_FILL_MODE fillMode,
-		std::shared_ptr<DirectX::SimpleMath::Vector4> renderOffset
+		std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset
 	);
 	RenderComponent(
 		DirectX::XMFLOAT4 fillColor,
 		D3D11_FILL_MODE fillMode,
-		DirectX::SimpleMath::Vector4 renderOffset
+		DirectX::SimpleMath::Vector3 renderOffset
 	);
 
 	virtual void Initialize();

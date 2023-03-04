@@ -9,7 +9,7 @@ public:
 	std::shared_ptr<DirectX::SimpleMath::Vector3> translateDirection;
 
 	PingPongRacket();
-	PingPongRacket(DirectX::SimpleMath::Vector4 position);
+	PingPongRacket(DirectX::SimpleMath::Vector3 position);
 
 	void FixedUpdate() override;
 };

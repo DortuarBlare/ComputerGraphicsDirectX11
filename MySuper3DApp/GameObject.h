@@ -9,12 +9,12 @@ public:
 	std::shared_ptr<TransformComponent> transform;
 
 	float velocity = 0.25f; // Move to the rigidbody later
-	std::shared_ptr<DirectX::SimpleMath::Vector4> direction; // Move to the rigidbody later
+	std::shared_ptr<DirectX::SimpleMath::Vector3> direction; // Move to the rigidbody later
 
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
 
 	GameObject();
-	GameObject(DirectX::SimpleMath::Vector4 translation, DirectX::SimpleMath::Vector4 direction);
+	GameObject(DirectX::SimpleMath::Vector3 translation, DirectX::SimpleMath::Vector3 direction);
 	virtual ~GameObject() = default;
 
 	virtual void Initialize();
@@ -29,8 +29,8 @@ public:
 	template<typename T>
 	std::optional<T> GetComponent();
 
-	virtual void SetPosition(DirectX::SimpleMath::Vector4 newPosition); // Move to "Transform" class later
-	virtual void Translate(DirectX::SimpleMath::Vector4 translation); // Move to "Transform" class later
+	virtual void SetPosition(DirectX::SimpleMath::Vector3 newPosition); // Move to "Transform" class later
+	virtual void Translate(DirectX::SimpleMath::Vector3 translation); // Move to "Transform" class later
 };
 
 template<typename T>

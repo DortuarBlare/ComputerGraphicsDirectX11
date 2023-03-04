@@ -8,11 +8,11 @@ public:
 	std::shared_ptr<BoxColliderComponent> collider;
 
 	PingPongGameObject();
-	PingPongGameObject(DirectX::SimpleMath::Vector4 position);
+	PingPongGameObject(DirectX::SimpleMath::Vector3 position);
 
 	virtual void FixedUpdate();
 
 	void Reflect(BoxColliderComponent boxCollider);
-	void SetPosition(DirectX::SimpleMath::Vector4 newPosition) override;
-	void Translate(DirectX::SimpleMath::Vector4 translation) override;
+	void SetPosition(DirectX::SimpleMath::Vector3 newPosition) override;
+	void Translate(DirectX::SimpleMath::Vector3 translation) override;
 };

@@ -5,13 +5,13 @@
 
 GameObject::GameObject() {
 	transform = std::make_shared<TransformComponent>();
-	direction = std::make_shared<DirectX::SimpleMath::Vector4>();
+	direction = std::make_shared<DirectX::SimpleMath::Vector3>();
 }
 
-GameObject::GameObject(DirectX::SimpleMath::Vector4 position, DirectX::SimpleMath::Vector4 direction) {
+GameObject::GameObject(DirectX::SimpleMath::Vector3 position, DirectX::SimpleMath::Vector3 direction) {
 	transform = std::make_shared<TransformComponent>();
-	transform->localPosition = std::make_shared<DirectX::SimpleMath::Vector4>(position);
-	this->direction = std::make_shared<DirectX::SimpleMath::Vector4>(direction);
+	transform->localPosition = std::make_shared<DirectX::SimpleMath::Vector3>(position);
+	this->direction = std::make_shared<DirectX::SimpleMath::Vector3>(direction);
 }
 
 
@@ -56,13 +56,13 @@ void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
 }
 
 
-void GameObject::SetPosition(DirectX::SimpleMath::Vector4 newPosition) {
+void GameObject::SetPosition(DirectX::SimpleMath::Vector3 newPosition) {
 	*transform->localPosition = newPosition;
 }
 
 /*
 * Moves the position in the direction and distance of "translation"
 */
-void GameObject::Translate(DirectX::SimpleMath::Vector4 translation) {
+void GameObject::Translate(DirectX::SimpleMath::Vector3 translation) {
 	*transform->localPosition += translation;
 }
