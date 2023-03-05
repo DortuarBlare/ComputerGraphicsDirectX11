@@ -7,22 +7,12 @@ struct VS_IN {
 	float4 pos : POSITION0;
 	float4 col : COLOR0;
 };
-
-struct ConstData {
-    float4 offset;
-};
-
 struct ConstDataMatrix {
-    //float4x4 transform;
     matrix transform;
 };
 
-cbuffer ConstBuf : register(b0) {
-    ConstData constData;
-};
-
-cbuffer ConstBufMatrix : register(b1) {
-    ConstDataMatrix constDataMatrix; // MeshData
+cbuffer ConstBufMatrix : register(b0) {
+    ConstDataMatrix constDataMatrix;
 };
 
 
@@ -35,8 +25,7 @@ float4 PSMain(PS_IN input) : SV_Target {
 PS_IN VSMain(VS_IN input) {
     PS_IN output = (PS_IN) 0;
 	
-    //output.pos = input.pos + constData.offset; // multiply (float4(input.pos.xyz, 1.0f), MeshData.Transform)
-    output.pos = mul(input.pos, constDataMatrix.transform); // Multiply on matrix
+    output.pos = mul(input.pos, constDataMatrix.transform);
     output.col = input.col;
 	
     return output;

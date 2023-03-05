@@ -31,7 +31,7 @@ void PingPongGameObject::Reflect(BoxColliderComponent boxCollider) {
 	}
 	normalVector.Normalize();
 
-	std::cout << "Reflect normal: " << normalVector.x << ' ' << normalVector.y << std::endl;
+	//std::cout << "Reflect normal: " << normalVector.x << ' ' << normalVector.y << std::endl;
 
 	*direction = DirectX::SimpleMath::Vector3::Reflect(*direction, normalVector);
 }

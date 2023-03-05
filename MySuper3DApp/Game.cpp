@@ -77,6 +77,8 @@ Game::Game(LPCWSTR name, int clientWidth, int clientHeight, bool windowed) {
 
 	viewport = std::make_shared<D3D11_VIEWPORT>();
 	swapDesc = std::make_shared<DXGI_SWAP_CHAIN_DESC>();
+
+	camera = std::make_shared<CameraGameObject>();
 }
 
 /*
@@ -94,6 +96,7 @@ void Game::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool 
 void Game::PrepareResources() {
 	display = std::make_shared<DisplayWin32>(name, clientWidth, clientHeight, WndProc);
 	inputDevice = std::make_shared<InputDevice>();
+	gameObjects.push_back(camera);
 
 	// Initialize viewport parameters
 	viewport->TopLeftX = 0; // X position of the left hand side of the viewport
@@ -157,7 +160,7 @@ void Game::PrepareResources() {
 * Initialize all "GameComponent" items in vector
 */
 void Game::Initialize() {
-	for (auto component : gameObjects)
+	for (auto& component : gameObjects)
 		component->Initialize();
 }
 
@@ -180,7 +183,7 @@ void Game::PrepareFrame() {
 * For logic
 */
 void Game::Update() {
-	for (auto gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 		gameObject->Update();
 
 	// Handle ESC button
@@ -193,7 +196,7 @@ void Game::Update() {
 * For physics
 */
 void Game::FixedUpdate() {
-	for (auto gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 		gameObject->FixedUpdate();
 }
 
@@ -201,7 +204,7 @@ void Game::FixedUpdate() {
 * Draw all "GameComponent" items in vector
 */
 void Game::Draw() {
-	for (auto gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 		gameObject->Draw();
 }
 

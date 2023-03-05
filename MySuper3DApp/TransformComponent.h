@@ -4,6 +4,8 @@
 
 class TransformComponent : public GameObjectComponent {
 public:
+	std::shared_ptr<TransformComponent> parent = nullptr;
+
 	std::shared_ptr<DirectX::SimpleMath::Vector3> localPosition;
 	std::shared_ptr<DirectX::SimpleMath::Quaternion> localRotation;
 
@@ -22,5 +24,13 @@ public:
 	DirectX::SimpleMath::Quaternion GetRotation();
 	void SetRotation(DirectX::SimpleMath::Quaternion rotation);
 
+	DirectX::SimpleMath::Matrix GetLocalModel();
+	DirectX::SimpleMath::Matrix GetModel();
 
+	DirectX::SimpleMath::Vector3 LocalForward();
+	DirectX::SimpleMath::Vector3 LocalUp();
+	DirectX::SimpleMath::Vector3 LocalRight();
+	DirectX::SimpleMath::Vector3 Forward();
+	DirectX::SimpleMath::Vector3 Up();
+	DirectX::SimpleMath::Vector3 Right();
 };

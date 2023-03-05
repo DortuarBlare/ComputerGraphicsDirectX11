@@ -135,7 +135,7 @@
     <ClCompile Include="CircleRenderComponent.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraGameObject.cpp" />
     <ClCompile Include="Delegates.cpp" />
     <ClCompile Include="PingPongGameObject.cpp" />
     <ClCompile Include="PingPongRacket.cpp" />
@@ -164,7 +164,7 @@
     <ClInclude Include="CircleRenderComponent.h" />
     <ClInclude Include="BoxColliderComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraGameObject.h" />
     <ClInclude Include="Delegates.h" />
     <ClInclude Include="PingPongGameObject.h" />
     <ClInclude Include="PingPongRacket.h" />

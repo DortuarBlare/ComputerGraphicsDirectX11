@@ -8,16 +8,6 @@ class PingPongGame : public Game {
 private:
 	unsigned int leftPlayerScore;
 	unsigned int rightPlayerScore;
-
-	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
-
-	void Initialize() override;
-	void Update() override;
-	void FixedUpdate() override;
-
-	void ConfigureGameObjects();
-
-public:
 	std::shared_ptr<PingPongRacket> leftPlayer;
 	std::shared_ptr<PingPongRacket> rightPlayer;
 	std::shared_ptr<PingPongBall> ball;
@@ -27,9 +17,17 @@ public:
 	std::shared_ptr<PingPongGameObject> leftInvisibleWall;
 	std::shared_ptr<PingPongGameObject> rightInvisibleWall;
 
+	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+
+	void Initialize() override;
+	void Update() override;
+	void FixedUpdate() override;
+
+	void ConfigureGameObjects();
+
+	void RestartRound();
+public:
 	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
 
 	void Run() override;
-
-	void RestartRound();
 };

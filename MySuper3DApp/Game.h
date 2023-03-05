@@ -1,12 +1,14 @@
 #pragma once
 #include "pch.h"
 
-#include "GameObject.h"
-#include "DisplayWin32.h"
 #include "InputDevice.h"
+#include "GameObject.h"
+#include "CameraGameObject.h"
+#include "DisplayWin32.h"
 
 class InputDevice;
 class GameObject;
+class CameraGameObject;
 
 class Game {
 protected:
@@ -38,6 +40,7 @@ protected:
 
 public:
 	static std::unique_ptr<Game> instance; // Singleton
+	std::shared_ptr<CameraGameObject> camera;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::shared_ptr<InputDevice> inputDevice; // For input handling
 	std::shared_ptr<std::chrono::time_point<std::chrono::steady_clock>> startTime;

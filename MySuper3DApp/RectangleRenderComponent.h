@@ -11,18 +11,6 @@ public:
 		D3D11_FILL_MODE fillMode,
 		DirectX::XMFLOAT3 extents
 	);
-	RectangleRenderComponent(
-		DirectX::XMFLOAT4 fillColor,
-		D3D11_FILL_MODE fillMode,
-		std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset,
-		DirectX::XMFLOAT3 extents
-	);
-	RectangleRenderComponent(
-		DirectX::XMFLOAT4 fillColor,
-		D3D11_FILL_MODE fillMode,
-		DirectX::SimpleMath::Vector3 renderOffset,
-		DirectX::XMFLOAT3 extents
-	);
 
 	void Initialize() override;
 

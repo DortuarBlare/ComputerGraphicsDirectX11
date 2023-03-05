@@ -24,29 +24,20 @@ protected:
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
+	std::shared_ptr<DirectX::SimpleMath::Matrix> constBufMatrix;
 
 	std::vector<unsigned int> indeces;
 	std::vector<DirectX::XMFLOAT4> points;
 
 	DirectX::XMFLOAT4 fillColor;
 	D3D11_FILL_MODE fillMode;
-	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset;
 
 	UINT strides[1];
 	UINT offsets[1];
 
 public:
 	RenderComponent();
-	RenderComponent(
-		DirectX::XMFLOAT4 fillColor,
-		D3D11_FILL_MODE fillMode,
-		std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset
-	);
-	RenderComponent(
-		DirectX::XMFLOAT4 fillColor,
-		D3D11_FILL_MODE fillMode,
-		DirectX::SimpleMath::Vector3 renderOffset
-	);
+	RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
 	void Update();

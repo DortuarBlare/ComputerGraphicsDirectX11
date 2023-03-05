@@ -8,7 +8,6 @@ public:
 	TriangleRenderComponent();
 	TriangleRenderComponent(
 		DirectX::XMFLOAT4 fillColor,
-		D3D11_FILL_MODE fillMode,
-		std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset
+		D3D11_FILL_MODE fillMode
 	);
 };

@@ -4,7 +4,6 @@
 RenderComponent::RenderComponent() {
 	fillColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	fillMode = D3D11_FILL_SOLID;
-	renderOffset = std::make_shared<DirectX::SimpleMath::Vector3>();
 
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
@@ -16,16 +15,12 @@ RenderComponent::RenderComponent() {
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+	constBufMatrix = std::make_shared<DirectX::SimpleMath::Matrix>();
 }
 
-RenderComponent::RenderComponent(
-	DirectX::XMFLOAT4 fillColor,
-	D3D11_FILL_MODE fillMode,
-	std::shared_ptr<DirectX::SimpleMath::Vector3> renderOffset
-) {
+RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode) {
 	this->fillColor = fillColor;
 	this->fillMode = fillMode;
-	this->renderOffset = renderOffset;
 
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
 
@@ -37,27 +32,7 @@ RenderComponent::RenderComponent(
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-}
-
-RenderComponent::RenderComponent(
-	DirectX::XMFLOAT4 fillColor,
-	D3D11_FILL_MODE fillMode,
-	DirectX::SimpleMath::Vector3 renderOffset
-) {
-	this->fillColor = fillColor;
-	this->fillMode = fillMode;
-	this->renderOffset = std::make_shared<DirectX::SimpleMath::Vector3>(renderOffset);
-
-	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
-
-	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
-	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
-	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
-	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+	constBufMatrix = std::make_shared<DirectX::SimpleMath::Matrix>();
 }
 
 /*
@@ -179,15 +154,18 @@ void RenderComponent::Initialize() {
 	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
-	//constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Vector4);
-	constBufDesc->ByteWidth = sizeof(DirectX::XMMATRIX);
-	constBufDesc->Usage = D3D11_USAGE_DEFAULT; // D3D11_USAGE_DYNAMIC with matrix? 
+	constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Matrix);
+	constBufDesc->Usage = D3D11_USAGE_DYNAMIC;
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBufDesc->CPUAccessFlags = 0;
+	constBufDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	constBufDesc->MiscFlags = 0;
 	constBufDesc->StructureByteStride = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), nullptr, constBuf.GetAddressOf());
+	constData->pSysMem = constBufMatrix.get();
+	constData->SysMemPitch = 0;
+	constData->SysMemSlicePitch = 0;
+
+	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), constData.get(), constBuf.GetAddressOf());
 
 	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
 	rastDesc->FillMode = fillMode; // Solid or wireframe
@@ -203,8 +181,22 @@ void RenderComponent::Initialize() {
 * Component updating on each frame
 */
 void RenderComponent::Update() {
+	// Scaling for correct display on the X axis
+	//DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
+	//	DirectX::XMMatrixMultiply(
+	//		//DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
+	//		DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f),
+	//		DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
+	//	)
+	//);
 	// Matrix::CreateTranslation(Position * ...
-	// game.context.Map(constBuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &res)
+
+	*constBufMatrix = Game::instance->camera->GetCameraMatrix();
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	Game::instance->GetContext()->Map(constBuf.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	memcpy(mappedResource.pData, constBufMatrix.get(), sizeof(constBufMatrix));
+	Game::instance->GetContext()->Unmap(constBuf.Get(), 0);
 }
 
 void RenderComponent::FixedUpdate() {
@@ -217,15 +209,6 @@ void RenderComponent::FixedUpdate() {
 */
 void RenderComponent::Draw() {
 	if (enabled) {
-		// Scaling for correct display on the X axis
-		DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
-			DirectX::XMMatrixMultiply(
-				//DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
-				DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f),
-				DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
-			)
-		);
-
 		Game::instance->GetContext()->IASetInputLayout(layout.Get());
 		Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -237,8 +220,8 @@ void RenderComponent::Draw() {
 		Game::instance->GetContext()->RSSetState(rastState.Get());
 
 		// Use constant buffer for offset
-		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, &transform, 0, 0);
-		Game::instance->GetContext()->VSSetConstantBuffers(1, 1, constBuf.GetAddressOf());
+		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
+		Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
 		Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
 	}
