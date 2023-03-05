@@ -12,7 +12,7 @@ class CameraGameObject;
 
 class Game {
 protected:
-	LPCWSTR	name; // Name of the game application
+	LPCWSTR	name;
 	int clientWidth;
 	int clientHeight;
 	bool windowed;

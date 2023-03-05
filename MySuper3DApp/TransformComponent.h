@@ -2,12 +2,14 @@
 #include "pch.h"
 #include "GameObjectComponent.h"
 
+using namespace DirectX::SimpleMath;
+
 class TransformComponent : public GameObjectComponent {
 public:
 	std::shared_ptr<TransformComponent> parent = nullptr;
 
-	std::shared_ptr<DirectX::SimpleMath::Vector3> localPosition;
-	std::shared_ptr<DirectX::SimpleMath::Quaternion> localRotation;
+	std::shared_ptr<Vector3> localPosition;
+	std::shared_ptr<Quaternion> localRotation;
 
 	TransformComponent();
 
@@ -18,19 +20,19 @@ public:
 	void Reload();
 	void DestroyResources();
 
-	DirectX::SimpleMath::Vector3 GetPosition();
+	Vector3 GetPosition();
 	void SetPosition(DirectX::SimpleMath::Vector3 position);
 
-	DirectX::SimpleMath::Quaternion GetRotation();
+	Quaternion GetRotation();
 	void SetRotation(DirectX::SimpleMath::Quaternion rotation);
 
-	DirectX::SimpleMath::Matrix GetLocalModel();
-	DirectX::SimpleMath::Matrix GetModel();
+	Matrix GetLocalModel();
+	Matrix GetModel();
 
-	DirectX::SimpleMath::Vector3 LocalForward();
-	DirectX::SimpleMath::Vector3 LocalUp();
-	DirectX::SimpleMath::Vector3 LocalRight();
-	DirectX::SimpleMath::Vector3 Forward();
-	DirectX::SimpleMath::Vector3 Up();
-	DirectX::SimpleMath::Vector3 Right();
+	Vector3 LocalForward();
+	Vector3 LocalUp();
+	Vector3 LocalRight();
+	Vector3 Forward();
+	Vector3 Up();
+	Vector3 Right();
 };

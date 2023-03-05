@@ -3,30 +3,32 @@
 #include "GameObject.h"
 #include "InputDevice.h"
 
+using namespace DirectX::SimpleMath;
+
 class CameraGameObject : public GameObject {
 private:
 	bool perspective = true;
 	float fov = DirectX::XM_PIDIV2;
-	const float nearPlane = 0.1f;
-	const float farPlane = 1000.0f;
+	float nearPlane = 0.1f;
+	float farPlane = 1000.0f;
 
 	float cameraRotationSpeed = 0.005f;
 
-	float yaw = 0;
-	float pitch = 0;
+	float yaw = 0; // Better use localRotation later
+	float pitch = 0; // Better use localRotation later
 	
-	DirectX::SimpleMath::Matrix viewMatrix;
-	DirectX::SimpleMath::Matrix projectionMatrix;
+	Matrix viewMatrix;
+	Matrix projectionMatrix;
 
-	void CreatePerspectiveFieldOFView();
-	void CreateOrthographic();
+	Matrix CreatePerspectiveMatrix();
+	Matrix CreateOrthographicMatrix();
 
 public:
 	void Initialize() override;
 	void Update() override;
 	void FixedUpdate() override;
 
-	DirectX::SimpleMath::Matrix GetCameraMatrix();
+	Matrix GetCameraMatrix();
 	
 	//void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData, int payload);
 
@@ -41,12 +43,4 @@ public:
 	// 
 	// Yaw and Pitch without third
 	// inputDevice AddRaw(...)
-
-	// Update
-	// Change velocity
-	// Normalize
-	// rotMatrix.Forward() * velDirection.x + Vector3::Up * velDirection.y + rotMatrix.Right() * velDirection.z;
-	// Normalize if has something
-	// cameraPos = cameraPos * velDir * VelocityMagnitude * deltaTime
-	// viewMatrix = createLookAt(cameraPos, cameraPos + rotMatrix + forward, vector3::up)
 };

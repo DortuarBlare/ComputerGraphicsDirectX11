@@ -9,7 +9,7 @@ public:
 
 	CircleRenderComponent();
 	CircleRenderComponent(
-		DirectX::XMFLOAT4 fillColor,
+		DirectX::SimpleMath::Color fillColor,
 		D3D11_FILL_MODE fillMode,
 		float radius,
 		unsigned int pointsAmount

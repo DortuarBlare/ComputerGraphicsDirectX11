@@ -6,7 +6,7 @@ RectangleRenderComponent::RectangleRenderComponent() : RenderComponent() {
 }
 
 RectangleRenderComponent::RectangleRenderComponent(
-	DirectX::XMFLOAT4 fillColor,
+	DirectX::SimpleMath::Color fillColor,
 	D3D11_FILL_MODE fillMode,
 	DirectX::XMFLOAT3 extents
 ) : RenderComponent(fillColor, fillMode) {
@@ -29,5 +29,5 @@ void RectangleRenderComponent::ConfigureRectangle() {
 		}
 	);
 
-	indeces.insert(indeces.end(), { 0, 1, 2, 1, 0, 3 });
+	indexes.insert(indexes.end(), { 0, 1, 2, 1, 0, 3 });
 }

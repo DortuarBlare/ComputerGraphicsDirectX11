@@ -2,6 +2,9 @@
 #include "pch.h"
 #include "GameObjectComponent.h"
 
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
 class RenderComponent : public GameObjectComponent {
 protected:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
@@ -24,12 +27,12 @@ protected:
 	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
-	std::shared_ptr<DirectX::SimpleMath::Matrix> constBufMatrix;
+	std::shared_ptr<Matrix> constBufMatrix;
 
-	std::vector<unsigned int> indeces;
-	std::vector<DirectX::XMFLOAT4> points;
+	std::vector<unsigned int> indexes;
+	std::vector<XMFLOAT4> points;
 
-	DirectX::XMFLOAT4 fillColor;
+	Color fillColor;
 	D3D11_FILL_MODE fillMode;
 
 	UINT strides[1];
@@ -37,12 +40,12 @@ protected:
 
 public:
 	RenderComponent();
-	RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode);
+	RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
 	void Update();
 	void FixedUpdate();
-	void Draw();
+	virtual void Draw();
 	void Reload();
 	void DestroyResources();
 };

@@ -2,7 +2,7 @@
 #include "RenderComponent.h"
 
 RenderComponent::RenderComponent() {
-	fillColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	fillColor = { 0.0f, 0.0f, 0.0f };
 	fillMode = D3D11_FILL_SOLID;
 
 	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
@@ -15,10 +15,10 @@ RenderComponent::RenderComponent() {
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	constBufMatrix = std::make_shared<DirectX::SimpleMath::Matrix>();
+	constBufMatrix = std::make_shared<Matrix>();
 }
 
-RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fillMode) {
+RenderComponent::RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode) {
 	this->fillColor = fillColor;
 	this->fillMode = fillMode;
 
@@ -32,7 +32,7 @@ RenderComponent::RenderComponent(DirectX::XMFLOAT4 fillColor, D3D11_FILL_MODE fi
 
 	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	constBufMatrix = std::make_shared<DirectX::SimpleMath::Matrix>();
+	constBufMatrix = std::make_shared<Matrix>();
 }
 
 /*
@@ -127,7 +127,7 @@ void RenderComponent::Initialize() {
 		layout.GetAddressOf()
 	);
 
-	vertexBufDesc->ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
+	vertexBufDesc->ByteWidth = sizeof(XMFLOAT4) * points.size();
 	vertexBufDesc->Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufDesc->CPUAccessFlags = 0;
@@ -140,21 +140,21 @@ void RenderComponent::Initialize() {
 
 	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
-	indexBufDesc->ByteWidth = sizeof(int) * indeces.size();
+	indexBufDesc->ByteWidth = sizeof(int) * indexes.size();
 	indexBufDesc->Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufDesc->CPUAccessFlags = 0;
 	indexBufDesc->MiscFlags = 0;
 	indexBufDesc->StructureByteStride = 0;
 
-	indexData->pSysMem = indeces.data();
+	indexData->pSysMem = indexes.data();
 	indexData->SysMemPitch = 0;
 	indexData->SysMemSlicePitch = 0;
 
 	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
-	constBufDesc->ByteWidth = sizeof(DirectX::SimpleMath::Matrix);
+	constBufDesc->ByteWidth = sizeof(Matrix);
 	constBufDesc->Usage = D3D11_USAGE_DYNAMIC;
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -177,20 +177,7 @@ void RenderComponent::Initialize() {
 	offsets[0] = 0;
 }
 
-/*
-* Component updating on each frame
-*/
 void RenderComponent::Update() {
-	// Scaling for correct display on the X axis
-	//DirectX::XMMATRIX transform = DirectX::XMMatrixTranspose(
-	//	DirectX::XMMatrixMultiply(
-	//		//DirectX::XMMatrixScaling(static_cast<float>(Game::instance->GetDisplay()->GetClientHeight()) / Game::instance->GetDisplay()->GetClientWidth(), 1.0f, 1.0f),
-	//		DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f),
-	//		DirectX::XMMatrixTranslation(renderOffset->x, renderOffset->y, renderOffset->z)
-	//	)
-	//);
-	// Matrix::CreateTranslation(Position * ...
-
 	*constBufMatrix = Game::instance->camera->GetCameraMatrix();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -199,14 +186,8 @@ void RenderComponent::Update() {
 	Game::instance->GetContext()->Unmap(constBuf.Get(), 0);
 }
 
-void RenderComponent::FixedUpdate() {
+void RenderComponent::FixedUpdate() {}
 
-}
-
-/*
-* Draw on each frame (Drawcall)
-* It draws a square consisting of 2 triangles
-*/
 void RenderComponent::Draw() {
 	if (enabled) {
 		Game::instance->GetContext()->IASetInputLayout(layout.Get());
@@ -219,24 +200,13 @@ void RenderComponent::Draw() {
 
 		Game::instance->GetContext()->RSSetState(rastState.Get());
 
-		// Use constant buffer for offset
 		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
 		Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
-		Game::instance->GetContext()->DrawIndexed(indeces.size(), 0, 0);
+		Game::instance->GetContext()->DrawIndexed(indexes.size(), 0, 0);
 	}
 }
 
-/*
-* Reinitialization
-*/
-void RenderComponent::Reload() {
+void RenderComponent::Reload() {}
 
-}
-
-/*
-* Call in the destructor if there is a need for it
-*/
-void RenderComponent::DestroyResources() {
-
-}
+void RenderComponent::DestroyResources() {}

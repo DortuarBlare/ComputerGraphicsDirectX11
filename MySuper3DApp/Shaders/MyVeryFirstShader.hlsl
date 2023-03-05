@@ -7,12 +7,9 @@ struct VS_IN {
 	float4 pos : POSITION0;
 	float4 col : COLOR0;
 };
-struct ConstDataMatrix {
-    matrix transform;
-};
 
 cbuffer ConstBufMatrix : register(b0) {
-    ConstDataMatrix constDataMatrix;
+    float4x4 transform;
 };
 
 
@@ -25,7 +22,7 @@ float4 PSMain(PS_IN input) : SV_Target {
 PS_IN VSMain(VS_IN input) {
     PS_IN output = (PS_IN) 0;
 	
-    output.pos = mul(input.pos, constDataMatrix.transform);
+    output.pos = mul(input.pos, transform);
     output.col = input.col;
 	
     return output;

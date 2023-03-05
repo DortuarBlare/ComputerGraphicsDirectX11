@@ -21,8 +21,6 @@ PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool
 void PingPongGame::Initialize() {
 	Game::Initialize();
 
-	//camera->transform->localPosition->z -= 5.0f;
-
 	*leftPlayer->transform->localPosition -= {0.5f, 0.0f, 0.0f};
 	*rightPlayer->transform->localPosition += {0.5f, 0.0f, 0.0f};
 	leftPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
@@ -158,9 +156,9 @@ void PingPongGame::RestartRound() {
 * Need to call before PingPongGame::Initialize()
 */
 void PingPongGame::ConfigureGameObjects() {
-	DirectX::XMFLOAT4 racketColor(0.67f, 0.9f, 0.76f, 1.0f);
-	DirectX::XMFLOAT4 ballColor(0.67f, 0.9f, 0.76f, 1.0f);
-	DirectX::XMFLOAT4 debugColor(1.0f, 0.0f, 0.0f, 1.0f);
+	DirectX::SimpleMath::Color racketColor(0.67f, 0.9f, 0.76f, 1.0f);
+	DirectX::SimpleMath::Color ballColor(0.67f, 0.9f, 0.76f, 1.0f);
+	DirectX::SimpleMath::Color debugColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 	std::shared_ptr<RectangleRenderComponent> leftPlayerMesh =
 		std::make_shared<RectangleRenderComponent>(

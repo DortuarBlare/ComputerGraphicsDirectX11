@@ -2,12 +2,12 @@
 #include "TriangleRenderComponent.h"
 
 TriangleRenderComponent::TriangleRenderComponent() : RenderComponent() {
-	indeces.insert(indeces.end(), { 0, 1, 2 });
+	indexes.insert(indexes.end(), { 0, 1, 2 });
 }
 
 TriangleRenderComponent::TriangleRenderComponent(
-	DirectX::XMFLOAT4 fillColor,
+	DirectX::SimpleMath::Color fillColor,
 	D3D11_FILL_MODE fillMode
 ) : RenderComponent(fillColor, fillMode) {
-	indeces.insert(indeces.end(), { 0, 1, 2 });
+	indexes.insert(indexes.end(), { 0, 1, 2 });
 }

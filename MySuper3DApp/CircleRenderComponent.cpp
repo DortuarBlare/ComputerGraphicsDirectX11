@@ -7,7 +7,7 @@ CircleRenderComponent::CircleRenderComponent() : RenderComponent() {
 }
 
 CircleRenderComponent::CircleRenderComponent(
-	DirectX::XMFLOAT4 fillColor,
+	DirectX::SimpleMath::Color fillColor,
 	D3D11_FILL_MODE fillMode,
 	float radius,
 	unsigned int pointsAmount
@@ -38,7 +38,7 @@ void CircleRenderComponent::ConfigureCircle() {
 	}
 
 	for (unsigned int i = 1; i < pointsAmount; i++) {
-		indeces.insert(indeces.end(), { 0, i, i + 1 });
+		indexes.insert(indexes.end(), { 0, i, i + 1 });
 	}
-	indeces.insert(indeces.end(), { 0, pointsAmount, 1 });
+	indexes.insert(indexes.end(), { 0, pointsAmount, 1 });
 }

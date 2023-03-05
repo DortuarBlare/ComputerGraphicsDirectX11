@@ -7,7 +7,7 @@ class TriangleRenderComponent : public RenderComponent {
 public:
 	TriangleRenderComponent();
 	TriangleRenderComponent(
-		DirectX::XMFLOAT4 fillColor,
+		DirectX::SimpleMath::Color fillColor,
 		D3D11_FILL_MODE fillMode
 	);
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "LineRenderComponent.h"
 
 class SolarSystem : public Game {
 private:

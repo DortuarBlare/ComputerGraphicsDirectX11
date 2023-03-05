@@ -208,12 +208,7 @@ void Game::Draw() {
 		gameObject->Draw();
 }
 
-/*
-* There is still no understanding of what will happen here
-*/
-void Game::RestoreTargets() {
-
-}
+void Game::RestoreTargets() {}
 
 /*
 * Presenting graphics
@@ -221,7 +216,7 @@ void Game::RestoreTargets() {
 void Game::EndFrame() {
 	context->OMSetRenderTargets(0, nullptr, nullptr);
 
-	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0); // Show what we've drawn
+	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
 
 /*
@@ -249,11 +244,11 @@ void Game::UpdateInternal() {
 		frameCount = 0;
 	}*/
 
-	PrepareFrame();
-
 	Update();
 
 	FixedUpdate(); // Change for fixed calls
+
+	PrepareFrame();
 
 	Draw();
 
@@ -294,7 +289,7 @@ void Game::Exit() {
 }
 
 void Game::DestroyResources() {
-	for (auto gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 		gameObject->DestroyResources();
 }
 
