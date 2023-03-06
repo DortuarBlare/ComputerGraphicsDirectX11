@@ -25,15 +25,32 @@ void SolarSystem::Initialize() {
 	Moon->transform->localPosition->y += yPlanetsOffset;
 	Mars->transform->localPosition->y += yPlanetsOffset;
 	Jupiter->transform->localPosition->y += yPlanetsOffset;
+	Saturn->transform->localPosition->y += yPlanetsOffset;
+	Uranus->transform->localPosition->y += yPlanetsOffset;
+	Neptune->transform->localPosition->y += yPlanetsOffset;
 }
 
 void SolarSystem::Update() {
 	Game::Update();
 
-	if (Game::instance->inputDevice->IsKeyDown(Keys::D1)) {
-		camera->orbitMode = true;
-		camera->transform->parent = Sun->transform;
-	}
+	if (Game::instance->inputDevice->IsKeyDown(Keys::D0))
+		camera->AttachTo(Sun->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D1))
+		camera->AttachTo(Mercury->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D2))
+		camera->AttachTo(Venus->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D3))
+		camera->AttachTo(Earth->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D4))
+		camera->AttachTo(Mars->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D5))
+		camera->AttachTo(Jupiter->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D6))
+		camera->AttachTo(Saturn->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D7))
+		camera->AttachTo(Uranus->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D8))
+		camera->AttachTo(Neptune->transform);
 }
 
 void SolarSystem::FixedUpdate() {
@@ -144,13 +161,58 @@ void SolarSystem::ConfigureGameObjects() {
 	JupiterDescription.rotateAroundAxis = Vector3::Up;
 	JupiterDescription.orbitRadius = 50.0f;
 	JupiterDescription.fillMode = D3D11_FILL_SOLID;
-	JupiterDescription.radius = 2.5f;
+	JupiterDescription.radius = 3.5f;
 	JupiterDescription.sliceCount = 20;
 	JupiterDescription.stackCount = 20;
 	JupiterDescription.topColor = { 0.85f, 0.53f, 0.1f };
 	JupiterDescription.bottomColor = { 0.86f, 0.58f, 0.44f };
 	Jupiter = std::make_shared<SolarSystemGameObject>(JupiterDescription);
 	//Jupiter->transform->parent = Sun->transform;
+
+	SolarSystemGameObjectDescription SaturnDescription = {};
+	SaturnDescription.localRotationSpeed = 2.5f;
+	SaturnDescription.localRotationAxis = Vector3::Right;
+	SaturnDescription.rotateAroundSpeed = 1.25f;
+	SaturnDescription.rotateAroundAxis = Vector3::Up;
+	SaturnDescription.orbitRadius = 60.0f;
+	SaturnDescription.fillMode = D3D11_FILL_SOLID;
+	SaturnDescription.radius = 1.5f;
+	SaturnDescription.sliceCount = 20;
+	SaturnDescription.stackCount = 20;
+	SaturnDescription.topColor = { 0.62f, 0.62f, 0.37f };
+	SaturnDescription.bottomColor = { 0.82f, 0.82f, 0.57f };
+	Saturn = std::make_shared<SolarSystemGameObject>(SaturnDescription);
+	//Saturn->transform->parent = Sun->transform;
+
+	SolarSystemGameObjectDescription UranusDescription = {};
+	UranusDescription.localRotationSpeed = 2.5f;
+	UranusDescription.localRotationAxis = Vector3::Right;
+	UranusDescription.rotateAroundSpeed = 1.0f;
+	UranusDescription.rotateAroundAxis = Vector3::Up + Vector3::Left;
+	UranusDescription.orbitRadius = 70.0f;
+	UranusDescription.fillMode = D3D11_FILL_SOLID;
+	UranusDescription.radius = 1.75f;
+	UranusDescription.sliceCount = 20;
+	UranusDescription.stackCount = 20;
+	UranusDescription.topColor = { 0.64f, 0.93f, 0.83f };
+	UranusDescription.bottomColor = { 0.64f, 0.86f, 0.82f };
+	Uranus = std::make_shared<SolarSystemGameObject>(UranusDescription);
+	//Uranus->transform->parent = Sun->transform;
+
+	SolarSystemGameObjectDescription NeptuneDescription = {};
+	NeptuneDescription.localRotationSpeed = 2.5f;
+	NeptuneDescription.localRotationAxis = Vector3::Right;
+	NeptuneDescription.rotateAroundSpeed = 0.25f;
+	NeptuneDescription.rotateAroundAxis = Vector3::Up;
+	NeptuneDescription.orbitRadius = 80.0f;
+	NeptuneDescription.fillMode = D3D11_FILL_SOLID;
+	NeptuneDescription.radius = 3.0f;
+	NeptuneDescription.sliceCount = 20;
+	NeptuneDescription.stackCount = 20;
+	NeptuneDescription.topColor = { 0.19f, 0.39f, 0.65f };
+	NeptuneDescription.bottomColor = { 0.2f, 0.2f, 0.8f };
+	Neptune = std::make_shared<SolarSystemGameObject>(NeptuneDescription);
+	//Neptune->transform->parent = Sun->transform;
 
 	SolarSystem::instance->gameObjects.push_back(grid);
 	SolarSystem::instance->gameObjects.push_back(Sun);
@@ -160,6 +222,9 @@ void SolarSystem::ConfigureGameObjects() {
 	SolarSystem::instance->gameObjects.push_back(Moon);
 	SolarSystem::instance->gameObjects.push_back(Mars);
 	SolarSystem::instance->gameObjects.push_back(Jupiter);
+	SolarSystem::instance->gameObjects.push_back(Saturn);
+	SolarSystem::instance->gameObjects.push_back(Uranus);
+	SolarSystem::instance->gameObjects.push_back(Neptune);
 
 	std::shared_ptr<LineRenderComponent> gridRender = std::make_shared<LineRenderComponent>(gridColor);
 	gridRender->AddGrid(50, 2, gridColor);
@@ -172,4 +237,7 @@ void SolarSystem::ConfigureGameObjects() {
 	Moon->Configure();
 	Mars->Configure();
 	Jupiter->Configure();
+	Saturn->Configure();
+	Uranus->Configure();
+	Neptune->Configure();
 }

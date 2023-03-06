@@ -25,28 +25,28 @@ void CameraGameObject::Update() {
 
     if (Game::instance->inputDevice->IsKeyDown(Keys::A)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * right;
-        orbitMode = false;
+        Detach();
     }
     if (Game::instance->inputDevice->IsKeyDown(Keys::D)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * right;
-        orbitMode = false;
+        Detach();
     }
     if (Game::instance->inputDevice->IsKeyDown(Keys::W)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * forward;
-        orbitMode = false;
+        Detach();
     }
     if (Game::instance->inputDevice->IsKeyDown(Keys::S)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * forward;
-        orbitMode = false;
+        Detach();
     }
 
     if (Game::instance->inputDevice->IsKeyDown(Keys::Space)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * Vector3::Up;
-        orbitMode = false;
+        Detach();
     }
     if (Game::instance->inputDevice->IsKeyDown(Keys::LeftShift)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * Vector3::Up;
-        orbitMode = false;
+        Detach();
     }
 
     if (orbitMode && transform->parent) {
@@ -59,25 +59,13 @@ void CameraGameObject::Update() {
                 Vector3::Forward,
                 Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)
             );
-        transform->parent = nullptr;
+        up = Vector3::Transform(
+            Vector3::Up,
+            Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)
+        );
     }
 
-    up = Vector3::Transform(
-        Vector3::Up,
-        Matrix::CreateFromQuaternion(*transform->localRotation)
-    );
-
-    /*Vector3 target = *transform->localPosition +
-        Vector3::Transform(
-            Vector3::Forward,
-            Matrix::CreateFromQuaternion(*transform->localRotation)
-        );*/
-
-    viewMatrix = Matrix::CreateLookAt(
-        *transform->localPosition,
-        target,
-        up
-    );
+    viewMatrix = CreateViewMatrix();
 
     if (perspective)
         projectionMatrix = CreatePerspectiveMatrix();
@@ -96,8 +84,34 @@ void CameraGameObject::FixedUpdate() {
     GameObject::FixedUpdate();
 }
 
+
+void CameraGameObject::AttachTo(std::shared_ptr<TransformComponent> transform) {
+    orbitMode = true;
+    this->transform->parent = transform;
+
+    orbitOffset = 10.0f *
+        Vector3::Transform(
+            Vector3::Forward + Vector3::Up,
+            Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)
+        );
+
+    up = Vector3::Up;
+}
+
+void CameraGameObject::Detach() {
+    if (transform->parent) {
+        orbitMode = false;
+        transform->parent = nullptr;
+    }
+}
+
+
 Matrix CameraGameObject::GetCameraMatrix() {
     return viewMatrix * projectionMatrix;
+}
+
+Matrix CameraGameObject::CreateViewMatrix() {
+    return Matrix::CreateLookAt(*transform->localPosition, target, up);
 }
 
 Matrix CameraGameObject::CreatePerspectiveMatrix() {
@@ -120,6 +134,7 @@ Matrix CameraGameObject::CreateOrthographicMatrix() {
         );
 }
 
+
 void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData) {
     /**transform->localRotation *=
         Quaternion::CreateFromYawPitchRoll(
@@ -137,8 +152,8 @@ void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& 
         *transform->localRotation;*/
 
     if (!orbitMode) {
-        yaw += -mouseData.Offset.x * cameraRotationSpeed;
-        pitch += -mouseData.Offset.y * cameraRotationSpeed;
+        yaw += -mouseData.Offset.x * rotationSpeed;
+        pitch += -mouseData.Offset.y * rotationSpeed;
 
         if (pitch > DirectX::XM_PIDIV2 - 0.01)
             pitch = DirectX::XM_PIDIV2 - 0.01;
@@ -149,6 +164,14 @@ void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& 
             velocity += mouseData.WheelDelta / 10;
     }
     else {
-        orbitOffset *= 1 - 0.001f * mouseData.WheelDelta;
+        Vector3 right = orbitOffset.Cross(up);
+        Quaternion quaternionFromMouseInput =
+            Quaternion::CreateFromAxisAngle(up, -0.005f * mouseData.Offset.x) *
+            Quaternion::CreateFromAxisAngle(right, 0.005f * mouseData.Offset.y);
+        orbitOffset = Vector3::Transform(orbitOffset, Matrix::CreateFromQuaternion(quaternionFromMouseInput));
+        up = Vector3::Transform(up, Matrix::CreateFromQuaternion(quaternionFromMouseInput));
+
+        // Changing the distance to the planet
+        orbitOffset *= 1 - orbitApproximationSpeed * mouseData.WheelDelta;
     }
 }

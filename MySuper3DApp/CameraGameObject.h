@@ -19,13 +19,17 @@ private:
 	Vector3 target;
 	Vector3 up;
 	Vector3 orbitOffset;
-	float cameraRotationSpeed = 0.005f;
+	float rotationSpeed = 0.005f;
+	float orbitApproximationSpeed = 0.0025f;
 	
 	Matrix viewMatrix;
 	Matrix projectionMatrix;
 
+	Matrix CreateViewMatrix();
 	Matrix CreatePerspectiveMatrix();
 	Matrix CreateOrthographicMatrix();
+
+	void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData);
 
 public:
 	bool orbitMode = false;
@@ -34,9 +38,11 @@ public:
 	void Update() override;
 	void FixedUpdate() override;
 
+	void AttachTo(std::shared_ptr<TransformComponent> transform);
+	void Detach();
+
 	Matrix GetCameraMatrix();
 	
-	void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData);
 
 	// Methods
 
