@@ -26,6 +26,7 @@ private:
 	float rotateAroundSpeed;
 	Vector3 rotateAroundAxis;
 	float orbitRadius;
+	Vector3 offset;
 
 	std::shared_ptr<SphereRenderComponent> mesh;
 

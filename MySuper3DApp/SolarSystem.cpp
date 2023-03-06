@@ -22,7 +22,7 @@ void SolarSystem::Initialize() {
 	Mercury->transform->localPosition->y += yPlanetsOffset;
 	Venus->transform->localPosition->y += yPlanetsOffset;
 	Earth->transform->localPosition->y += yPlanetsOffset;
-	Moon->transform->localPosition->y += yPlanetsOffset;
+	//Moon->transform->localPosition->y += yPlanetsOffset;
 	Mars->transform->localPosition->y += yPlanetsOffset;
 	Jupiter->transform->localPosition->y += yPlanetsOffset;
 	Saturn->transform->localPosition->y += yPlanetsOffset;
@@ -127,9 +127,9 @@ void SolarSystem::ConfigureGameObjects() {
 	SolarSystemGameObjectDescription MoonDescription = {};
 	MoonDescription.localRotationSpeed = 1.0f;
 	MoonDescription.localRotationAxis = Vector3::Up;
-	MoonDescription.rotateAroundSpeed = 1.0f;
-	MoonDescription.rotateAroundAxis = Vector3::Right;
-	MoonDescription.orbitRadius = 7.5f;
+	MoonDescription.rotateAroundSpeed = 5.0f;
+	MoonDescription.rotateAroundAxis = Vector3::Up + Vector3::Right;
+	MoonDescription.orbitRadius = 3.0f;
 	MoonDescription.fillMode = D3D11_FILL_SOLID;
 	MoonDescription.radius = 0.5f;
 	MoonDescription.sliceCount = 20;

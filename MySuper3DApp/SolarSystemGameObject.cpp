@@ -24,16 +24,16 @@ void SolarSystemGameObject::FixedUpdate() {
 	GameObject::FixedUpdate();
 
 	if (transform->parent) {
-		Vector3 offset =
+		offset =
 			Vector3::Transform(
-				*transform->localPosition,
+				offset,
 				Matrix::CreateFromAxisAngle(
 					rotateAroundAxis,
 					rotateAroundSpeed * Game::instance->deltaTime
 				)
 			);
 
-		*transform->localPosition = *transform->parent->localPosition/* + offset*/;
+		*transform->localPosition = *transform->parent->localPosition + offset;
 	}
 	else {
 		*transform->localPosition = 
@@ -52,8 +52,10 @@ void SolarSystemGameObject::FixedUpdate() {
 void SolarSystemGameObject::Configure() {
 	AddComponent(mesh);
 
-	if (transform->parent) 
-		*transform->localPosition = *transform->parent->localPosition + Vector3::Forward * orbitRadius;
+	if (transform->parent) {
+		offset = Vector3::Forward * orbitRadius;
+		*transform->localPosition = *transform->parent->localPosition + offset;
+	}
 	else
 		*transform->localPosition += Vector3::Forward * orbitRadius;
 }

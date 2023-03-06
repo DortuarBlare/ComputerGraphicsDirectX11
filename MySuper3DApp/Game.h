@@ -26,6 +26,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backTex; // 2D texture interface manages texel data, which is structured memory
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv; // Identifies the render-target subresources that can be accessed during rendering (Back buffer?)
 
+
 	Game(LPCWSTR name, int clientWidth, int clientHeight, bool windowed);
 
 	virtual void UpdateInternal();
