@@ -170,7 +170,7 @@ void RenderComponent::Initialize() {
 
 	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), constData.get(), constBuf.GetAddressOf());
 
-	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
+	rastDesc->CullMode = D3D11_CULL_FRONT; // Cull None | Cull Front | Cull Back
 	rastDesc->FillMode = fillMode; // Solid or wireframe
 
 	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
