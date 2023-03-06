@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "InputDevice.h"
 
+class InputDevice;
+
 using namespace DirectX::SimpleMath;
 
 class CameraGameObject : public GameObject {
@@ -12,10 +14,9 @@ private:
 	float nearPlane = 0.1f;
 	float farPlane = 1000.0f;
 
+	float yaw = 0;
+	float pitch = 0;
 	float cameraRotationSpeed = 0.005f;
-
-	float yaw = 0; // Better use localRotation later
-	float pitch = 0; // Better use localRotation later
 	
 	Matrix viewMatrix;
 	Matrix projectionMatrix;
@@ -30,7 +31,7 @@ public:
 
 	Matrix GetCameraMatrix();
 	
-	//void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData, int payload);
+	void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData);
 
 	// Methods
 

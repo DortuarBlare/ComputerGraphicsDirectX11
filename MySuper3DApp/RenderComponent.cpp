@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RenderComponent.h"
+#include "TransformComponent.h"
 
 RenderComponent::RenderComponent() {
 	fillColor = { 0.0f, 0.0f, 0.0f };
@@ -155,9 +156,11 @@ void RenderComponent::Initialize() {
 
 	// Create const buffer
 	constBufDesc->ByteWidth = sizeof(Matrix);
-	constBufDesc->Usage = D3D11_USAGE_DYNAMIC;
+	//constBufDesc->Usage = D3D11_USAGE_DYNAMIC;
+	constBufDesc->Usage = D3D11_USAGE_DEFAULT;
 	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBufDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	//constBufDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constBufDesc->CPUAccessFlags = 0;
 	constBufDesc->MiscFlags = 0;
 	constBufDesc->StructureByteStride = 0;
 
@@ -178,12 +181,12 @@ void RenderComponent::Initialize() {
 }
 
 void RenderComponent::Update() {
-	*constBufMatrix = Game::instance->camera->GetCameraMatrix();
+	/**constBufMatrix = Game::instance->camera->GetCameraMatrix();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	Game::instance->GetContext()->Map(constBuf.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	memcpy(mappedResource.pData, constBufMatrix.get(), sizeof(constBufMatrix));
-	Game::instance->GetContext()->Unmap(constBuf.Get(), 0);
+	Game::instance->GetContext()->Unmap(constBuf.Get(), 0);*/
 }
 
 void RenderComponent::FixedUpdate() {}
@@ -200,7 +203,11 @@ void RenderComponent::Draw() {
 
 		Game::instance->GetContext()->RSSetState(rastState.Get());
 
-		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
+		const Matrix world = Matrix::CreateFromQuaternion(*owner->transform->localRotation) * Matrix::CreateTranslation(*owner->transform->localPosition);
+		*constBufMatrix = world * Game::instance->camera->GetCameraMatrix();
+		*constBufMatrix = constBufMatrix->Transpose();
+		
+		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
 		Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
 		Game::instance->GetContext()->DrawIndexed(indexes.size(), 0, 0);

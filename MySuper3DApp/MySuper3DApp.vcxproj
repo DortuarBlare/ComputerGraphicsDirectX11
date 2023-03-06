@@ -142,6 +142,8 @@
     <ClCompile Include="PingPongRacket.cpp" />
     <ClCompile Include="PingPongBall.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
+    <ClCompile Include="SolarSystemGameObject.cpp" />
+    <ClCompile Include="SphereRenderComponent.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -172,6 +174,8 @@
     <ClInclude Include="PingPongRacket.h" />
     <ClInclude Include="PingPongBall.h" />
     <ClInclude Include="SolarSystem.h" />
+    <ClInclude Include="SolarSystemGameObject.h" />
+    <ClInclude Include="SphereRenderComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="DisplayWin32.h" />

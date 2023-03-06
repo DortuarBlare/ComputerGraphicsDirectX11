@@ -8,7 +8,6 @@ public:
 	std::shared_ptr<BoxColliderComponent> collider;
 
 	PingPongGameObject();
-	PingPongGameObject(DirectX::SimpleMath::Vector3 position);
 
 	virtual void FixedUpdate();
 

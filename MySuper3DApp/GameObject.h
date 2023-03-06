@@ -14,8 +14,6 @@ public:
 	std::vector<std::shared_ptr<GameObjectComponent>> components;
 
 	GameObject();
-	GameObject(DirectX::SimpleMath::Vector3 translation, DirectX::SimpleMath::Vector3 direction);
-	virtual ~GameObject() = default;
 
 	virtual void Initialize();
 	virtual void Update();

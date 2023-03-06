@@ -64,7 +64,7 @@ Vector3 TransformComponent::LocalRight() {
 }
 
 Vector3 TransformComponent::Forward() {
-	return GetRotation() * Vector3::Forward;
+	return Vector3::Transform(Vector3::Forward, GetRotation());
 }
 
 Vector3 TransformComponent::Up() {

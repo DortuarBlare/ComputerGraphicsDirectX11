@@ -8,12 +8,6 @@ GameObject::GameObject() {
 	direction = std::make_shared<DirectX::SimpleMath::Vector3>();
 }
 
-GameObject::GameObject(DirectX::SimpleMath::Vector3 position, DirectX::SimpleMath::Vector3 direction) {
-	transform = std::make_shared<TransformComponent>();
-	transform->localPosition = std::make_shared<DirectX::SimpleMath::Vector3>(position);
-	this->direction = std::make_shared<DirectX::SimpleMath::Vector3>(direction);
-}
-
 
 void GameObject::Initialize() {
 	for (auto& component : components)

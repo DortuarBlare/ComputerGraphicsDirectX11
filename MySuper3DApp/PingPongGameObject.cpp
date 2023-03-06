@@ -4,8 +4,6 @@
 
 PingPongGameObject::PingPongGameObject() : GameObject() {}
 
-PingPongGameObject::PingPongGameObject(DirectX::SimpleMath::Vector3 position) : GameObject(position, {}) {}
-
 
 void PingPongGameObject::FixedUpdate() {}
 

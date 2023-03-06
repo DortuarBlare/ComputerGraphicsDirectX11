@@ -3,8 +3,6 @@
 #include "Delegates.h"
 #include <unordered_set>
 
-#include "Game.h"
-
 class Game;
 
 class InputDevice {

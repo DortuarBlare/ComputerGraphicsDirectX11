@@ -174,7 +174,7 @@ void Game::PrepareFrame() {
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 
 	context->RSSetViewports(1, viewport.get());
-	float backgroundColor[] = { 0.18f, 0.55f, 0.34f, 1.0f };
+	float backgroundColor[] = { 0.0f, 0.0f, 0.0f};
 	context->ClearRenderTargetView(rtv.Get(), backgroundColor);
 }
 

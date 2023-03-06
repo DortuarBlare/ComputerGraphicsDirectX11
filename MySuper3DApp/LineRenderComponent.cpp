@@ -21,7 +21,9 @@ void LineRenderComponent::Draw() {
 		Game::instance->GetContext()->RSSetState(rastState.Get());
 
 		// Use constant buffer for offset
-		//Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
+		*constBufMatrix = Game::instance->camera->GetCameraMatrix().Transpose();
+
+		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
 		Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
 		Game::instance->GetContext()->DrawIndexed(indexes.size(), 0, 0);
