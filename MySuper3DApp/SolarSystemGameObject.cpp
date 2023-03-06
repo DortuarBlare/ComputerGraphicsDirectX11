@@ -7,6 +7,8 @@ SolarSystemGameObject::SolarSystemGameObject(SolarSystemGameObjectDescription de
 	this->localRotationAxis = description.localRotationAxis;
 
 	this->rotateAroundSpeed = description.rotateAroundSpeed;
+	this->rotateAroundAxis = description.rotateAroundAxis;
+	this->orbitRadius = description.orbitRadius;
 
 	mesh = std::make_shared<SphereRenderComponent>(
 		description.fillMode,
@@ -26,14 +28,22 @@ void SolarSystemGameObject::FixedUpdate() {
 			Vector3::Transform(
 				*transform->localPosition,
 				Matrix::CreateFromAxisAngle(
-					Vector3::Up,
+					rotateAroundAxis,
 					rotateAroundSpeed * Game::instance->deltaTime
 				)
 			);
 
-		std::cout << "Offset: " << offset.x << ' ' << offset.y << ' ' << offset.z << std::endl;
-
-		*transform->localPosition = *transform->parent->localPosition + offset;
+		*transform->localPosition = *transform->parent->localPosition/* + offset*/;
+	}
+	else {
+		*transform->localPosition = 
+			Vector3::Transform(
+				*transform->localPosition,
+				Matrix::CreateFromAxisAngle(
+					rotateAroundAxis,
+					rotateAroundSpeed * Game::instance->deltaTime
+				)
+			);
 	}
 
 	*transform->localRotation *= Quaternion::CreateFromAxisAngle(localRotationAxis, localRotationSpeed * Game::instance->deltaTime);
@@ -42,6 +52,8 @@ void SolarSystemGameObject::FixedUpdate() {
 void SolarSystemGameObject::Configure() {
 	AddComponent(mesh);
 
-	/*if (transform->parent) 
-		*transform->localPosition = *transform->parent->localPosition + Vector3::Forward * 2.5f;*/
+	if (transform->parent) 
+		*transform->localPosition = *transform->parent->localPosition + Vector3::Forward * orbitRadius;
+	else
+		*transform->localPosition += Vector3::Forward * orbitRadius;
 }

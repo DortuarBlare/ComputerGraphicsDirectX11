@@ -7,6 +7,8 @@ struct SolarSystemGameObjectDescription {
 	Vector3 localRotationAxis;
 
 	float rotateAroundSpeed;
+	Vector3 rotateAroundAxis;
+	float orbitRadius;
 
 	D3D11_FILL_MODE fillMode;
 	float radius;
@@ -22,6 +24,8 @@ private:
 	Vector3 localRotationAxis;
 
 	float rotateAroundSpeed;
+	Vector3 rotateAroundAxis;
+	float orbitRadius;
 
 	std::shared_ptr<SphereRenderComponent> mesh;
 

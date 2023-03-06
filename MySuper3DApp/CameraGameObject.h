@@ -16,6 +16,9 @@ private:
 
 	float yaw = 0;
 	float pitch = 0;
+	Vector3 target;
+	Vector3 up;
+	Vector3 orbitOffset;
 	float cameraRotationSpeed = 0.005f;
 	
 	Matrix viewMatrix;
@@ -25,6 +28,8 @@ private:
 	Matrix CreateOrthographicMatrix();
 
 public:
+	bool orbitMode = false;
+
 	void Initialize() override;
 	void Update() override;
 	void FixedUpdate() override;

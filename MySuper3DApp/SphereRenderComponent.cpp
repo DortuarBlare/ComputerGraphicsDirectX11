@@ -54,7 +54,7 @@ void SphereRenderComponent::ConfigureSphere() {
 	}
 
 	points.push_back({ 0.0f, -radius, 0.0f, 1.0f });
-	points.push_back(bottomColor);
+	points.push_back(lerpBottomColor);
 
 	for (int i = 1; i <= sliceCount; i++) {
 		indexes.push_back(0);

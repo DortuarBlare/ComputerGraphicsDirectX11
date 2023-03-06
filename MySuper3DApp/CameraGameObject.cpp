@@ -7,7 +7,7 @@ void CameraGameObject::Initialize() {
     Game::instance->inputDevice->MouseMove.AddRaw(this, &CameraGameObject::MouseEventHandler);
 
     velocity = 5.0f;
-    transform->localPosition->y += 10;
+    orbitOffset = *transform->localPosition;
 }
 
 void CameraGameObject::Update() {
@@ -18,37 +18,60 @@ void CameraGameObject::Update() {
     Vector3 forward = Vector3::Transform(Vector3::Forward, rotationMatrix);
     Vector3 right = Vector3::Transform(Vector3::Right, rotationMatrix);
 
-    if (Game::instance->inputDevice->IsKeyDown(Keys::A))
+    if (Game::instance->inputDevice->IsKeyDown(Keys::P))
+        perspective = true;
+    if (Game::instance->inputDevice->IsKeyDown(Keys::O))
+        perspective = false;
+
+    if (Game::instance->inputDevice->IsKeyDown(Keys::A)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * right;
-    if (Game::instance->inputDevice->IsKeyDown(Keys::D))
+        orbitMode = false;
+    }
+    if (Game::instance->inputDevice->IsKeyDown(Keys::D)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * right;
-    if (Game::instance->inputDevice->IsKeyDown(Keys::W))
+        orbitMode = false;
+    }
+    if (Game::instance->inputDevice->IsKeyDown(Keys::W)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * forward;
-    if (Game::instance->inputDevice->IsKeyDown(Keys::S))
+        orbitMode = false;
+    }
+    if (Game::instance->inputDevice->IsKeyDown(Keys::S)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * forward;
+        orbitMode = false;
+    }
 
-    if (Game::instance->inputDevice->IsKeyDown(Keys::Space))
+    if (Game::instance->inputDevice->IsKeyDown(Keys::Space)) {
         *transform->localPosition += velocity * Game::instance->deltaTime * Vector3::Up;
-    if (Game::instance->inputDevice->IsKeyDown(Keys::LeftShift))
+        orbitMode = false;
+    }
+    if (Game::instance->inputDevice->IsKeyDown(Keys::LeftShift)) {
         *transform->localPosition -= velocity * Game::instance->deltaTime * Vector3::Up;
+        orbitMode = false;
+    }
 
-    Vector3 target = *transform->localPosition +
-        Vector3::Transform(
-            Vector3::Forward,
-            Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)
-        );
+    if (orbitMode && transform->parent) {
+        *transform->localPosition = *transform->parent->localPosition + orbitOffset;
+        target = *transform->parent->localPosition;
+    }
+    else {
+        target = *transform->localPosition +
+            Vector3::Transform(
+                Vector3::Forward,
+                Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)
+            );
+        transform->parent = nullptr;
+    }
+
+    up = Vector3::Transform(
+        Vector3::Up,
+        Matrix::CreateFromQuaternion(*transform->localRotation)
+    );
 
     /*Vector3 target = *transform->localPosition +
         Vector3::Transform(
             Vector3::Forward,
             Matrix::CreateFromQuaternion(*transform->localRotation)
         );*/
-
-    Vector3 up = 
-        Vector3::Transform(
-            Vector3::Up,
-            Matrix::CreateFromQuaternion(*transform->localRotation)
-        );
 
     viewMatrix = Matrix::CreateLookAt(
         *transform->localPosition,
@@ -113,14 +136,19 @@ void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& 
         ) *
         *transform->localRotation;*/
 
-    yaw += -mouseData.Offset.x * cameraRotationSpeed;
-    pitch += -mouseData.Offset.y * cameraRotationSpeed;
+    if (!orbitMode) {
+        yaw += -mouseData.Offset.x * cameraRotationSpeed;
+        pitch += -mouseData.Offset.y * cameraRotationSpeed;
 
-    if (pitch > DirectX::XM_PIDIV2 - 0.01)
-        pitch = DirectX::XM_PIDIV2 - 0.01;
-    if (pitch < -DirectX::XM_PIDIV2 + 0.01)
-        pitch = -DirectX::XM_PIDIV2 + 0.01;
+        if (pitch > DirectX::XM_PIDIV2 - 0.01)
+            pitch = DirectX::XM_PIDIV2 - 0.01;
+        if (pitch < -DirectX::XM_PIDIV2 + 0.01)
+            pitch = -DirectX::XM_PIDIV2 + 0.01;
 
-    if (velocity + mouseData.WheelDelta / 10 > 0)
-        velocity += mouseData.WheelDelta / 10;
+        if (velocity + mouseData.WheelDelta / 10 > 0)
+            velocity += mouseData.WheelDelta / 10;
+    }
+    else {
+        orbitOffset *= 1 - 0.001f * mouseData.WheelDelta;
+    }
 }
