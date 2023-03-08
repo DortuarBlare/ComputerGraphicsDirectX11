@@ -205,8 +205,7 @@ void RenderComponent::Draw() {
 
 		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
-		const Matrix world = Matrix::CreateFromQuaternion(*owner->transform->localRotation) * Matrix::CreateTranslation(*owner->transform->localPosition);
-		*constBufMatrix = world * Game::Instance()->camera->GetCameraMatrix();
+		*constBufMatrix = owner->transform->GetLocalModel() * Game::Instance()->camera->GetCameraMatrix();
 		*constBufMatrix = constBufMatrix->Transpose();
 
 		Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);

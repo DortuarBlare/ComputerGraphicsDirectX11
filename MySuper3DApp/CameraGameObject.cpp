@@ -134,21 +134,6 @@ Matrix CameraGameObject::CreateOrthographicMatrix() {
 
 
 void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData) {
-    /**transform->localRotation *=
-        Quaternion::CreateFromYawPitchRoll(
-            -mouseData.Offset.x * cameraRotationSpeed,
-            -mouseData.Offset.y * cameraRotationSpeed,
-            0
-        );*/
-
-    /**transform->localRotation =
-        Quaternion::CreateFromAxisAngle(Vector3::Up, -mouseData.Offset.x * cameraRotationSpeed) *
-        Quaternion::CreateFromAxisAngle(Vector3::Transform(
-            Vector3::Right, Matrix::CreateFromQuaternion(*transform->localRotation)),
-            -mouseData.Offset.y * cameraRotationSpeed
-        ) *
-        *transform->localRotation;*/
-
     if (!orbitMode) {
         yaw += -mouseData.Offset.x * rotationSpeed;
         pitch += -mouseData.Offset.y * rotationSpeed;
@@ -162,12 +147,11 @@ void CameraGameObject::MouseEventHandler(const InputDevice::MouseMoveEventArgs& 
             velocity += mouseData.WheelDelta / 10;
     }
     else {
-        Vector3 right = orbitOffset.Cross(up);
         Quaternion quaternionFromMouseInput =
-            Quaternion::CreateFromAxisAngle(up, -0.005f * mouseData.Offset.x) *
-            Quaternion::CreateFromAxisAngle(right, 0.005f * mouseData.Offset.y);
+            Quaternion::CreateFromAxisAngle(Vector3::Up, -0.005f * mouseData.Offset.x) *
+            Quaternion::CreateFromAxisAngle(orbitOffset.Cross(Vector3::Up), 0.005f * mouseData.Offset.y);
         orbitOffset = Vector3::Transform(orbitOffset, Matrix::CreateFromQuaternion(quaternionFromMouseInput));
-        up = Vector3::Transform(up, Matrix::CreateFromQuaternion(quaternionFromMouseInput));
+        up = Vector3::Transform(Vector3::Up, Matrix::CreateFromQuaternion(quaternionFromMouseInput));
 
         // Changing the distance to the planet
         orbitOffset *= 1 - orbitApproximationSpeed * mouseData.WheelDelta;
