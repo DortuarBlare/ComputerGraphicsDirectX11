@@ -17,7 +17,7 @@ private:
 	std::shared_ptr<SolarSystemGameObject> Uranus;
 	std::shared_ptr<SolarSystemGameObject> Neptune;
 
-	SolarSystem(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+	SolarSystem(LPCWSTR name);
 
 	void Initialize() override;
 	void Update() override;
@@ -26,7 +26,7 @@ private:
 	void ConfigureGameObjects();
 
 public:
-	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+	static void CreateInstance(LPCWSTR name);
 
-	void Run() override;
+	void Run(int screenWidth, int screenHeight, bool fullscreen) override;
 };

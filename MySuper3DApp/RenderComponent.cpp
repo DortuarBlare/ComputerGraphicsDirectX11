@@ -46,32 +46,34 @@ void RenderComponent::Initialize() {
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
-	Game::instance->res = D3DCompileFromFile(
-		L"./Shaders/MyVeryFirstShader.hlsl",
-		nullptr /*macros*/,
-		nullptr /*include*/,
-		"PSMain",
-		"ps_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0,
-		pixelShaderByteCode.GetAddressOf(),
-		&errorPixelCode
-	);
+	Game::Instance()->renderSystem->res =
+		D3DCompileFromFile(
+			L"./Shaders/MyVeryFirstShader.hlsl",
+			nullptr /*macros*/,
+			nullptr /*include*/,
+			"PSMain",
+			"ps_5_0",
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+			0,
+			pixelShaderByteCode.GetAddressOf(),
+			&errorPixelCode
+		);
 
 	// Compile vertex shader
-	Game::instance->res = D3DCompileFromFile(
-		L"./Shaders/MyVeryFirstShader.hlsl",
-		nullptr /*macros*/,
-		nullptr /*include*/,
-		"VSMain",
-		"vs_5_0", // Shader target (Pixel / Vertex)
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Different flags (for example code translation)
-		0,
-		vertexShaderByteCode.GetAddressOf(),
-		&errorVertexCode
-	);
+	Game::Instance()->renderSystem->res =
+		D3DCompileFromFile(
+			L"./Shaders/MyVeryFirstShader.hlsl",
+			nullptr /*macros*/,
+			nullptr /*include*/,
+			"VSMain",
+			"vs_5_0", // Shader target (Pixel / Vertex)
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Different flags (for example code translation)
+			0,
+			vertexShaderByteCode.GetAddressOf(),
+			&errorVertexCode
+		);
 
-	if (FAILED(Game::instance->res)) {
+	if (FAILED(Game::Instance()->renderSystem->res)) {
 		// If the shader failed to compile it should have written something to the error message.
 		if (errorVertexCode) {
 			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
@@ -80,19 +82,19 @@ void RenderComponent::Initialize() {
 		}
 		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
-			MessageBox(Game::instance->GetDisplay()->GetHWnd(), L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
+			MessageBox(Game::Instance()->renderSystem->display->GetHWnd(), L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
 
 		return;
 	}
 
-	Game::instance->GetDevice()->CreatePixelShader(
+	Game::Instance()->renderSystem->device->CreatePixelShader(
 		pixelShaderByteCode->GetBufferPointer(),
 		pixelShaderByteCode->GetBufferSize(),
 		nullptr,
 		pixelShader.GetAddressOf()
 	);
 
-	Game::instance->GetDevice()->CreateVertexShader(
+	Game::Instance()->renderSystem->device->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr,
@@ -120,7 +122,7 @@ void RenderComponent::Initialize() {
 		},
 	};
 
-	Game::instance->GetDevice()->CreateInputLayout(
+	Game::Instance()->renderSystem->device->CreateInputLayout(
 		inputElements,
 		2,
 		vertexShaderByteCode->GetBufferPointer(),
@@ -139,7 +141,7 @@ void RenderComponent::Initialize() {
 	vertexData->SysMemPitch = 0;
 	vertexData->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
 
 	indexBufDesc->ByteWidth = sizeof(int) * indexes.size();
 	indexBufDesc->Usage = D3D11_USAGE_DEFAULT;
@@ -152,7 +154,7 @@ void RenderComponent::Initialize() {
 	indexData->SysMemPitch = 0;
 	indexData->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
 
 	// Create const buffer
 	constBufDesc->ByteWidth = sizeof(Matrix);
@@ -168,13 +170,13 @@ void RenderComponent::Initialize() {
 	constData->SysMemPitch = 0;
 	constData->SysMemSlicePitch = 0;
 
-	Game::instance->GetDevice()->CreateBuffer(constBufDesc.get(), constData.get(), constBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(constBufDesc.get(), constData.get(), constBuf.GetAddressOf());
 
-	rastDesc->CullMode = D3D11_CULL_FRONT; // Cull None | Cull Front | Cull Back
+	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
 	rastDesc->FillMode = fillMode; // Solid or wireframe
 
-	Game::instance->res = Game::instance->GetDevice()->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
-	Game::instance->GetContext()->RSSetState(rastState.Get());
+	Game::Instance()->renderSystem->res = Game::Instance()->renderSystem->device->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
+	Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
 	strides[0] = 32; // Position and color in one structure, so array with one value - 32 (2 float4)
 	offsets[0] = 0;
@@ -193,24 +195,24 @@ void RenderComponent::FixedUpdate() {}
 
 void RenderComponent::Draw() {
 	if (enabled) {
-		Game::instance->GetContext()->IASetInputLayout(layout.Get());
-		Game::instance->GetContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		Game::instance->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
-		Game::instance->GetContext()->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
+		Game::Instance()->renderSystem->context->IASetInputLayout(layout.Get());
+		Game::Instance()->renderSystem->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Game::Instance()->renderSystem->context->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
+		Game::Instance()->renderSystem->context->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
 
-		Game::instance->GetContext()->VSSetShader(vertexShader.Get(), nullptr, 0);
-		Game::instance->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
+		Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
+		Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-		Game::instance->GetContext()->RSSetState(rastState.Get());
+		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
 		const Matrix world = Matrix::CreateFromQuaternion(*owner->transform->localRotation) * Matrix::CreateTranslation(*owner->transform->localPosition);
-		*constBufMatrix = world * Game::instance->camera->GetCameraMatrix();
+		*constBufMatrix = world * Game::Instance()->camera->GetCameraMatrix();
 		*constBufMatrix = constBufMatrix->Transpose();
-		
-		Game::instance->GetContext()->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
-		Game::instance->GetContext()->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
-		Game::instance->GetContext()->DrawIndexed(indexes.size(), 0, 0);
+		Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
+		Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
+
+		Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
 	}
 }
 

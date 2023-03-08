@@ -2,8 +2,7 @@
 #include "PingPongGame.h"
 #include "TransformComponent.h"
 
-PingPongGame::PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) :
-	Game(name, screenWidth, screenHeight, windowed) {
+PingPongGame::PingPongGame(LPCWSTR name) : Game(name) {
 	leftPlayerScore = 0;
 	rightPlayerScore = 0;
 	leftPlayer = std::make_shared<PingPongRacket>();
@@ -89,15 +88,6 @@ void PingPongGame::Update() {
 		leftPlayerScore++;
 		RestartRound();
 	}
-
-
-	if (totalTime > 1.0f) {
-		totalTime -= 1.0f;
-
-		WCHAR text[100];
-		swprintf_s(text, TEXT("Left player score: %i ||| Right player score: %i"), leftPlayerScore, rightPlayerScore);
-		SetWindowText(display->GetHWnd(), text);
-	}
 }
 
 /*
@@ -120,25 +110,25 @@ void PingPongGame::FixedUpdate() {
 	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down))
 		ball->Reflect(*downInvisibleWall->collider);
 
-	ball->Translate(*ball->direction * ball->velocity * Game::instance->deltaTime);
+	ball->Translate(*ball->direction * ball->velocity * Time::DeltaTime());
 }
 
 /*
 * There is no public access to constructor because of "Singleton" pattern
 * Need to use this method to create Game::instance (PingPongGame)
 */
-void PingPongGame::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) {
+void PingPongGame::CreateInstance(LPCWSTR name) {
 	if (!instance)
-		instance = std::unique_ptr<PingPongGame>(new PingPongGame(name, screenWidth, screenHeight, windowed));
+		instance = std::unique_ptr<PingPongGame>(new PingPongGame(name));
 }
 
 /*
 * Configure game objects before run
 * Call Game::Run() for basic logic
 */
-void PingPongGame::Run() {
+void PingPongGame::Run(int screenWidth, int screenHeight, bool fullscreen) {
 	ConfigureGameObjects();
-	Game::Run();
+	Game::Run(screenWidth, screenHeight, fullscreen);
 }
 
 /*
@@ -149,6 +139,10 @@ void PingPongGame::RestartRound() {
 	rightPlayer->velocity = 0.75f;
 	ball->velocity = 0.25f;
 	ball->SetPosition({ 0.0f, 0.0f, 0.0f });
+
+	WCHAR text[100];
+	swprintf_s(text, TEXT("Left player score: %i ||| Right player score: %i"), leftPlayerScore, rightPlayerScore);
+	SetWindowText(renderSystem->display->GetHWnd(), text);
 }
 
 /*

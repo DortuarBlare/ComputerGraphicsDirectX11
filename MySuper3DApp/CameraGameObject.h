@@ -42,17 +42,4 @@ public:
 	void Detach();
 
 	Matrix GetCameraMatrix();
-	
-
-	// Methods
-
-	// GetVector
-	// invert get up...
-
-	//CreatePerspectiveFieldOFView
-
-	//CameraController
-	// 
-	// Yaw and Pitch without third
-	// inputDevice AddRaw(...)
 };

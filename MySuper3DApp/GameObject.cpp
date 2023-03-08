@@ -41,7 +41,7 @@ void GameObject::DestroyResources() {
 
 
 void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
-	for (auto& gameObject : Game::instance->gameObjects) {
+	for (auto& gameObject : Game::Instance()->gameObjects) {
 		if (gameObject.get() == this)
 			component->owner = gameObject;
 	}

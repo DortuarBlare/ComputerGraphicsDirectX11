@@ -29,7 +29,7 @@ void SolarSystemGameObject::FixedUpdate() {
 				offset,
 				Matrix::CreateFromAxisAngle(
 					rotateAroundAxis,
-					rotateAroundSpeed * Game::instance->deltaTime
+					rotateAroundSpeed * Time::DeltaTime()
 				)
 			);
 
@@ -41,12 +41,12 @@ void SolarSystemGameObject::FixedUpdate() {
 				*transform->localPosition,
 				Matrix::CreateFromAxisAngle(
 					rotateAroundAxis,
-					rotateAroundSpeed * Game::instance->deltaTime
+					rotateAroundSpeed * Time::DeltaTime()
 				)
 			);
 	}
 
-	*transform->localRotation *= Quaternion::CreateFromAxisAngle(localRotationAxis, localRotationSpeed * Game::instance->deltaTime);
+	*transform->localRotation *= Quaternion::CreateFromAxisAngle(localRotationAxis, localRotationSpeed * Time::DeltaTime());
 }
 
 void SolarSystemGameObject::Configure() {

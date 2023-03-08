@@ -36,7 +36,7 @@ void BoxColliderComponent::DestroyResources() {
 bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 translation) {
 	translation.Normalize();
 
-	for (auto& gameObject : Game::instance->gameObjects) {
+	for (auto& gameObject : Game::Instance()->gameObjects) {
 		std::shared_ptr<GameObject> noCollisionGameObject = nullptr;
 		auto it = std::find(noCollisionGameObjects.begin(), noCollisionGameObjects.end(), gameObject);
 
@@ -76,7 +76,7 @@ bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 direction, fl
 	DirectX::SimpleMath::Vector3 rayPosition(PointOnBounds(direction));
 	DirectX::SimpleMath::Ray ray(rayPosition, direction);
 	
-	for (auto& gameObject : Game::instance->gameObjects) {
+	for (auto& gameObject : Game::Instance()->gameObjects) {
 		std::shared_ptr<GameObject> noCollisionGameObject = nullptr;
 		auto it = std::find(noCollisionGameObjects.begin(), noCollisionGameObjects.end(), gameObject);
 

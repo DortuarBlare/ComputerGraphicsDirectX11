@@ -2,14 +2,13 @@
 #include "SolarSystem.h"
 #include "TransformComponent.h"
 
-SolarSystem::SolarSystem(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) :
-	Game(name, screenWidth, screenHeight, windowed) {
+SolarSystem::SolarSystem(LPCWSTR name) : Game(name) {
 	grid = std::make_shared<GameObject>();
 }
 
-void SolarSystem::CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed) {
+void SolarSystem::CreateInstance(LPCWSTR name) {
 	if (!instance)
-		instance = std::unique_ptr<SolarSystem>(new SolarSystem(name, screenWidth, screenHeight, windowed));
+		instance = std::unique_ptr<SolarSystem>(new SolarSystem(name));
 }
 
 void SolarSystem::Initialize() {
@@ -22,7 +21,6 @@ void SolarSystem::Initialize() {
 	Mercury->transform->localPosition->y += yPlanetsOffset;
 	Venus->transform->localPosition->y += yPlanetsOffset;
 	Earth->transform->localPosition->y += yPlanetsOffset;
-	//Moon->transform->localPosition->y += yPlanetsOffset;
 	Mars->transform->localPosition->y += yPlanetsOffset;
 	Jupiter->transform->localPosition->y += yPlanetsOffset;
 	Saturn->transform->localPosition->y += yPlanetsOffset;
@@ -57,9 +55,9 @@ void SolarSystem::FixedUpdate() {
 	Game::FixedUpdate();
 }
 
-void SolarSystem::Run() {
+void SolarSystem::Run(int screenWidth, int screenHeight, bool fullscreen) {
 	ConfigureGameObjects();
-	Game::Run();
+	Game::Run(screenWidth, screenHeight, fullscreen);
 }
 
 void SolarSystem::ConfigureGameObjects() {

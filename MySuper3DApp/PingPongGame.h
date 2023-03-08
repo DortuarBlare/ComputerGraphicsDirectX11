@@ -17,7 +17,7 @@ private:
 	std::shared_ptr<PingPongGameObject> leftInvisibleWall;
 	std::shared_ptr<PingPongGameObject> rightInvisibleWall;
 
-	PingPongGame(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+	PingPongGame(LPCWSTR name);
 
 	void Initialize() override;
 	void Update() override;
@@ -27,7 +27,7 @@ private:
 
 	void RestartRound();
 public:
-	static void CreateInstance(LPCWSTR name, int screenWidth, int screenHeight, bool windowed);
+	static void CreateInstance(LPCWSTR name);
 
-	void Run() override;
+	void Run(int screenWidth, int screenHeight, bool fullscreen) override;
 };

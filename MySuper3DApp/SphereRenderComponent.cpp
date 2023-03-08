@@ -76,7 +76,7 @@ void SphereRenderComponent::ConfigureSphere() {
 		}
 	}
 
-	const int southPoleIndex = points.size() - 1;
+	const int southPoleIndex = points.size() / 2 - 1;
 
 	baseIndex = southPoleIndex - ringVertexCount;
 

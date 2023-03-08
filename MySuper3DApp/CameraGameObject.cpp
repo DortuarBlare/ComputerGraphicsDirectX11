@@ -4,7 +4,7 @@
 
 void CameraGameObject::Initialize() {
     GameObject::Initialize();
-    Game::instance->inputDevice->MouseMove.AddRaw(this, &CameraGameObject::MouseEventHandler);
+    Game::Instance()->inputDevice->MouseMove.AddRaw(this, &CameraGameObject::MouseEventHandler);
 
     velocity = 5.0f;
     orbitOffset = *transform->localPosition;
@@ -18,34 +18,34 @@ void CameraGameObject::Update() {
     Vector3 forward = Vector3::Transform(Vector3::Forward, rotationMatrix);
     Vector3 right = Vector3::Transform(Vector3::Right, rotationMatrix);
 
-    if (Game::instance->inputDevice->IsKeyDown(Keys::P))
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::P))
         perspective = true;
-    if (Game::instance->inputDevice->IsKeyDown(Keys::O))
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::O))
         perspective = false;
 
-    if (Game::instance->inputDevice->IsKeyDown(Keys::A)) {
-        *transform->localPosition -= velocity * Game::instance->deltaTime * right;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::A)) {
+        *transform->localPosition -= velocity * Time::DeltaTime() * right;
         Detach();
     }
-    if (Game::instance->inputDevice->IsKeyDown(Keys::D)) {
-        *transform->localPosition += velocity * Game::instance->deltaTime * right;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::D)) {
+        *transform->localPosition += velocity * Time::DeltaTime() * right;
         Detach();
     }
-    if (Game::instance->inputDevice->IsKeyDown(Keys::W)) {
-        *transform->localPosition += velocity * Game::instance->deltaTime * forward;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::W)) {
+        *transform->localPosition += velocity * Time::DeltaTime() * forward;
         Detach();
     }
-    if (Game::instance->inputDevice->IsKeyDown(Keys::S)) {
-        *transform->localPosition -= velocity * Game::instance->deltaTime * forward;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::S)) {
+        *transform->localPosition -= velocity * Time::DeltaTime() * forward;
         Detach();
     }
 
-    if (Game::instance->inputDevice->IsKeyDown(Keys::Space)) {
-        *transform->localPosition += velocity * Game::instance->deltaTime * Vector3::Up;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::Space)) {
+        *transform->localPosition += velocity * Time::DeltaTime() * Vector3::Up;
         Detach();
     }
-    if (Game::instance->inputDevice->IsKeyDown(Keys::LeftShift)) {
-        *transform->localPosition -= velocity * Game::instance->deltaTime * Vector3::Up;
+    if (Game::Instance()->inputDevice->IsKeyDown(Keys::LeftShift)) {
+        *transform->localPosition -= velocity * Time::DeltaTime() * Vector3::Up;
         Detach();
     }
 
@@ -115,20 +115,18 @@ Matrix CameraGameObject::CreateViewMatrix() {
 }
 
 Matrix CameraGameObject::CreatePerspectiveMatrix() {
-    return
-        Matrix::CreatePerspectiveFieldOfView(
-            fov,
-            static_cast<float>(Game::instance->GetDisplay()->GetClientWidth()) / Game::instance->GetDisplay()->GetClientHeight(),
-            nearPlane,
-            farPlane
-        );
+    float aspectRatio =
+        static_cast<float>(Game::Instance()->renderSystem->display->GetClientWidth()) /
+        Game::Instance()->renderSystem->display->GetClientHeight();
+
+    return Matrix::CreatePerspectiveFieldOfView(fov, aspectRatio, nearPlane, farPlane);
 }
 
 Matrix CameraGameObject::CreateOrthographicMatrix() {
     return
         Matrix::CreateOrthographic(
-            Game::instance->GetDisplay()->GetClientWidth() / 50,
-            Game::instance->GetDisplay()->GetClientHeight() / 50,
+            static_cast<float>(Game::Instance()->renderSystem->display->GetClientWidth()) / 50,
+            static_cast<float>(Game::Instance()->renderSystem->display->GetClientHeight()) / 50,
             nearPlane,
             farPlane
         );
