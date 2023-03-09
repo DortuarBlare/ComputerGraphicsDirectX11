@@ -9,8 +9,6 @@ private:
 	Color topColor;
 	Color bottomColor;
 
-	void ConfigureSphere();
-
 public:
 	SphereRenderComponent() = delete;
 	SphereRenderComponent(

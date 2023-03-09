@@ -12,55 +12,6 @@ void SolarSystem::CreateInstance(LPCWSTR name) {
 }
 
 void SolarSystem::Initialize() {
-	Game::Initialize();
-
-	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
-
-	float yPlanetsOffset = 10.0f;
-	Sun->transform->localPosition->y += yPlanetsOffset;
-	Mercury->transform->localPosition->y += yPlanetsOffset;
-	Venus->transform->localPosition->y += yPlanetsOffset;
-	Earth->transform->localPosition->y += yPlanetsOffset;
-	Mars->transform->localPosition->y += yPlanetsOffset;
-	Jupiter->transform->localPosition->y += yPlanetsOffset;
-	Saturn->transform->localPosition->y += yPlanetsOffset;
-	Uranus->transform->localPosition->y += yPlanetsOffset;
-	Neptune->transform->localPosition->y += yPlanetsOffset;
-}
-
-void SolarSystem::Update() {
-	Game::Update();
-
-	if (Game::instance->inputDevice->IsKeyDown(Keys::D0))
-		camera->AttachTo(Sun->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D1))
-		camera->AttachTo(Mercury->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D2))
-		camera->AttachTo(Venus->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D3))
-		camera->AttachTo(Earth->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D4))
-		camera->AttachTo(Mars->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D5))
-		camera->AttachTo(Jupiter->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D6))
-		camera->AttachTo(Saturn->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D7))
-		camera->AttachTo(Uranus->transform);
-	else if (Game::instance->inputDevice->IsKeyDown(Keys::D8))
-		camera->AttachTo(Neptune->transform);
-}
-
-void SolarSystem::FixedUpdate() {
-	Game::FixedUpdate();
-}
-
-void SolarSystem::Run(int screenWidth, int screenHeight, bool fullscreen) {
-	ConfigureGameObjects();
-	Game::Run(screenWidth, screenHeight, fullscreen);
-}
-
-void SolarSystem::ConfigureGameObjects() {
 	Color gridColor(0.75f, 0.75f, 0.75f);
 
 	SolarSystemGameObjectDescription SunDescription = {};
@@ -228,14 +179,49 @@ void SolarSystem::ConfigureGameObjects() {
 	gridRender->AddGrid(50, 2, gridColor);
 	grid->AddComponent(gridRender);
 
-	Sun->Configure();
-	Mercury->Configure();
-	Venus->Configure();
-	Earth->Configure();
-	Moon->Configure();
-	Mars->Configure();
-	Jupiter->Configure();
-	Saturn->Configure();
-	Uranus->Configure();
-	Neptune->Configure();
+	Game::Initialize();
+
+	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
+
+	float yPlanetsOffset = 10.0f;
+	Sun->transform->localPosition->y += yPlanetsOffset;
+	Mercury->transform->localPosition->y += yPlanetsOffset;
+	Venus->transform->localPosition->y += yPlanetsOffset;
+	Earth->transform->localPosition->y += yPlanetsOffset;
+	Mars->transform->localPosition->y += yPlanetsOffset;
+	Jupiter->transform->localPosition->y += yPlanetsOffset;
+	Saturn->transform->localPosition->y += yPlanetsOffset;
+	Uranus->transform->localPosition->y += yPlanetsOffset;
+	Neptune->transform->localPosition->y += yPlanetsOffset;
+}
+
+void SolarSystem::Update() {
+	Game::Update();
+
+	if (Game::instance->inputDevice->IsKeyDown(Keys::D0))
+		camera->AttachTo(Sun->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D1))
+		camera->AttachTo(Mercury->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D2))
+		camera->AttachTo(Venus->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D3))
+		camera->AttachTo(Earth->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D4))
+		camera->AttachTo(Mars->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D5))
+		camera->AttachTo(Jupiter->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D6))
+		camera->AttachTo(Saturn->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D7))
+		camera->AttachTo(Uranus->transform);
+	else if (Game::instance->inputDevice->IsKeyDown(Keys::D8))
+		camera->AttachTo(Neptune->transform);
+}
+
+void SolarSystem::FixedUpdate() {
+	Game::FixedUpdate();
+}
+
+void SolarSystem::Run(int screenWidth, int screenHeight, bool fullscreen) {
+	Game::Run(screenWidth, screenHeight, fullscreen);
 }

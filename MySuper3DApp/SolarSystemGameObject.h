@@ -33,7 +33,6 @@ private:
 public:
 	SolarSystemGameObject(SolarSystemGameObjectDescription description);
 
+	void Initialize() override;
 	virtual void FixedUpdate();
-
-	void Configure();
 };

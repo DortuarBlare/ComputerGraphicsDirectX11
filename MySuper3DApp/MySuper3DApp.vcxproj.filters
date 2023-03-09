@@ -138,6 +138,12 @@
     <ClCompile Include="RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KatamariDamacyGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KatamariDamacyGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayWin32.h">
@@ -219,6 +225,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KatamariDamacyGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KatamariDamacyGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

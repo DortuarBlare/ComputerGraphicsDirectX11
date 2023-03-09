@@ -20,6 +20,19 @@ SolarSystemGameObject::SolarSystemGameObject(SolarSystemGameObjectDescription de
 	);
 }
 
+void SolarSystemGameObject::Initialize() {
+	AddComponent(mesh);
+
+	if (transform->parent) {
+		offset = Vector3::Forward * orbitRadius;
+		*transform->localPosition = *transform->parent->localPosition + offset;
+	}
+	else
+		*transform->localPosition += Vector3::Forward * orbitRadius;
+
+	GameObject::Initialize();
+}
+
 void SolarSystemGameObject::FixedUpdate() {
 	GameObject::FixedUpdate();
 
@@ -47,15 +60,4 @@ void SolarSystemGameObject::FixedUpdate() {
 	}
 
 	*transform->localRotation *= Quaternion::CreateFromAxisAngle(localRotationAxis, localRotationSpeed * Time::DeltaTime());
-}
-
-void SolarSystemGameObject::Configure() {
-	AddComponent(mesh);
-
-	if (transform->parent) {
-		offset = Vector3::Forward * orbitRadius;
-		*transform->localPosition = *transform->parent->localPosition + offset;
-	}
-	else
-		*transform->localPosition += Vector3::Forward * orbitRadius;
 }

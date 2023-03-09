@@ -23,9 +23,8 @@ private:
 	void Update() override;
 	void FixedUpdate() override;
 
-	void ConfigureGameObjects();
-
 	void RestartRound();
+
 public:
 	static void CreateInstance(LPCWSTR name);
 

@@ -17,11 +17,6 @@ SphereRenderComponent::SphereRenderComponent(
 }
 
 void SphereRenderComponent::Initialize() {
-	ConfigureSphere();
-	RenderComponent::Initialize();
-}
-
-void SphereRenderComponent::ConfigureSphere() {
 	Color lerpTopColor = {};
 	Color::Lerp(topColor, bottomColor, 0.5f, lerpTopColor);
 	Color lerpBottomColor = {};
@@ -85,4 +80,6 @@ void SphereRenderComponent::ConfigureSphere() {
 		indexes.push_back(baseIndex + i);
 		indexes.push_back(baseIndex + i + 1);
 	}
+
+	RenderComponent::Initialize();
 }

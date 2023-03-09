@@ -21,96 +21,213 @@
       <FileName>ColliderComponent.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Camera" Collapsed="true">
-    <Position X="14.75" Y="0.5" Width="1.5" />
+  <Class Name="CameraGameObject" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Camera.h</FileName>
+      <HashCode>AAQAAAAAAyAAQQMIIAQgAgQAAAAMiEAAAAFAAgQACAA=</HashCode>
+      <FileName>CameraGameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LineRenderComponent" Collapsed="true">
+    <Position X="7.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgABAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>LineRenderComponent.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PingPongGameObject" Collapsed="true">
-    <Position X="5.25" Y="6.5" Width="1.5" />
+    <Position X="6" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAEAgAAAAAAAAAAAAABAAAAAgAAAAAEEAAAAAA=</HashCode>
       <FileName>PingPongGameObject.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PingPongRacket" Collapsed="true">
-    <Position X="3.75" Y="8" Width="1.5" />
-    <InheritanceLine Type="PingPongGameObject" FixedFromPoint="true">
-      <Path>
-        <Point X="5.375" Y="7.191" />
-        <Point X="5.375" Y="7.625" />
-        <Point X="4.5" Y="7.625" />
-        <Point X="4.5" Y="8" />
-      </Path>
-    </InheritanceLine>
+    <Position X="5" Y="11.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAABAAAAABAAgAAAAAA=</HashCode>
       <FileName>PingPongRacket.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PingPongBall" Collapsed="true">
-    <Position X="6.75" Y="8" Width="1.5" />
-    <InheritanceLine Type="PingPongGameObject" FixedFromPoint="true">
-      <Path>
-        <Point X="6.688" Y="7.191" />
-        <Point X="6.688" Y="7.625" />
-        <Point X="7.5" Y="7.625" />
-        <Point X="7.5" Y="8" />
-      </Path>
-    </InheritanceLine>
+    <Position X="7.25" Y="11.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PingPongBall.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TransformComponent" Collapsed="true">
-    <Position X="9.75" Y="1.75" Width="1.5" />
+  <Class Name="RenderSystem" Collapsed="true">
+    <Position X="18.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYAAAAAAkAAAwAAAAAAABAAAABAAAAACAAAAAAAAAA=</HashCode>
+      <HashCode>AACCAAACAAAAAgAAFAIAABAABAEAABAAAgBCAABAAAA=</HashCode>
+      <FileName>RenderSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SolarSystem" Collapsed="true">
+    <Position X="10.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQDBAAAAgMAAQAAAABAAAAAAAAAAIAAIAAAAQiAAA4=</HashCode>
+      <FileName>SolarSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SolarSystemGameObject" Collapsed="true">
+    <Position X="2.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAQAAAAgAgAAAAAABAAgAABAADAAAAAAAAAAAABAA=</HashCode>
+      <FileName>SolarSystemGameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SphereRenderComponent" Collapsed="true">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAQACAQAAAAAAAQAAAgBAAAAAAAAAIAA=</HashCode>
+      <FileName>SphereRenderComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Time" Collapsed="true">
+    <Position X="20.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAEAAAABAAEgAAAAAQAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Time.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TransformComponent" Collapsed="true">
+    <Position X="14.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAYAAAAAAmCAA0BAAAACABAAAABAAggACACAAAAAABI=</HashCode>
       <FileName>TransformComponent.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DisplayWin32" Collapsed="true">
-    <Position X="16.5" Y="0.5" Width="1.5" />
+    <Position X="18.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAABAAAEAAAABABABgAAIAAAAAAAAAQAAAIAAAAAAAA=</HashCode>
       <FileName>DisplayWin32.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Game" Collapsed="true">
-    <Position X="5.25" Y="10" Width="1.5" />
+  <Class Name="IDelegateBase" Collapsed="true">
+    <Position X="3.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AASCBAACAgEAByBEJAMgABCFAwlEABgAIiAQAABAEEI=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAgAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDelegate&lt;RetVal, ...Args&gt;" Collapsed="true">
+    <Position X="3.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaticDelegate&lt;RetVal(Args...), Args2...&gt;" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAQQAAAAAAAAAAAAAAAAAAECAAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RawDelegate&lt;IsConst, T, RetVal(Args...), Args2...&gt;" Collapsed="true">
+    <Position X="2.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAYAAAwQAAAAAAAAAAAAAAAAAAACCAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LambdaDelegate&lt;TLambda, RetVal(Args...), Args2...&gt;" Collapsed="true">
+    <Position X="5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAQAAAAQAIAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SPDelegate&lt;IsConst, T, RetVal(Args...), Args2...&gt;" Collapsed="true">
+    <Position X="7.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAYAAAiQAAAAAAAAAAAAAAAAAAACAAAAAgAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DelegateHandle" Collapsed="true">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAABAAEAAgAASAAAAAABAQAAAggAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InlineAllocator&lt;MaxStackSize&gt;" Collapsed="true">
+    <Position X="20.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAUAAAIAACAAAAAAAAAAAABAAAAAAAgAAIAAAM=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DelegateBase" Collapsed="true">
+    <Position X="10.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABQAAAIQAAACAQAAAAAAAQAAAAAAAAAAgAFJAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Delegate&lt;RetVal, ...Args&gt;" Collapsed="true">
+    <Position X="10.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAggAAAAAAAAwAAAAAAAAAAAEAAEAAAAAAQAAAAJI=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MulticastDelegateBase" Collapsed="true">
+    <Position X="10.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MulticastDelegate&lt;...Args&gt;" Collapsed="true">
+    <Position X="10.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAKSDCAAAFCADAKAAAAABQAAAAAAAAAAIAAgAAAAEAQ=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputDevice" Collapsed="true">
+    <Position X="22" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAIAAAAAAACACAAhBIAAAAAAAAAQACCAIA=</HashCode>
+      <FileName>InputDevice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="11.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAgAABQAAIAAAAAAAAwhEAAIAYAAAAAAAAAI=</HashCode>
       <FileName>Game.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PingPongGame" Collapsed="true">
-    <Position X="5.25" Y="11.25" Width="1.5" />
+    <Position X="12.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgwAhQAAAgAAAQgBAADCAAAAIAgAAAAAAAAAAAAgABI=</HashCode>
       <FileName>PingPongGame.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameObject" Collapsed="true">
-    <Position X="5.25" Y="5.25" Width="1.5" />
+    <Position X="3.75" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQAAAAAAgAIIwAAAACABAAAAABEAgAACAQEAAIAAAA=</HashCode>
+      <HashCode>AAQAAAAAAgAIIwAAAACABAAAAABEAgAACAQEAAIAAAA=</HashCode>
       <FileName>GameObject.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameObjectComponent" Collapsed="true">
-    <Position X="5.25" Y="0.5" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAgAAgwAAAACAAAAAAABAAAAACAAAAAAAAAA=</HashCode>
       <FileName>GameObjectComponent.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="RenderComponent" Collapsed="true">
-    <Position X="5.25" Y="1.75" Width="1.5" />
+    <Position X="7.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAgACFAgQgAyAAEAEgEAAJAABWCAgACAJADAAAAgA=</HashCode>
+      <HashCode>AAQAgACFAgQgAyAAEAEgEAAJEABSCAAACAJADAAAAgI=</HashCode>
       <FileName>RenderComponent.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -122,11 +239,109 @@
     </TypeIdentifier>
   </Class>
   <Class Name="TriangleRenderComponent" Collapsed="true">
-    <Position X="7.5" Y="3.25" Width="1.5" />
+    <Position X="12" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>TriangleRenderComponent.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DirectX::SimpleMath::Ray" Collapsed="true">
+    <Position X="16.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAKAAAAAAAIQAAAAAAAAAAAAAgAAAAAIA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DirectX::SimpleMath::Viewport" Collapsed="true">
+    <Position X="22" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgBAAQEAAQAQgBACQggBAAgAAAABABgAAQAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="SolarSystemGameObjectDescription" Collapsed="true">
+    <Position X="22" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAwAAACAAgAAACAAAAAgAABQACAgAAAAAAAAAAIAA=</HashCode>
+      <FileName>SolarSystemGameObject.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_DelegatesInteral::MemberFunction&lt;true, Object, RetVal, Args...&gt;" Collapsed="true">
+    <Position X="22" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Delegates.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector2" Collapsed="true">
+    <Position X="16.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAIAABCBABBAAAEAAgQwRBCQAAAABAgECgAAAAAMA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector4" Collapsed="true">
+    <Position X="20.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAIgABCFAABAAAEAABQwRBCQAAAABAgECgAAAAAMA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Matrix" Collapsed="true">
+    <Position X="20.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEEaAAIAAAkACEAEgAQRTIBAgADIAiEDwAAgAAAI=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Quaternion" Collapsed="true">
+    <Position X="18.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABYAAAAAAAAAEQIAAYBAKAAAAAgAgkAwAAAQAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Plane" Collapsed="true">
+    <Position X="16.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAMAAAAQQACAAIAEAAgAIgBAAAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Rectangle" Collapsed="true">
+    <Position X="20.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAEAAAAAAAAQAQAIEAQAAAAAhAAAABABgAQAYgIA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector3" Collapsed="true">
+    <Position X="18.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAIgKBCJAABAAAEAAgQwRBCQAAAABAiECgAAAAAMI=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Color" Collapsed="true">
+    <Position X="16.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAIAAAAAEAAQAAAARAAAAAEAAEBgQAkqAEAAQA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="std::less&lt;DirectX::SimpleMath::Rectangle&gt;" Collapsed="true">
+    <Position X="18.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="Keys" Collapsed="true">
+    <Position X="16.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AaKq+3/VQdAsyowIExETSCoVGi1UVBsOyAGg/v//YUs=</HashCode>
+      <FileName>Keys.h</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -18,138 +18,6 @@ PingPongGame::PingPongGame(LPCWSTR name) : Game(name) {
 }
 
 void PingPongGame::Initialize() {
-	Game::Initialize();
-
-	*leftPlayer->transform->localPosition -= {0.5f, 0.0f, 0.0f};
-	*rightPlayer->transform->localPosition += {0.5f, 0.0f, 0.0f};
-	leftPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
-	rightPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x += 0.5f;
-
-	ball->direction->x = -1.0f;
-
-	*upInvisibleWall->transform->localPosition += {0.0f, 1.0f, 0.0f};
-	upInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y += 1.0f;
-
-	*downInvisibleWall->transform->localPosition -= {0.0f, 1.0f, 0.0f};
-	downInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y -= 1.0f;
-
-	*leftInvisibleWall->transform->localPosition -= {1.0f, 0.0f, 0.0f};
-	leftInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 1.0f;
-
-	*rightInvisibleWall->transform->localPosition += {1.0f, 0.0f, 0.0f};
-	rightInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x += 1.0f;
-}
-
-/*
-* Call Game::Update() for base logic
-* Handle input player here because of better time control
-*/
-void PingPongGame::Update() {
-	Game::Update();
-
-
-	// Left player handle input
-	*leftPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
-
-	if (inputDevice->IsKeyDown(Keys::A))
-		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
-
-	if (inputDevice->IsKeyDown(Keys::D))
-		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
-
-	if (inputDevice->IsKeyDown(Keys::W))
-		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
-
-	if (inputDevice->IsKeyDown(Keys::S))
-		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
-
-
-	// Right player handle input
-	*rightPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
-
-	if (inputDevice->IsKeyDown(Keys::Left))
-		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
-
-	if (inputDevice->IsKeyDown(Keys::Right))
-		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
-
-	if (inputDevice->IsKeyDown(Keys::Up))
-		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
-
-	if (inputDevice->IsKeyDown(Keys::Down))
-		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
-
-	
-	if (ball->transform->localPosition->x < -1.0f) {
-		rightPlayerScore++;
-		RestartRound();
-	}
-	else if (ball->transform->localPosition->x > 1.0f) {
-		leftPlayerScore++;
-		RestartRound();
-	}
-}
-
-/*
-* Call Game::FixedUpdate() for base physics
-* Handle some unique physics here
-*/
-void PingPongGame::FixedUpdate() {
-	Game::FixedUpdate();
-
-	if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Left)) {
-		ball->velocity *= 1.1f;
-		ball->Reflect(*leftPlayer->collider);
-	}
-	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Right)) {
-		ball->velocity *= 1.1f;
-		ball->Reflect(*rightPlayer->collider);
-	}
-	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up))
-		ball->Reflect(*upInvisibleWall->collider);
-	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down))
-		ball->Reflect(*downInvisibleWall->collider);
-
-	ball->Translate(*ball->direction * ball->velocity * Time::DeltaTime());
-}
-
-/*
-* There is no public access to constructor because of "Singleton" pattern
-* Need to use this method to create Game::instance (PingPongGame)
-*/
-void PingPongGame::CreateInstance(LPCWSTR name) {
-	if (!instance)
-		instance = std::unique_ptr<PingPongGame>(new PingPongGame(name));
-}
-
-/*
-* Configure game objects before run
-* Call Game::Run() for basic logic
-*/
-void PingPongGame::Run(int screenWidth, int screenHeight, bool fullscreen) {
-	ConfigureGameObjects();
-	Game::Run(screenWidth, screenHeight, fullscreen);
-}
-
-/*
-* Set default values of all dynamic game objects
-*/
-void PingPongGame::RestartRound() {
-	leftPlayer->velocity = 0.75f;
-	rightPlayer->velocity = 0.75f;
-	ball->velocity = 0.25f;
-	ball->SetPosition({ 0.0f, 0.0f, 0.0f });
-
-	WCHAR text[100];
-	swprintf_s(text, TEXT("Left player score: %i ||| Right player score: %i"), leftPlayerScore, rightPlayerScore);
-	SetWindowText(renderSystem->display->GetHWnd(), text);
-}
-
-/*
-* Configure all ping pong game objects
-* Need to call before PingPongGame::Initialize()
-*/
-void PingPongGame::ConfigureGameObjects() {
 	DirectX::SimpleMath::Color racketColor(0.67f, 0.9f, 0.76f, 1.0f);
 	DirectX::SimpleMath::Color ballColor(0.67f, 0.9f, 0.76f, 1.0f);
 	DirectX::SimpleMath::Color debugColor(1.0f, 0.0f, 0.0f, 1.0f);
@@ -338,4 +206,129 @@ void PingPongGame::ConfigureGameObjects() {
 	rightInvisibleWall->AddComponent(rightInvisibleWallCollision);
 	rightInvisibleWall->collider = rightInvisibleWallCollision;
 	rightInvisibleWall->AddComponent(rightInvisibleWallDebugCollision);
+
+	Game::Initialize();
+
+	*leftPlayer->transform->localPosition -= {0.5f, 0.0f, 0.0f};
+	*rightPlayer->transform->localPosition += {0.5f, 0.0f, 0.0f};
+	leftPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 0.5f;
+	rightPlayer->GetComponent<BoxColliderComponent>().value().GetCenter().x += 0.5f;
+
+	ball->direction->x = -1.0f;
+
+	*upInvisibleWall->transform->localPosition += {0.0f, 1.0f, 0.0f};
+	upInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y += 1.0f;
+
+	*downInvisibleWall->transform->localPosition -= {0.0f, 1.0f, 0.0f};
+	downInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().y -= 1.0f;
+
+	*leftInvisibleWall->transform->localPosition -= {1.0f, 0.0f, 0.0f};
+	leftInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x -= 1.0f;
+
+	*rightInvisibleWall->transform->localPosition += {1.0f, 0.0f, 0.0f};
+	rightInvisibleWall->GetComponent<BoxColliderComponent>().value().GetCenter().x += 1.0f;
+}
+
+/*
+* Call Game::Update() for base logic
+* Handle input player here because of better time control
+*/
+void PingPongGame::Update() {
+	Game::Update();
+
+
+	// Left player handle input
+	*leftPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
+
+	if (inputDevice->IsKeyDown(Keys::A))
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
+
+	if (inputDevice->IsKeyDown(Keys::D))
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
+
+	if (inputDevice->IsKeyDown(Keys::W))
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
+
+	if (inputDevice->IsKeyDown(Keys::S))
+		*leftPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
+
+
+	// Right player handle input
+	*rightPlayer->translateDirection = DirectX::SimpleMath::Vector3::Zero;
+
+	if (inputDevice->IsKeyDown(Keys::Left))
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Left;
+
+	if (inputDevice->IsKeyDown(Keys::Right))
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Right;
+
+	if (inputDevice->IsKeyDown(Keys::Up))
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Up;
+
+	if (inputDevice->IsKeyDown(Keys::Down))
+		*rightPlayer->translateDirection += DirectX::SimpleMath::Vector3::Down;
+
+	
+	if (ball->transform->localPosition->x < -1.0f) {
+		rightPlayerScore++;
+		RestartRound();
+	}
+	else if (ball->transform->localPosition->x > 1.0f) {
+		leftPlayerScore++;
+		RestartRound();
+	}
+}
+
+/*
+* Call Game::FixedUpdate() for base physics
+* Handle some unique physics here
+*/
+void PingPongGame::FixedUpdate() {
+	Game::FixedUpdate();
+
+	if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Left)) {
+		ball->velocity *= 1.1f;
+		ball->Reflect(*leftPlayer->collider);
+	}
+	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Right)) {
+		ball->velocity *= 1.1f;
+		ball->Reflect(*rightPlayer->collider);
+	}
+	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Up))
+		ball->Reflect(*upInvisibleWall->collider);
+	else if (ball->GetComponent<BoxColliderComponent>().value().Intersects(DirectX::SimpleMath::Vector3::Down))
+		ball->Reflect(*downInvisibleWall->collider);
+
+	ball->Translate(*ball->direction * ball->velocity * Time::DeltaTime());
+}
+
+/*
+* There is no public access to constructor because of "Singleton" pattern
+* Need to use this method to create Game::instance (PingPongGame)
+*/
+void PingPongGame::CreateInstance(LPCWSTR name) {
+	if (!instance)
+		instance = std::unique_ptr<PingPongGame>(new PingPongGame(name));
+}
+
+/*
+* Configure game objects before run
+* Call Game::Run() for basic logic
+*/
+void PingPongGame::Run(int screenWidth, int screenHeight, bool fullscreen) {
+	Game::Run(screenWidth, screenHeight, fullscreen);
+}
+
+/*
+* Set default values of all dynamic game objects
+*/
+void PingPongGame::RestartRound() {
+	leftPlayer->velocity = 0.75f;
+	rightPlayer->velocity = 0.75f;
+	ball->velocity = 0.25f;
+	ball->SetPosition({ 0.0f, 0.0f, 0.0f });
+
+	WCHAR text[100];
+	swprintf_s(text, TEXT("Left player score: %i ||| Right player score: %i"), leftPlayerScore, rightPlayerScore);
+	SetWindowText(renderSystem->display->GetHWnd(), text);
 }
