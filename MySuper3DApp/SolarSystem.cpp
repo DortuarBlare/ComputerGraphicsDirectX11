@@ -198,6 +198,37 @@ void SolarSystem::Initialize() {
 void SolarSystem::Update() {
 	Game::Update();
 
+	if (inputDevice->IsKeyDown(Keys::P))
+		camera->perspective = true;
+	if (inputDevice->IsKeyDown(Keys::O))
+		camera->perspective = false;
+
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::A)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * (camera->Right() * -1));
+		camera->Detach();
+	}
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::D)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * camera->Right());
+		camera->Detach();
+	}
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::W)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * camera->Forward());
+		camera->Detach();
+	}
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::S)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * (camera->Forward() * -1));
+		camera->Detach();
+	}
+
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::Space)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * Vector3::Up);
+		camera->Detach();
+	}
+	if (Game::Instance()->inputDevice->IsKeyDown(Keys::LeftShift)) {
+		camera->Translate(camera->velocity * Time::DeltaTime() * Vector3::Down);
+		camera->Detach();
+	}
+
 	if (Game::instance->inputDevice->IsKeyDown(Keys::D0))
 		camera->AttachTo(Sun->transform);
 	else if (Game::instance->inputDevice->IsKeyDown(Keys::D1))

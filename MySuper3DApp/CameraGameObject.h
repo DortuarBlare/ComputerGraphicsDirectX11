@@ -5,12 +5,12 @@
 
 class InputDevice;
 
+using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 class CameraGameObject : public GameObject {
 private:
-	bool perspective = true;
-	float fov = DirectX::XM_PIDIV2;
+	float fov = XM_PIDIV2;
 	float nearPlane = 0.1f;
 	float farPlane = 1000.0f;
 
@@ -32,6 +32,7 @@ private:
 	void MouseEventHandler(const InputDevice::MouseMoveEventArgs& mouseData);
 
 public:
+	bool perspective = true;
 	bool orbitMode = false;
 
 	void Initialize() override;
@@ -42,4 +43,6 @@ public:
 	void Detach();
 
 	Matrix GetCameraMatrix();
+	Vector3 Forward();
+	Vector3 Right();
 };

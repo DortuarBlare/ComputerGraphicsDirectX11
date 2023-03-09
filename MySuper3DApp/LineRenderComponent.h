@@ -7,6 +7,7 @@ class LineRenderComponent : public RenderComponent {
 public:
 	LineRenderComponent() = delete;
 	LineRenderComponent(Color color);
+	LineRenderComponent(LPCWSTR textureFileName, Color color);
 
 	void Initialize() override;
 	void Draw() override;

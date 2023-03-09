@@ -1,33 +1,36 @@
 #pragma once
 #include "pch.h"
 #include "GameObjectComponent.h"
+#include "WICTextureLoader.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
+using namespace Microsoft::WRL;
 
 class RenderComponent : public GameObjectComponent {
 protected:
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
-	Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderByteCode;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
-	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
+	ComPtr<ID3D11InputLayout> layout;
+	ComPtr<ID3D11PixelShader> pixelShader;
+	ComPtr<ID3DBlob> pixelShaderByteCode;
+	ComPtr<ID3D11VertexShader> vertexShader;
+	ComPtr<ID3DBlob> vertexShaderByteCode;
 
-	std::shared_ptr<CD3D11_RASTERIZER_DESC> rastDesc;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
+	ComPtr<ID3D11RasterizerState> rastState;
 
-	std::shared_ptr<D3D11_BUFFER_DESC> vertexBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> vertexData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuf;
+	ComPtr<ID3D11Buffer> vertexBuf;
 
-	std::shared_ptr<D3D11_BUFFER_DESC> indexBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> indexData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuf;
+	ComPtr<ID3D11Buffer> indexBuf;
 
-	std::shared_ptr<D3D11_BUFFER_DESC> constBufDesc;
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuf;
+	ComPtr<ID3D11Buffer> constBuf;
 	std::shared_ptr<Matrix> constBufMatrix;
+
+	LPCWSTR textureFileName;
+	ComPtr<ID3D11Resource> texture;
+	ComPtr<ID3D11ShaderResourceView> textureView;
+	ComPtr<ID3D11SamplerState> samplerState;
 
 	std::vector<unsigned int> indexes;
 	std::vector<XMFLOAT4> points;
@@ -41,6 +44,7 @@ protected:
 public:
 	RenderComponent();
 	RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode);
+	RenderComponent(LPCWSTR textureFileName, Color fillColor, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
 	void Update();

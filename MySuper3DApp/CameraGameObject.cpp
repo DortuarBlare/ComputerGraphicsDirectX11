@@ -13,42 +13,6 @@ void CameraGameObject::Initialize() {
 void CameraGameObject::Update() {
     GameObject::Update();
 
-    Matrix rotationMatrix = Matrix::CreateFromYawPitchRoll(yaw, pitch, 0);
-
-    Vector3 forward = Vector3::Transform(Vector3::Forward, rotationMatrix);
-    Vector3 right = Vector3::Transform(Vector3::Right, rotationMatrix);
-
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::P))
-        perspective = true;
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::O))
-        perspective = false;
-
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::A)) {
-        *transform->localPosition -= velocity * Time::DeltaTime() * right;
-        Detach();
-    }
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::D)) {
-        *transform->localPosition += velocity * Time::DeltaTime() * right;
-        Detach();
-    }
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::W)) {
-        *transform->localPosition += velocity * Time::DeltaTime() * forward;
-        Detach();
-    }
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::S)) {
-        *transform->localPosition -= velocity * Time::DeltaTime() * forward;
-        Detach();
-    }
-
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::Space)) {
-        *transform->localPosition += velocity * Time::DeltaTime() * Vector3::Up;
-        Detach();
-    }
-    if (Game::Instance()->inputDevice->IsKeyDown(Keys::LeftShift)) {
-        *transform->localPosition -= velocity * Time::DeltaTime() * Vector3::Up;
-        Detach();
-    }
-
     if (orbitMode && transform->parent) {
         *transform->localPosition = *transform->parent->localPosition + orbitOffset;
         target = *transform->parent->localPosition;
@@ -71,13 +35,6 @@ void CameraGameObject::Update() {
         projectionMatrix = CreatePerspectiveMatrix();
     else
         projectionMatrix = CreateOrthographicMatrix();
-
-    /*std::cout <<
-        "Camera position: " <<
-        transform->localPosition->x << ' ' <<
-        transform->localPosition->y << ' ' <<
-        transform->localPosition->z <<
-        std::endl;*/
 }
 
 void CameraGameObject::FixedUpdate() {
@@ -108,6 +65,14 @@ void CameraGameObject::Detach() {
 
 Matrix CameraGameObject::GetCameraMatrix() {
     return viewMatrix * projectionMatrix;
+}
+
+Vector3 CameraGameObject::Forward() {
+    return Vector3::Transform(Vector3::Forward, Matrix::CreateFromYawPitchRoll(yaw, pitch, 0));
+}
+
+Vector3 CameraGameObject::Right() {
+    return Vector3::Transform(Vector3::Right, Matrix::CreateFromYawPitchRoll(yaw, pitch, 0));
 }
 
 Matrix CameraGameObject::CreateViewMatrix() {

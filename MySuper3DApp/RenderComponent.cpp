@@ -6,32 +6,36 @@ RenderComponent::RenderComponent() {
 	fillColor = { 0.0f, 0.0f, 0.0f };
 	fillMode = D3D11_FILL_SOLID;
 
-	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
-
-	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 	constBufMatrix = std::make_shared<Matrix>();
 }
 
 RenderComponent::RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode) {
+	this->textureFileName = L"Textures/Default.jpeg";
 	this->fillColor = fillColor;
 	this->fillMode = fillMode;
 
-	rastDesc = std::make_shared<CD3D11_RASTERIZER_DESC>();
-
-	vertexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	indexBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
 	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	constBufDesc = std::make_shared<D3D11_BUFFER_DESC>();
+	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+	constBufMatrix = std::make_shared<Matrix>();
+}
+
+RenderComponent::RenderComponent(LPCWSTR textureFileName, Color fillColor, D3D11_FILL_MODE fillMode) {
+	this->textureFileName = textureFileName;
+	this->fillColor = fillColor;
+	this->fillMode = fillMode;
+
+	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
+	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
+
 	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 	constBufMatrix = std::make_shared<Matrix>();
 }
@@ -46,7 +50,7 @@ void RenderComponent::Initialize() {
 	ID3DBlob* errorVertexCode = nullptr;
 
 	// Compile pixel shader
-	Game::Instance()->renderSystem->res =
+	HRESULT res =
 		D3DCompileFromFile(
 			L"./Shaders/MyVeryFirstShader.hlsl",
 			nullptr /*macros*/,
@@ -60,7 +64,7 @@ void RenderComponent::Initialize() {
 		);
 
 	// Compile vertex shader
-	Game::Instance()->renderSystem->res =
+	res =
 		D3DCompileFromFile(
 			L"./Shaders/MyVeryFirstShader.hlsl",
 			nullptr /*macros*/,
@@ -73,7 +77,7 @@ void RenderComponent::Initialize() {
 			&errorVertexCode
 		);
 
-	if (FAILED(Game::Instance()->renderSystem->res)) {
+	if (FAILED(res)) {
 		// If the shader failed to compile it should have written something to the error message.
 		if (errorVertexCode) {
 			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
@@ -112,7 +116,7 @@ void RenderComponent::Initialize() {
 			0 // The number of instances to draw using the same per-instance data before advancing in the buffer by one element
 		},
 		D3D11_INPUT_ELEMENT_DESC {
-			"COLOR",
+			"TEXCOORD",
 			0,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			0,
@@ -130,52 +134,75 @@ void RenderComponent::Initialize() {
 		layout.GetAddressOf()
 	);
 
-	vertexBufDesc->ByteWidth = sizeof(XMFLOAT4) * points.size();
-	vertexBufDesc->Usage = D3D11_USAGE_DEFAULT;
-	vertexBufDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufDesc->CPUAccessFlags = 0;
-	vertexBufDesc->MiscFlags = 0;
-	vertexBufDesc->StructureByteStride = 0;
+
+	D3D11_BUFFER_DESC vertexBufDesc = {};
+	vertexBufDesc.ByteWidth = sizeof(XMFLOAT4) * points.size();
+	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufDesc.CPUAccessFlags = 0;
+	vertexBufDesc.MiscFlags = 0;
+	vertexBufDesc.StructureByteStride = 0;
 
 	vertexData->pSysMem = points.data();
 	vertexData->SysMemPitch = 0;
 	vertexData->SysMemSlicePitch = 0;
 
-	Game::Instance()->renderSystem->device->CreateBuffer(vertexBufDesc.get(), vertexData.get(), vertexBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(&vertexBufDesc, vertexData.get(), vertexBuf.GetAddressOf());
 
-	indexBufDesc->ByteWidth = sizeof(int) * indexes.size();
-	indexBufDesc->Usage = D3D11_USAGE_DEFAULT;
-	indexBufDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufDesc->CPUAccessFlags = 0;
-	indexBufDesc->MiscFlags = 0;
-	indexBufDesc->StructureByteStride = 0;
+
+	D3D11_BUFFER_DESC indexBufDesc = {};
+	indexBufDesc.ByteWidth = sizeof(int) * indexes.size();
+	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufDesc.CPUAccessFlags = 0;
+	indexBufDesc.MiscFlags = 0;
+	indexBufDesc.StructureByteStride = 0;
 
 	indexData->pSysMem = indexes.data();
 	indexData->SysMemPitch = 0;
 	indexData->SysMemSlicePitch = 0;
 
-	Game::Instance()->renderSystem->device->CreateBuffer(indexBufDesc.get(), indexData.get(), indexBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(&indexBufDesc, indexData.get(), indexBuf.GetAddressOf());
 
-	// Create const buffer
-	constBufDesc->ByteWidth = sizeof(Matrix);
-	//constBufDesc->Usage = D3D11_USAGE_DYNAMIC;
-	constBufDesc->Usage = D3D11_USAGE_DEFAULT;
-	constBufDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//constBufDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	constBufDesc->CPUAccessFlags = 0;
-	constBufDesc->MiscFlags = 0;
-	constBufDesc->StructureByteStride = 0;
+
+	D3D11_BUFFER_DESC constBufDesc = {};
+	constBufDesc.ByteWidth = sizeof(Matrix);
+	constBufDesc.Usage = D3D11_USAGE_DEFAULT; // D3D11_USAGE_DYNAMIC
+	constBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDesc.CPUAccessFlags = 0; // D3D11_CPU_ACCESS_WRITE
+	constBufDesc.MiscFlags = 0;
+	constBufDesc.StructureByteStride = 0;
 
 	constData->pSysMem = constBufMatrix.get();
 	constData->SysMemPitch = 0;
 	constData->SysMemSlicePitch = 0;
 
-	Game::Instance()->renderSystem->device->CreateBuffer(constBufDesc.get(), constData.get(), constBuf.GetAddressOf());
+	Game::Instance()->renderSystem->device->CreateBuffer(&constBufDesc, constData.get(), constBuf.GetAddressOf());
 
-	rastDesc->CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
-	rastDesc->FillMode = fillMode; // Solid or wireframe
 
-	Game::Instance()->renderSystem->res = Game::Instance()->renderSystem->device->CreateRasterizerState(rastDesc.get(), rastState.GetAddressOf());
+	res = CreateWICTextureFromFile(
+		Game::Instance()->renderSystem->device.Get(),
+		Game::Instance()->renderSystem->context.Get(),
+		textureFileName,
+		texture.GetAddressOf(),
+		textureView.GetAddressOf()
+	);
+
+	D3D11_SAMPLER_DESC samplerStateDesc = {};
+	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+
+	res = Game::Instance()->renderSystem->device->CreateSamplerState(&samplerStateDesc, samplerState.GetAddressOf());
+
+
+	CD3D11_RASTERIZER_DESC rastDesc = {};
+	rastDesc.CullMode = D3D11_CULL_NONE; // Cull None | Cull Front | Cull Back
+	rastDesc.FillMode = fillMode; // Solid or wireframe
+	rastDesc.DepthClipEnable = true;
+
+	res = Game::Instance()->renderSystem->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
 	Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
 	strides[0] = 32; // Position and color in one structure, so array with one value - 32 (2 float4)
@@ -202,6 +229,9 @@ void RenderComponent::Draw() {
 
 		Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
 		Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
+
+		Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
+		Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
 
 		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 

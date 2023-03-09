@@ -3,8 +3,10 @@
 
 LineRenderComponent::LineRenderComponent(Color color) : RenderComponent(color, D3D11_FILL_SOLID) {}
 
+LineRenderComponent::LineRenderComponent(LPCWSTR textureFileName, Color color) :
+	RenderComponent(textureFileName, color, D3D11_FILL_SOLID) {}
+
 void LineRenderComponent::Initialize() {
-	// Something with lines
 	RenderComponent::Initialize();
 }
 

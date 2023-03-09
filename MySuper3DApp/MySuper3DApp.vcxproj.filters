@@ -90,9 +90,6 @@
     <ClCompile Include="RectangleRenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="TriangleRenderComponent.cpp">
-      <Filter>Source Files\Game\GameObject\Component\Render</Filter>
-    </ClCompile>
     <ClCompile Include="CameraGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,6 +141,15 @@
     <ClCompile Include="KatamariDamacyGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WICTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayWin32.h">
@@ -177,9 +183,6 @@
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="RectangleRenderComponent.h">
-      <Filter>Header Files\Game\GameObject\Component\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="TriangleRenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="CameraGameObject.h">
@@ -231,6 +234,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KatamariDamacyGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoaderHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DDS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

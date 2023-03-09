@@ -2,14 +2,23 @@
 #include "pch.h"
 #include "RenderComponent.h"
 
+using namespace DirectX::SimpleMath;
+
 class CircleRenderComponent : public RenderComponent {
 public:
 	float radius;
 	unsigned int pointsAmount;
 
-	CircleRenderComponent();
+	CircleRenderComponent() = delete;
 	CircleRenderComponent(
-		DirectX::SimpleMath::Color fillColor,
+		Color fillColor,
+		D3D11_FILL_MODE fillMode,
+		float radius,
+		unsigned int pointsAmount
+	);
+	CircleRenderComponent(
+		LPCWSTR textureFileName,
+		Color fillColor,
 		D3D11_FILL_MODE fillMode,
 		float radius,
 		unsigned int pointsAmount

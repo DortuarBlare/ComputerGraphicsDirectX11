@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <WinUser.h>
 #include <wrl.h>
+#include <wincodec.h>
 #include <d3d.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>

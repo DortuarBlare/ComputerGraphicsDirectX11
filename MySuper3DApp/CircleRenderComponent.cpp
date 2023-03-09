@@ -1,17 +1,23 @@
 #include "pch.h"
 #include "CircleRenderComponent.h"
 
-CircleRenderComponent::CircleRenderComponent() : RenderComponent() {
-	radius = 0.0f;
-	pointsAmount = 0;
-}
-
 CircleRenderComponent::CircleRenderComponent(
-	DirectX::SimpleMath::Color fillColor,
+	Color fillColor,
 	D3D11_FILL_MODE fillMode,
 	float radius,
 	unsigned int pointsAmount
 ) : RenderComponent(fillColor, fillMode) {
+	this->radius = radius;
+	this->pointsAmount = pointsAmount;
+}
+
+CircleRenderComponent::CircleRenderComponent(
+	LPCWSTR textureFileName,
+	Color fillColor,
+	D3D11_FILL_MODE fillMode,
+	float radius,
+	unsigned int pointsAmount
+) : RenderComponent(textureFileName, fillColor, fillMode) {
 	this->radius = radius;
 	this->pointsAmount = pointsAmount;
 }

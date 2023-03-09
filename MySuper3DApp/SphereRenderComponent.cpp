@@ -16,6 +16,22 @@ SphereRenderComponent::SphereRenderComponent(
 	this->bottomColor = bottomColor;
 }
 
+SphereRenderComponent::SphereRenderComponent(
+	LPCWSTR textureFileName,
+	D3D11_FILL_MODE fillMode,
+	float radius,
+	int sliceCount,
+	int stackCount,
+	Color topColor,
+	Color bottomColor
+) : RenderComponent(textureFileName, {}, fillMode) {
+	this->radius = radius;
+	this->sliceCount = sliceCount;
+	this->stackCount = stackCount;
+	this->topColor = topColor;
+	this->bottomColor = bottomColor;
+}
+
 void SphereRenderComponent::Initialize() {
 	Color lerpTopColor = {};
 	Color::Lerp(topColor, bottomColor, 0.5f, lerpTopColor);

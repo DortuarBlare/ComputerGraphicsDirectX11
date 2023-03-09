@@ -44,7 +44,7 @@ RenderSystem::RenderSystem(LPCWSTR name, int clientWidth, int clientHeight, bool
 	D3D_FEATURE_LEVEL featureLevels[featureLevelsNumber] = { D3D_FEATURE_LEVEL_11_1 };
 
 	// Creates a device that represents the display adapter and a swap chain used for rendering
-	res = D3D11CreateDeviceAndSwapChain(
+	HRESULT res = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -93,13 +93,12 @@ void RenderSystem::PrepareFrame() {
 
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), depthStencilView.Get());
 
-	float backgroundColor[] = { 0.0f, 0.0f, 0.0f };
+	float backgroundColor[] = { 0.0f, 0.7f, 0.93f };
 	context->RSSetViewports(1, viewport.get());
 	context->ClearRenderTargetView(rtv.Get(), backgroundColor);
 	context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-// Draw all "GameComponent" items in vector
 void RenderSystem::DrawInternal(std::vector<std::shared_ptr<GameObject>>& gameObjects) {
 	for (auto& gameObject : gameObjects)
 		gameObject->Draw();

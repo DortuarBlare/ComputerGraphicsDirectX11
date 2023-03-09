@@ -20,8 +20,6 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 
-	HRESULT res; // Used for return codes from "Direct3D 11" functions
-
 	RenderSystem(LPCWSTR name, int clientWidth, int clientHeight, bool fullscreen, WNDPROC wndProc);
 
 	void Draw(std::vector<std::shared_ptr<GameObject>>& gameObjects);

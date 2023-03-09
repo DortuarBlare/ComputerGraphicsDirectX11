@@ -1,29 +1,31 @@
 struct PS_IN {
 	float4 pos : SV_POSITION;
- 	float4 col : COLOR;
+ 	float4 tex : TEXCOORD;
 };
 
 struct VS_IN {
 	float4 pos : POSITION0;
-	float4 col : COLOR0;
+    float4 tex : TEXCOORD0;
 };
 
 cbuffer ConstBufMatrix : register(b0) {
     float4x4 transform;
 };
 
+Texture2D DiffuseMap : register(t0);
+SamplerState Sampler : register(s0);
 
 float4 PSMain(PS_IN input) : SV_Target {
-    float4 col = input.col;
+    float4 tex = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
     
-    return col;
+    return tex;
 }
 
 PS_IN VSMain(VS_IN input) {
     PS_IN output = (PS_IN) 0;
 	
     output.pos = mul(input.pos, transform);
-    output.col = input.col;
+    output.tex = input.tex;
 	
     return output;
 }
