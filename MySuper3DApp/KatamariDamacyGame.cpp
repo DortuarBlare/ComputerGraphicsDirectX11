@@ -4,7 +4,6 @@
 
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name) : Game(name) {
 	ground = std::make_shared<GameObject>();
-	grid = std::make_shared<GameObject>();
 	player = std::make_shared<KatamariDamacyGameObject>();
 }
 
@@ -15,25 +14,21 @@ void KatamariDamacyGame::CreateInstance(LPCWSTR name) {
 
 void KatamariDamacyGame::Initialize() {
 	gameObjects.push_back(ground);
-	gameObjects.push_back(grid);
 	gameObjects.push_back(player);
+
 
 	std::shared_ptr<RectangleRenderComponent> groundMesh =
 		std::make_shared< RectangleRenderComponent>(
 			L"Textures/Grass.jpg",
-			Color(0.13f, 0.55f, 0.13f),
 			D3D11_FILL_SOLID,
 			XMFLOAT3(200.0f, 200.0f, 0.0f)
 		);
 
 	ground->AddComponent(groundMesh);
 
-	Color gridColor(0.0f, 0.0f, 0.0f);
-	std::shared_ptr<LineRenderComponent> gridRender = std::make_shared<LineRenderComponent>(L"Textures/White.jpg", gridColor);
-	gridRender->AddGrid(50, 2, gridColor);
-	grid->AddComponent(gridRender);
 
 	Game::Initialize();
+
 
 	*ground->transform->localRotation *= Quaternion::CreateFromAxisAngle(Vector3::Right, XM_PIDIV2);
 

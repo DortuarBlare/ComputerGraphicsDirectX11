@@ -21,12 +21,9 @@ public:
 	);
 	SphereRenderComponent(
 		LPCWSTR textureFileName,
-		D3D11_FILL_MODE fillMode,
 		float radius,
 		int sliceCount,
-		int stackCount,
-		Color topColor,
-		Color bottomColor
+		int stackCount
 	);
 
 	void Initialize() override;

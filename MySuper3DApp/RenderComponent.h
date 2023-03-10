@@ -35,7 +35,6 @@ protected:
 	std::vector<unsigned int> indexes;
 	std::vector<XMFLOAT4> points;
 
-	Color fillColor;
 	D3D11_FILL_MODE fillMode;
 
 	UINT strides[1];
@@ -43,8 +42,8 @@ protected:
 
 public:
 	RenderComponent();
-	RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode);
-	RenderComponent(LPCWSTR textureFileName, Color fillColor, D3D11_FILL_MODE fillMode);
+	RenderComponent(D3D11_FILL_MODE fillMode);
+	RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
 	void Update();

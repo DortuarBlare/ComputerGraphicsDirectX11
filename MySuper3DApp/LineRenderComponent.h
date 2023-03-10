@@ -6,8 +6,7 @@ using namespace DirectX::SimpleMath;
 class LineRenderComponent : public RenderComponent {
 public:
 	LineRenderComponent() = delete;
-	LineRenderComponent(Color color);
-	LineRenderComponent(LPCWSTR textureFileName, Color color);
+	LineRenderComponent(LPCWSTR textureFileName);
 
 	void Initialize() override;
 	void Draw() override;

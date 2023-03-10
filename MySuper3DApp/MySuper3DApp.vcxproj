@@ -132,7 +132,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CircleRenderComponent.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="CameraGameObject.cpp" />
@@ -142,9 +141,6 @@
     <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="KatamariDamacyGameObject.cpp" />
     <ClCompile Include="LineRenderComponent.cpp" />
-    <ClCompile Include="PingPongGameObject.cpp" />
-    <ClCompile Include="PingPongRacket.cpp" />
-    <ClCompile Include="PingPongBall.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="SolarSystemGameObject.cpp" />
@@ -164,13 +160,11 @@
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="InputDevice.cpp" />
     <ClCompile Include="MySuper3DApp.cpp" />
-    <ClCompile Include="PingPongGame.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="RectangleRenderComponent.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircleRenderComponent.h" />
     <ClInclude Include="BoxColliderComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="CameraGameObject.h" />
@@ -183,9 +177,6 @@
     <ClInclude Include="KatamariDamacyGameObject.h" />
     <ClInclude Include="LineRenderComponent.h" />
     <ClInclude Include="LoaderHelpers.h" />
-    <ClInclude Include="PingPongGameObject.h" />
-    <ClInclude Include="PingPongRacket.h" />
-    <ClInclude Include="PingPongBall.h" />
     <ClInclude Include="PlatformHelpers.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="SolarSystem.h" />
@@ -201,7 +192,6 @@
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="InputDevice.h" />
     <ClInclude Include="Keys.h" />
-    <ClInclude Include="PingPongGame.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="RectangleRenderComponent.h" />
     <ClInclude Include="WICTextureLoader.h" />

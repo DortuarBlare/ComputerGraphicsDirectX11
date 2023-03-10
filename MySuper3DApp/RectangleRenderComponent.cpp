@@ -2,37 +2,25 @@
 #include "RectangleRenderComponent.h"
 
 RectangleRenderComponent::RectangleRenderComponent(
-	Color fillColor,
-	D3D11_FILL_MODE fillMode,
-	XMFLOAT3 extents
-) : RenderComponent(fillColor, fillMode) {
-	this->extents = extents;
-}
-
-RectangleRenderComponent::RectangleRenderComponent(
 	LPCWSTR textureFileName,
-	Color fillColor,
 	D3D11_FILL_MODE fillMode,
 	XMFLOAT3 extents
-) : RenderComponent(textureFileName, fillColor, fillMode) {
+) : RenderComponent(textureFileName, fillMode) {
 	this->extents = extents;
 }
 
 void RectangleRenderComponent::Initialize() {
-	ConfigureRectangle();
-	RenderComponent::Initialize();
-}
-
-void RectangleRenderComponent::ConfigureRectangle() {
 	points.insert(points.end(),
 		{
-			/* Vertex position										*/ /* Vertex color */
-			XMFLOAT4(0.0f + extents.x,  0.0f + extents.y, 0.0f, 1.0f), fillColor,
-			XMFLOAT4(0.0f - extents.x,  0.0f - extents.y, 0.0f, 1.0f), fillColor,
-			XMFLOAT4(0.0f + extents.x,  0.0f - extents.y, 0.0f, 1.0f), fillColor,
-			XMFLOAT4(0.0f - extents.x,  0.0f + extents.y, 0.0f, 1.0f), fillColor
+			/* Vertex position										*/ /* Texture coordinated */
+			XMFLOAT4(0.0f + extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f),
+			XMFLOAT4(0.0f - extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f),
+			XMFLOAT4(0.0f + extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 0.0f),
+			XMFLOAT4(0.0f - extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 0.0f)
 		}
 	);
 
 	indexes.insert(indexes.end(), { 0, 1, 2, 1, 0, 3 });
+
+	RenderComponent::Initialize();
 }

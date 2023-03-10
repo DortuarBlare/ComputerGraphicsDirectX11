@@ -7,7 +7,6 @@
 class KatamariDamacyGame : public Game {
 private:
 	std::shared_ptr<GameObject> ground;
-	std::shared_ptr<GameObject> grid;
 	std::shared_ptr<KatamariDamacyGameObject> player;
 
 	KatamariDamacyGame(LPCWSTR name);

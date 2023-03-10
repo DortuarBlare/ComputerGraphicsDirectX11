@@ -175,7 +175,7 @@ void SolarSystem::Initialize() {
 	SolarSystem::instance->gameObjects.push_back(Uranus);
 	SolarSystem::instance->gameObjects.push_back(Neptune);
 
-	std::shared_ptr<LineRenderComponent> gridRender = std::make_shared<LineRenderComponent>(gridColor);
+	std::shared_ptr<LineRenderComponent> gridRender = std::make_shared<LineRenderComponent>(L"Textures/White.jpg");
 	gridRender->AddGrid(50, 2, gridColor);
 	grid->AddComponent(gridRender);
 

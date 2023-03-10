@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "LineRenderComponent.h"
 
-LineRenderComponent::LineRenderComponent(Color color) : RenderComponent(color, D3D11_FILL_SOLID) {}
-
-LineRenderComponent::LineRenderComponent(LPCWSTR textureFileName, Color color) :
-	RenderComponent(textureFileName, color, D3D11_FILL_SOLID) {}
+LineRenderComponent::LineRenderComponent(LPCWSTR textureFileName) :
+	RenderComponent(textureFileName, D3D11_FILL_SOLID) {}
 
 void LineRenderComponent::Initialize() {
 	RenderComponent::Initialize();
@@ -50,10 +48,11 @@ void LineRenderComponent::AddGrid(int gridSize, float cellSize, Color color) {
 	int firstPointIndex = points.size() / 2;
 	int nPoints = gridSize * 2 + 1;
 	float offset = -(nPoints / 2) * cellSize;
+	float yOffset = 0.1f;
 
 	for (int i = 0; i < nPoints; i++) {
 		for (int j = 0; j < nPoints; j++) {
-			points.push_back({ cellSize * i + offset, 0.5f, cellSize * j + offset, 1 });
+			points.push_back({ cellSize * i + offset, yOffset, cellSize * j + offset, 1 });
 			points.push_back(color);
 
 			if (i == nPoints / 2 && j == nPoints / 2)
@@ -73,6 +72,6 @@ void LineRenderComponent::AddGrid(int gridSize, float cellSize, Color color) {
 	AddLine({ 0, 0, 0, 1 }, { 0, cellSize, 0, 1 }, { 0, 1, 0 });
 	AddLine({ 0, 0, 0, 1 }, { 0, 0, cellSize, 1 }, { 0, 0, 1 });*/
 
-	AddLine({ 0, 0.5, 0, 1 }, { cellSize, 0.5, 0, 1 }, { 0, 0, 0 });
-	AddLine({ 0, 0.5, 0, 1 }, { 0, 0.5, cellSize, 1 }, { 0, 0, 0 });
+	AddLine({ 0, yOffset, 0, 1 }, { cellSize, yOffset, 0, 1 }, { 0, 0, 0 });
+	AddLine({ 0, yOffset, 0, 1 }, { 0, yOffset, cellSize, 1 }, { 0, 0, 0 });
 }

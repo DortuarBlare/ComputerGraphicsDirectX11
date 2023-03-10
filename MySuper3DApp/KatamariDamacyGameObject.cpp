@@ -4,12 +4,9 @@
 KatamariDamacyGameObject::KatamariDamacyGameObject() {
 	mesh = std::make_shared<SphereRenderComponent>(
 		L"Textures/Player.png",
-		D3D11_FILL_SOLID,
 		1.5f,
 		32,
-		32,
-		Color(1.0f, 1.0f, 1.0f),
-		Color(0.5f, 0.5f, 0.5f)
+		32
 	);
 }
 

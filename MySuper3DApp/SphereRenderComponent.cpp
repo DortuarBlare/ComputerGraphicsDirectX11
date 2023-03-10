@@ -18,28 +18,20 @@ SphereRenderComponent::SphereRenderComponent(
 
 SphereRenderComponent::SphereRenderComponent(
 	LPCWSTR textureFileName,
-	D3D11_FILL_MODE fillMode,
 	float radius,
 	int sliceCount,
-	int stackCount,
-	Color topColor,
-	Color bottomColor
-) : RenderComponent(textureFileName, {}, fillMode) {
+	int stackCount
+) : RenderComponent(textureFileName, D3D11_FILL_SOLID) {
 	this->radius = radius;
 	this->sliceCount = sliceCount;
 	this->stackCount = stackCount;
-	this->topColor = topColor;
-	this->bottomColor = bottomColor;
+	this->topColor = { 0.0f, 0.0f, 0.0f };
+	this->bottomColor = { 0.0f, 0.0f, 0.0f };
 }
 
 void SphereRenderComponent::Initialize() {
-	Color lerpTopColor = {};
-	Color::Lerp(topColor, bottomColor, 0.5f, lerpTopColor);
-	Color lerpBottomColor = {};
-	Color::Lerp(topColor, bottomColor, 0.5f, lerpBottomColor);
-
 	points.push_back({ 0.0f, radius, 0.0f, 1.0f });
-	points.push_back(lerpTopColor);
+	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, });
 
 	const float phiStep = XM_PI / static_cast<float>(stackCount);
 	const float thetaStep = XM_2PI / static_cast<float>(sliceCount);
@@ -50,22 +42,23 @@ void SphereRenderComponent::Initialize() {
 		for (int j = 0; j <= sliceCount; j++) {
 			const float theta = static_cast<float>(j) * thetaStep;
 			Vector4 tempPoint = {};
-			Color tempColor = {};
+			Vector4 tempTexCoords = {};
 
 			tempPoint.x = radius * sinf(phi) * cosf(theta);
 			tempPoint.y = radius * cosf(phi);
 			tempPoint.z = radius * sinf(phi) * sinf(theta);
 			tempPoint.w = 1.0f;
 
-			Color::Lerp(topColor, bottomColor, (sinf(2.0f * phi) * sinf(theta) + 1.0f) / 2.0f, tempColor);
+			tempTexCoords.x = theta / XM_2PI;
+			tempTexCoords.y = phi / XM_2PI;
 
 			points.push_back(tempPoint);
-			points.push_back(tempColor);
+			points.push_back(tempTexCoords);
 		}
 	}
 
 	points.push_back({ 0.0f, -radius, 0.0f, 1.0f });
-	points.push_back(lerpBottomColor);
+	points.push_back({ 0.0f, 1.0f, 0.0f, 0.0f, });
 
 	for (int i = 1; i <= sliceCount; i++) {
 		indexes.push_back(0);

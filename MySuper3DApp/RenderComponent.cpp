@@ -3,7 +3,6 @@
 #include "TransformComponent.h"
 
 RenderComponent::RenderComponent() {
-	fillColor = { 0.0f, 0.0f, 0.0f };
 	fillMode = D3D11_FILL_SOLID;
 
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
@@ -14,9 +13,8 @@ RenderComponent::RenderComponent() {
 	constBufMatrix = std::make_shared<Matrix>();
 }
 
-RenderComponent::RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode) {
+RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode) {
 	this->textureFileName = L"Textures/Default.jpeg";
-	this->fillColor = fillColor;
 	this->fillMode = fillMode;
 
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
@@ -27,9 +25,8 @@ RenderComponent::RenderComponent(Color fillColor, D3D11_FILL_MODE fillMode) {
 	constBufMatrix = std::make_shared<Matrix>();
 }
 
-RenderComponent::RenderComponent(LPCWSTR textureFileName, Color fillColor, D3D11_FILL_MODE fillMode) {
+RenderComponent::RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMode) {
 	this->textureFileName = textureFileName;
-	this->fillColor = fillColor;
 	this->fillMode = fillMode;
 
 	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
@@ -209,14 +206,7 @@ void RenderComponent::Initialize() {
 	offsets[0] = 0;
 }
 
-void RenderComponent::Update() {
-	/**constBufMatrix = Game::instance->camera->GetCameraMatrix();
-
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	Game::instance->GetContext()->Map(constBuf.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	memcpy(mappedResource.pData, constBufMatrix.get(), sizeof(constBufMatrix));
-	Game::instance->GetContext()->Unmap(constBuf.Get(), 0);*/
-}
+void RenderComponent::Update() {}
 
 void RenderComponent::FixedUpdate() {}
 
