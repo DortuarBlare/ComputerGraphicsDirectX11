@@ -18,7 +18,6 @@ private:
 	float pitch = 0;
 	Vector3 target;
 	Vector3 up;
-	Vector3 orbitOffset;
 	float rotationSpeed = 0.005f;
 	float orbitApproximationSpeed = 0.0025f;
 	
@@ -34,6 +33,7 @@ private:
 public:
 	bool perspective = true;
 	bool orbitMode = false;
+	Vector3 orbitOffset;
 
 	void Initialize() override;
 	void Update() override;
@@ -44,5 +44,6 @@ public:
 
 	Matrix GetCameraMatrix();
 	Vector3 Forward();
+	Vector3 OrbitForwardXZ();
 	Vector3 Right();
 };

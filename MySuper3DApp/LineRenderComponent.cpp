@@ -20,6 +20,9 @@ void LineRenderComponent::Draw() {
 		Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
 		Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
 
+		Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
+		Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+
 		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
 		// Use constant buffer for offset
@@ -50,7 +53,7 @@ void LineRenderComponent::AddGrid(int gridSize, float cellSize, Color color) {
 
 	for (int i = 0; i < nPoints; i++) {
 		for (int j = 0; j < nPoints; j++) {
-			points.push_back({ cellSize * i + offset, 0, cellSize * j + offset, 1 });
+			points.push_back({ cellSize * i + offset, 0.5f, cellSize * j + offset, 1 });
 			points.push_back(color);
 
 			if (i == nPoints / 2 && j == nPoints / 2)
@@ -66,7 +69,10 @@ void LineRenderComponent::AddGrid(int gridSize, float cellSize, Color color) {
 		}
 	}
 
-	AddLine({ 0, 0, 0, 1 }, { cellSize, 0, 0, 1 }, { 1, 0, 0 });
+	/*AddLine({ 0, 0, 0, 1 }, { cellSize, 0, 0, 1 }, { 1, 0, 0 });
 	AddLine({ 0, 0, 0, 1 }, { 0, cellSize, 0, 1 }, { 0, 1, 0 });
-	AddLine({ 0, 0, 0, 1 }, { 0, 0, cellSize, 1 }, { 0, 0, 1 });
+	AddLine({ 0, 0, 0, 1 }, { 0, 0, cellSize, 1 }, { 0, 0, 1 });*/
+
+	AddLine({ 0, 0.5, 0, 1 }, { cellSize, 0.5, 0, 1 }, { 0, 0, 0 });
+	AddLine({ 0, 0.5, 0, 1 }, { 0, 0.5, cellSize, 1 }, { 0, 0, 0 });
 }

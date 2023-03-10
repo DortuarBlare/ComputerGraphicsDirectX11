@@ -71,6 +71,19 @@ Vector3 CameraGameObject::Forward() {
     return Vector3::Transform(Vector3::Forward, Matrix::CreateFromYawPitchRoll(yaw, pitch, 0));
 }
 
+Vector3 CameraGameObject::OrbitForwardXZ() {
+    Vector3 orbitOffsetWithoutY = orbitOffset;
+    orbitOffsetWithoutY.y = 0;
+
+    /*std::cout << "orbitOffsetWithoutY before normalize: " << orbitOffsetWithoutY.x << ' ' << orbitOffsetWithoutY.y << ' ' << orbitOffsetWithoutY.z << std::endl;
+    orbitOffsetWithoutY.Normalize();
+    std::cout << "orbitOffsetWithoutY after normalize: " << orbitOffsetWithoutY.x << ' ' << orbitOffsetWithoutY.y << ' ' << orbitOffsetWithoutY.z << std::endl;*/
+    Vector3 result = Vector3::Forward - orbitOffsetWithoutY;
+    result.Normalize();
+
+    return result;
+}
+
 Vector3 CameraGameObject::Right() {
     return Vector3::Transform(Vector3::Right, Matrix::CreateFromYawPitchRoll(yaw, pitch, 0));
 }
