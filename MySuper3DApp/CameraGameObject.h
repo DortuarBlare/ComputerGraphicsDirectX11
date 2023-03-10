@@ -45,5 +45,6 @@ public:
 	Matrix GetCameraMatrix();
 	Vector3 Forward();
 	Vector3 OrbitForwardXZ();
+	Vector3 OrbitRightXZ();
 	Vector3 Right();
 };

@@ -75,10 +75,18 @@ Vector3 CameraGameObject::OrbitForwardXZ() {
     Vector3 orbitOffsetWithoutY = orbitOffset;
     orbitOffsetWithoutY.y = 0;
 
-    /*std::cout << "orbitOffsetWithoutY before normalize: " << orbitOffsetWithoutY.x << ' ' << orbitOffsetWithoutY.y << ' ' << orbitOffsetWithoutY.z << std::endl;
-    orbitOffsetWithoutY.Normalize();
-    std::cout << "orbitOffsetWithoutY after normalize: " << orbitOffsetWithoutY.x << ' ' << orbitOffsetWithoutY.y << ' ' << orbitOffsetWithoutY.z << std::endl;*/
     Vector3 result = Vector3::Forward - orbitOffsetWithoutY;
+    result.Normalize();
+
+    return result;
+}
+
+Vector3 CameraGameObject::OrbitRightXZ() {
+    Vector3 orbitOffsetWithoutY = orbitOffset;
+    orbitOffsetWithoutY.y = 0;
+    orbitOffsetWithoutY.Normalize();
+
+    Vector3 result = orbitOffsetWithoutY.Cross(Vector3::Up);
     result.Normalize();
 
     return result;

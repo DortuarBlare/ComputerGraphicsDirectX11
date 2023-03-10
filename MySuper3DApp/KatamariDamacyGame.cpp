@@ -19,9 +19,9 @@ void KatamariDamacyGame::Initialize() {
 
 	std::shared_ptr<RectangleRenderComponent> groundMesh =
 		std::make_shared< RectangleRenderComponent>(
-			L"Textures/Grass.jpg",
+			L"Textures/Carpet.jpg",
 			D3D11_FILL_SOLID,
-			XMFLOAT3(200.0f, 200.0f, 0.0f)
+			XMFLOAT3(100.0f, 100.0f, 0.0f)
 		);
 
 	ground->AddComponent(groundMesh);
@@ -41,9 +41,11 @@ void KatamariDamacyGame::Initialize() {
 
 void KatamariDamacyGame::Update() {
 	Game::Update();
-	
-	if (inputDevice->IsKeyDown(Keys::W))
+
+	if (inputDevice->IsKeyDown(Keys::W)) {
 		player->Translate(camera->OrbitForwardXZ() * camera->velocity * Time::DeltaTime());
+		*player->transform->localRotation *= Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), player->velocity * Time::DeltaTime());
+	}
 }
 
 void KatamariDamacyGame::FixedUpdate() {

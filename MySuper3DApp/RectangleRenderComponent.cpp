@@ -12,11 +12,11 @@ RectangleRenderComponent::RectangleRenderComponent(
 void RectangleRenderComponent::Initialize() {
 	points.insert(points.end(),
 		{
-			/* Vertex position										*/ /* Texture coordinated */
-			XMFLOAT4(0.0f + extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f),
-			XMFLOAT4(0.0f - extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f),
-			XMFLOAT4(0.0f + extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 0.0f),
-			XMFLOAT4(0.0f - extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 0.0f)
+			/* Vertex position										*/ /* Texture coordinates							  */
+			XMFLOAT4(0.0f + extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(extents.x / 4,	extents.y / 4,	0.0f, 0.0f),
+			XMFLOAT4(0.0f - extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f,			0.0f,			0.0f, 0.0f),
+			XMFLOAT4(0.0f + extents.x,  0.0f - extents.y, 0.0f, 1.0f), XMFLOAT4(extents.x / 4,	0.0f,			0.0f, 0.0f),
+			XMFLOAT4(0.0f - extents.x,  0.0f + extents.y, 0.0f, 1.0f), XMFLOAT4(0.0f,			extents.y / 4,	0.0f, 0.0f)
 		}
 	);
 
