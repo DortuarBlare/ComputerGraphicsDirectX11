@@ -4,17 +4,8 @@
 TransformComponent::TransformComponent() {
 	localPosition = std::make_shared<Vector3>(Vector3::Zero);
 	localRotation = std::make_shared<Quaternion>(Quaternion::Identity);
+	scale = std::make_shared<Vector3>(Vector3::One);
 }
-
-void TransformComponent::Initialize() {}
-
-void TransformComponent::Update() {}
-
-void TransformComponent::Draw() {}
-
-void TransformComponent::Reload() {}
-
-void TransformComponent::DestroyResources() {}
 
 Vector3 TransformComponent::GetPosition() {
 	if (parent) {
@@ -61,7 +52,7 @@ void TransformComponent::SetRotation(Quaternion rotation) {
 }
 
 Matrix TransformComponent::GetLocalModel() {
-	return Matrix::CreateFromQuaternion(*localRotation) * Matrix::CreateTranslation(*localPosition);
+	return Matrix::CreateScale(*scale) * Matrix::CreateFromQuaternion(*localRotation) * Matrix::CreateTranslation(*localPosition);
 }
 
 Matrix TransformComponent::GetModel() {

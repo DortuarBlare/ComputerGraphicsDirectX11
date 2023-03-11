@@ -9,10 +9,17 @@ KatamariDamacyGameObject::KatamariDamacyGameObject() {
 		32,
 		32
 	);
+
+	collider = std::make_shared<SphereColliderComponent>(
+		*transform->localPosition,
+		1.5f
+	);
 }
 
 void KatamariDamacyGameObject::Initialize() {
 	AddComponent(mesh);
+	AddComponent(collider);
+
 	GameObject::Initialize();
 }
 
@@ -21,11 +28,8 @@ void KatamariDamacyGameObject::Update() {
 
 	if (transform->parent) {
 		*transform->localPosition =
-			transform->parent->GetPosition() +
-			Vector3::Transform(
-				offsetFromParent,
-				*transform->parent->localRotation
-			);
+			*transform->parent->localPosition +
+			Vector3::Transform(offsetFromParent, *transform->parent->localRotation);
 
 		*transform->localRotation = *transform->parent->localRotation;
 	}
@@ -34,6 +38,8 @@ void KatamariDamacyGameObject::Update() {
 void KatamariDamacyGameObject::AttachTo(KatamariDamacyGameObject& other) {
 	transform->parent = other.transform;
 	offsetFromParent = *transform->localPosition - *transform->parent->localPosition;
+
 	offsetFromParent.Normalize();
 	offsetFromParent *= 3.0f;
+	collider->enabled = false;
 }

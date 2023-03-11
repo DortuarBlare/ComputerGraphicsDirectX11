@@ -2,36 +2,16 @@
 #include "BoxColliderComponent.h"
 
 BoxColliderComponent::BoxColliderComponent() {
-	boundingBox = std::make_shared<DirectX::BoundingBox>();
+	boundingBox = std::make_shared<BoundingBox>();
 }
 
-BoxColliderComponent::BoxColliderComponent(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 extents) {
-	boundingBox = std::make_shared<DirectX::BoundingBox>(center, extents);
+BoxColliderComponent::BoxColliderComponent(XMFLOAT3 center, XMFLOAT3 extents) {
+	boundingBox = std::make_shared<BoundingBox>(center, extents);
 }
 
-void BoxColliderComponent::Initialize() {
+void BoxColliderComponent::Initialize() {}
 
-}
-
-void BoxColliderComponent::Update() {
-
-}
-
-void BoxColliderComponent::FixedUpdate() {
-	
-}
-
-void BoxColliderComponent::Draw() {
-
-}
-
-void BoxColliderComponent::Reload() {
-
-}
-
-void BoxColliderComponent::DestroyResources() {
-
-}
+void BoxColliderComponent::Update() {}
 
 bool BoxColliderComponent::Intersects(DirectX::SimpleMath::Vector3 translation) {
 	translation.Normalize();

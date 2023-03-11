@@ -1,14 +1,15 @@
 #pragma once
 #include "GameObject.h"
 #include "SphereRenderComponent.h"
+#include "SphereColliderComponent.h"
 
 using namespace DirectX::SimpleMath;
 
 class KatamariDamacyGameObject : public GameObject {
-private:
-	std::shared_ptr<SphereRenderComponent> mesh;
-
 public:
+	std::shared_ptr<SphereRenderComponent> mesh;
+	std::shared_ptr<SphereColliderComponent> collider;
+
 	Vector3 offsetFromParent;
 
 	KatamariDamacyGameObject();

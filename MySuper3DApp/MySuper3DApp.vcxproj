@@ -144,6 +144,7 @@
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="SolarSystemGameObject.cpp" />
+    <ClCompile Include="SphereColliderComponent.cpp" />
     <ClCompile Include="SphereRenderComponent.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="SolarSystemGameObject.h" />
+    <ClInclude Include="SphereColliderComponent.h" />
     <ClInclude Include="SphereRenderComponent.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TransformComponent.h" />

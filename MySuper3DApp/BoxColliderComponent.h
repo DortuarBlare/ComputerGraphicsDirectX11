@@ -2,28 +2,27 @@
 #include "pch.h"
 #include "ColliderComponent.h"
 
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
 class BoxColliderComponent : public ColliderComponent {
 private:
-	std::shared_ptr<DirectX::BoundingBox> boundingBox;
+	std::shared_ptr<BoundingBox> boundingBox;
 
-	DirectX::SimpleMath::Vector3 PointOnBounds(DirectX::SimpleMath::Vector3 direction);
+	Vector3 PointOnBounds(Vector3 direction);
 
 public:
 	std::vector<std::shared_ptr<GameObject>> noCollisionGameObjects;
 
 	BoxColliderComponent();
-	BoxColliderComponent(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 extents);
+	BoxColliderComponent(XMFLOAT3 center, XMFLOAT3 extents);
 
-	void Initialize();
-	void Update();
-	void FixedUpdate();
-	void Draw();
-	void Reload();
-	void DestroyResources();
+	void Initialize() override;
+	void Update() override;
 
-	bool Intersects(DirectX::SimpleMath::Vector3 translation);
-	bool Intersects(DirectX::SimpleMath::Vector3 direction, float outDistance);
+	bool Intersects(Vector3 translation);
+	bool Intersects(Vector3 direction, float outDistance);
 
-	DirectX::XMFLOAT3& GetCenter();
-	DirectX::XMFLOAT3& GetExtents();
+	XMFLOAT3& GetCenter();
+	XMFLOAT3& GetExtents();
 };

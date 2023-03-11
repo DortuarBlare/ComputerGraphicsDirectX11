@@ -3,13 +3,14 @@
 
 class SphereRenderComponent : public RenderComponent {
 private:
-	float radius;
 	int sliceCount;
 	int stackCount;
 	Color topColor;
 	Color bottomColor;
 
 public:
+	float radius;
+
 	SphereRenderComponent() = delete;
 	SphereRenderComponent(
 		D3D11_FILL_MODE fillMode,

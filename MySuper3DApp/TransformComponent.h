@@ -10,14 +10,9 @@ public:
 
 	std::shared_ptr<Vector3> localPosition;
 	std::shared_ptr<Quaternion> localRotation;
+	std::shared_ptr<Vector3> scale;
 
 	TransformComponent();
-
-	void Initialize();
-	void Update();
-	void Draw();
-	void Reload();
-	void DestroyResources();
 
 	Vector3 GetPosition();
 	void SetPosition(Vector3 position);
