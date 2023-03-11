@@ -8,15 +8,13 @@ class KatamariDamacyGame : public Game {
 private:
 	std::shared_ptr<GameObject> ground;
 	std::shared_ptr<KatamariDamacyGameObject> player;
+	std::shared_ptr<KatamariDamacyGameObject> testObject;
 
 	KatamariDamacyGame(LPCWSTR name);
 
 	void Initialize() override;
 	void Update() override;
-	void FixedUpdate() override;
 
 public:
 	static void CreateInstance(LPCWSTR name);
-
-	void Run(int screenWidth, int screenHeight, bool fullscreen) override;
 };

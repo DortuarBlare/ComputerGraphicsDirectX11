@@ -21,10 +21,7 @@ private:
 
 	void Initialize() override;
 	void Update() override;
-	void FixedUpdate() override;
 
 public:
 	static void CreateInstance(LPCWSTR name);
-
-	void Run(int screenWidth, int screenHeight, bool fullscreen) override;
 };

@@ -48,17 +48,6 @@ void Game::Update() {
 }
 
 /*
-* FixedUpdate all "GameComponent" items in vector
-* For physics
-*/
-void Game::FixedUpdate() {
-	for (auto& gameObject : gameObjects)
-		gameObject->FixedUpdate();
-
-	camera->FixedUpdate();
-}
-
-/*
 * Protected method
 * Update all items
 * Call each frame
@@ -66,7 +55,6 @@ void Game::FixedUpdate() {
 void Game::UpdateInternal() {
 	Time::Update();
 	Update();
-	FixedUpdate(); // Change for fixed calls
 	renderSystem->Draw(gameObjects);
 }
 

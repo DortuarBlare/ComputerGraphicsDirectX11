@@ -5,6 +5,7 @@
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name) : Game(name) {
 	ground = std::make_shared<GameObject>();
 	player = std::make_shared<KatamariDamacyGameObject>();
+	testObject = std::make_shared<KatamariDamacyGameObject>();
 }
 
 void KatamariDamacyGame::CreateInstance(LPCWSTR name) {
@@ -15,6 +16,7 @@ void KatamariDamacyGame::CreateInstance(LPCWSTR name) {
 void KatamariDamacyGame::Initialize() {
 	gameObjects.push_back(ground);
 	gameObjects.push_back(player);
+	gameObjects.push_back(testObject);
 
 
 	std::shared_ptr<RectangleRenderComponent> groundMesh =
@@ -35,6 +37,9 @@ void KatamariDamacyGame::Initialize() {
 	player->velocity = 4.0f;
 	*player->transform->localPosition += {0.0f, 1.5f, 0.0f};
 
+	*testObject->transform->localPosition += {3.0f, 1.5f, 0.0f};
+	testObject->transform->parent = player->transform;
+
 	camera->AttachTo(player->transform);
 	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
 }
@@ -43,15 +48,9 @@ void KatamariDamacyGame::Update() {
 	Game::Update();
 
 	if (inputDevice->IsKeyDown(Keys::W)) {
-		player->Translate(camera->OrbitForwardXZ() * camera->velocity * Time::DeltaTime());
+		player->transform->Translate(camera->OrbitForwardXZ() * camera->velocity * Time::DeltaTime());
 		*player->transform->localRotation *= Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), player->velocity * Time::DeltaTime());
+
+		*testObject->transform->localPosition = testObject->transform->GetPosition();
 	}
-}
-
-void KatamariDamacyGame::FixedUpdate() {
-	Game::FixedUpdate();
-}
-
-void KatamariDamacyGame::Run(int screenWidth, int screenHeight, bool fullscreen) {
-	Game::Run(screenWidth, screenHeight, fullscreen);
 }

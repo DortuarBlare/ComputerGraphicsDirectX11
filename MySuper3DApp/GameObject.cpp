@@ -19,11 +19,6 @@ void GameObject::Update() {
 		component->Update();
 }
 
-void GameObject::FixedUpdate() {
-	for (auto& component : components)
-		component->FixedUpdate();
-}
-
 void GameObject::Draw() {
 	for (auto& component : components)
 		component->Draw();
@@ -47,16 +42,4 @@ void GameObject::AddComponent(std::shared_ptr<GameObjectComponent> component) {
 	}
 
 	components.push_back(component);
-}
-
-
-void GameObject::SetPosition(DirectX::SimpleMath::Vector3 newPosition) {
-	*transform->localPosition = newPosition;
-}
-
-/*
-* Moves the position in the direction and distance of "translation"
-*/
-void GameObject::Translate(DirectX::SimpleMath::Vector3 translation) {
-	*transform->localPosition += translation;
 }

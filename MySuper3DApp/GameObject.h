@@ -17,7 +17,6 @@ public:
 
 	virtual void Initialize();
 	virtual void Update();
-	virtual void FixedUpdate();
 	virtual void Draw();
 	virtual void Reload();
 	virtual void DestroyResources();
@@ -27,8 +26,6 @@ public:
 	template<typename T>
 	std::optional<T> GetComponent();
 
-	virtual void SetPosition(DirectX::SimpleMath::Vector3 newPosition); // Move to "Transform" class later
-	virtual void Translate(DirectX::SimpleMath::Vector3 translation); // Move to "Transform" class later
 };
 
 template<typename T>

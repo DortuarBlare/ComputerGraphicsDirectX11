@@ -33,8 +33,8 @@ void SolarSystemGameObject::Initialize() {
 	GameObject::Initialize();
 }
 
-void SolarSystemGameObject::FixedUpdate() {
-	GameObject::FixedUpdate();
+void SolarSystemGameObject::Update() {
+	GameObject::Update();
 
 	if (transform->parent) {
 		offset =

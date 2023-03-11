@@ -10,8 +10,6 @@ void TransformComponent::Initialize() {}
 
 void TransformComponent::Update() {}
 
-void TransformComponent::FixedUpdate() {}
-
 void TransformComponent::Draw() {}
 
 void TransformComponent::Reload() {}
@@ -27,6 +25,12 @@ Vector3 TransformComponent::GetPosition() {
 			);
 
 		return Vector3(temp.x, temp.y, temp.z);
+
+		/*return
+			Vector3::Transform(
+				*localPosition,
+				parent->GetModel()
+			);*/
 	}
 
 	return *localPosition;
@@ -34,14 +38,21 @@ Vector3 TransformComponent::GetPosition() {
 
 void TransformComponent::SetPosition(Vector3 position) {}
 
+// Moves the position in the direction and distance of "translation"
+void TransformComponent::Translate(Vector3 translation) {
+	*localPosition += translation;
+}
+
 Quaternion TransformComponent::GetRotation() {
 	if (parent)
-		return parent->GetRotation() * *localRotation;
+		return parent->GetRotation() * (*localRotation);
 
 	return *localRotation;
 }
 
-void TransformComponent::SetRotation(Quaternion rotation) {}
+void TransformComponent::SetRotation(Quaternion rotation) {
+	*localRotation = rotation;
+}
 
 Matrix TransformComponent::GetLocalModel() {
 	return Matrix::CreateFromQuaternion(*localRotation) * Matrix::CreateTranslation(*localPosition);

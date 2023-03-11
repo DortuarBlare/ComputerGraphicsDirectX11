@@ -37,10 +37,6 @@ void CameraGameObject::Update() {
         projectionMatrix = CreateOrthographicMatrix();
 }
 
-void CameraGameObject::FixedUpdate() {
-    GameObject::FixedUpdate();
-}
-
 
 void CameraGameObject::AttachTo(std::shared_ptr<TransformComponent> transform) {
     orbitMode = true;

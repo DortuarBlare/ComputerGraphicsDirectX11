@@ -15,16 +15,16 @@ public:
 
 	void Initialize();
 	void Update();
-	void FixedUpdate();
 	void Draw();
 	void Reload();
 	void DestroyResources();
 
 	Vector3 GetPosition();
-	void SetPosition(DirectX::SimpleMath::Vector3 position);
+	void SetPosition(Vector3 position);
+	void Translate(Vector3 translation);
 
 	Quaternion GetRotation();
-	void SetRotation(DirectX::SimpleMath::Quaternion rotation);
+	void SetRotation(Quaternion rotation);
 
 	Matrix GetLocalModel();
 	Matrix GetModel();

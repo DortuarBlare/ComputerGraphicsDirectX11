@@ -37,7 +37,6 @@ public:
 
 	void Initialize() override;
 	void Update() override;
-	void FixedUpdate() override;
 
 	void AttachTo(std::shared_ptr<TransformComponent> transform);
 	void Detach();

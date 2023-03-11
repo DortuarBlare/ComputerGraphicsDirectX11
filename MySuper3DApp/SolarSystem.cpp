@@ -204,28 +204,28 @@ void SolarSystem::Update() {
 		camera->perspective = false;
 
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::A)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * (camera->Right() * -1));
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * (camera->Right() * -1));
 		camera->Detach();
 	}
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::D)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * camera->Right());
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * camera->Right());
 		camera->Detach();
 	}
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::W)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * camera->Forward());
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * camera->Forward());
 		camera->Detach();
 	}
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::S)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * (camera->Forward() * -1));
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * (camera->Forward() * -1));
 		camera->Detach();
 	}
 
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::Space)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * Vector3::Up);
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * Vector3::Up);
 		camera->Detach();
 	}
 	if (Game::Instance()->inputDevice->IsKeyDown(Keys::LeftShift)) {
-		camera->Translate(camera->velocity * Time::DeltaTime() * Vector3::Down);
+		camera->transform->Translate(camera->velocity * Time::DeltaTime() * Vector3::Down);
 		camera->Detach();
 	}
 
@@ -247,12 +247,4 @@ void SolarSystem::Update() {
 		camera->AttachTo(Uranus->transform);
 	else if (Game::instance->inputDevice->IsKeyDown(Keys::D8))
 		camera->AttachTo(Neptune->transform);
-}
-
-void SolarSystem::FixedUpdate() {
-	Game::FixedUpdate();
-}
-
-void SolarSystem::Run(int screenWidth, int screenHeight, bool fullscreen) {
-	Game::Run(screenWidth, screenHeight, fullscreen);
 }

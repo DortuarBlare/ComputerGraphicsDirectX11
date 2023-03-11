@@ -23,7 +23,6 @@ protected:
 
 	virtual void Initialize();
 	virtual void Update();
-	virtual void FixedUpdate();
 	virtual void UpdateInternal();
 	virtual void DestroyResources();
 
