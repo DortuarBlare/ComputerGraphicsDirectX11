@@ -28,6 +28,7 @@ public:
 
 	Matrix GetLocalModel();
 	Matrix GetModel();
+	Matrix GetLocalView();
 
 	Vector3 LocalForward();
 	Vector3 LocalUp();

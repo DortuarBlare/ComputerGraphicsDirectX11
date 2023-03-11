@@ -9,7 +9,12 @@ private:
 	std::shared_ptr<SphereRenderComponent> mesh;
 
 public:
+	Vector3 offsetFromParent;
+
 	KatamariDamacyGameObject();
 
 	void Initialize() override;
+	void Update() override;
+
+	void AttachTo(KatamariDamacyGameObject& other);
 };

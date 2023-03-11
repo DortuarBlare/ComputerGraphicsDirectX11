@@ -38,7 +38,7 @@ void KatamariDamacyGame::Initialize() {
 	*player->transform->localPosition += {0.0f, 1.5f, 0.0f};
 
 	*testObject->transform->localPosition += {3.0f, 1.5f, 0.0f};
-	testObject->transform->parent = player->transform;
+	testObject->AttachTo(*player);
 
 	camera->AttachTo(player->transform);
 	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
@@ -48,9 +48,8 @@ void KatamariDamacyGame::Update() {
 	Game::Update();
 
 	if (inputDevice->IsKeyDown(Keys::W)) {
+		// Player translation and rotation
 		player->transform->Translate(camera->OrbitForwardXZ() * camera->velocity * Time::DeltaTime());
 		*player->transform->localRotation *= Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), player->velocity * Time::DeltaTime());
-
-		*testObject->transform->localPosition = testObject->transform->GetPosition();
 	}
 }
