@@ -7,6 +7,17 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 using namespace Microsoft::WRL;
 
+struct PerObject {
+	Matrix constBufMatrix;
+	Matrix invTrWorld;
+};
+
+struct PerScene {
+	Vector4 lightDirection;
+	Vector4 lightColor;
+	Vector4 viewDirectionSpecular;
+};
+
 class RenderComponent : public GameObjectComponent {
 protected:
 	ComPtr<ID3D11InputLayout> layout;
@@ -23,17 +34,18 @@ protected:
 	std::shared_ptr<D3D11_SUBRESOURCE_DATA> indexData;
 	ComPtr<ID3D11Buffer> indexBuf;
 
-	std::shared_ptr<D3D11_SUBRESOURCE_DATA> constData;
-	ComPtr<ID3D11Buffer> constBuf;
-	std::shared_ptr<Matrix> constBufMatrix;
+	ID3D11Buffer** constBuffers;
+
+	PerObject perObject;
+	PerScene perScene;
 
 	LPCWSTR textureFileName;
 	ComPtr<ID3D11Resource> texture;
 	ComPtr<ID3D11ShaderResourceView> textureView;
 	ComPtr<ID3D11SamplerState> samplerState;
 
-	std::vector<unsigned int> indexes;
 	std::vector<XMFLOAT4> points;
+	std::vector<unsigned int> indexes;
 
 	D3D11_FILL_MODE fillMode;
 
@@ -41,13 +53,12 @@ protected:
 	UINT offsets[1];
 
 public:
-	RenderComponent();
+	RenderComponent() = delete;
 	RenderComponent(D3D11_FILL_MODE fillMode);
 	RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
 	void Update();
-	void FixedUpdate();
 	virtual void Draw();
 	void Reload();
 	void DestroyResources();

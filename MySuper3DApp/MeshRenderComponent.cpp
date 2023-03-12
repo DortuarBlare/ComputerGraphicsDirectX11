@@ -51,7 +51,17 @@ void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 				1.0f 
 			}
 		);
+
 		points.push_back(textureCoordinate);
+
+		points.push_back(
+			{
+				mesh->mNormals[i].x,
+				mesh->mNormals[i].y,
+				mesh->mNormals[i].z,
+				0.0f
+			}
+		);
 	}
 
 	//Get indices

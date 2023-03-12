@@ -10,26 +10,26 @@ void LineRenderComponent::Initialize() {
 
 void LineRenderComponent::Draw() {
 	if (enabled) {
-		Game::Instance()->renderSystem->context->IASetInputLayout(layout.Get());
-		Game::Instance()->renderSystem->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-		Game::Instance()->renderSystem->context->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
-		Game::Instance()->renderSystem->context->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
+		//Game::Instance()->renderSystem->context->IASetInputLayout(layout.Get());
+		//Game::Instance()->renderSystem->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+		//Game::Instance()->renderSystem->context->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
+		//Game::Instance()->renderSystem->context->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
 
-		Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
-		Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
+		//Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
+		//Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-		Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
-		Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+		//Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
+		//Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
 
-		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
+		//Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
-		// Use constant buffer for offset
-		*constBufMatrix = Game::Instance()->camera->GetCameraMatrix().Transpose();
+		//// Use constant buffer for offset
+		//*constBufMatrix = Game::Instance()->camera->GetCameraMatrix().Transpose();
 
-		Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
-		Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
+		//Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
+		//Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
 
-		Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
+		//Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
 	}
 }
 

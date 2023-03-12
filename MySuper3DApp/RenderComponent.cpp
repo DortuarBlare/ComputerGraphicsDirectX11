@@ -2,17 +2,6 @@
 #include "RenderComponent.h"
 #include "TransformComponent.h"
 
-RenderComponent::RenderComponent() {
-	fillMode = D3D11_FILL_SOLID;
-
-	vertexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-
-	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	constBufMatrix = std::make_shared<Matrix>();
-}
-
 RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode) {
 	this->textureFileName = L"Textures/Default.jpeg";
 	this->fillMode = fillMode;
@@ -21,8 +10,7 @@ RenderComponent::RenderComponent(D3D11_FILL_MODE fillMode) {
 
 	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	constBufMatrix = std::make_shared<Matrix>();
+	constBuffers = new ID3D11Buffer * [2];
 }
 
 RenderComponent::RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMode) {
@@ -33,8 +21,7 @@ RenderComponent::RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMo
 
 	indexData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
 
-	constData = std::make_shared<D3D11_SUBRESOURCE_DATA>();
-	constBufMatrix = std::make_shared<Matrix>();
+	constBuffers = new ID3D11Buffer * [2];
 }
 
 /*
@@ -121,11 +108,19 @@ void RenderComponent::Initialize() {
 			D3D11_INPUT_PER_VERTEX_DATA,
 			0
 		},
+		D3D11_INPUT_ELEMENT_DESC {
+			"NORMAL",
+			0,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			0,
+			D3D11_APPEND_ALIGNED_ELEMENT,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0}
 	};
 
 	Game::Instance()->renderSystem->device->CreateInputLayout(
 		inputElements,
-		2,
+		std::size(inputElements),
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		layout.GetAddressOf()
@@ -148,7 +143,7 @@ void RenderComponent::Initialize() {
 
 
 	D3D11_BUFFER_DESC indexBufDesc = {};
-	indexBufDesc.ByteWidth = sizeof(int) * indexes.size();
+	indexBufDesc.ByteWidth = sizeof(unsigned int) * indexes.size();
 	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufDesc.CPUAccessFlags = 0;
@@ -162,19 +157,25 @@ void RenderComponent::Initialize() {
 	Game::Instance()->renderSystem->device->CreateBuffer(&indexBufDesc, indexData.get(), indexBuf.GetAddressOf());
 
 
-	D3D11_BUFFER_DESC constBufDesc = {};
-	constBufDesc.ByteWidth = sizeof(Matrix);
-	constBufDesc.Usage = D3D11_USAGE_DEFAULT; // D3D11_USAGE_DYNAMIC
-	constBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBufDesc.CPUAccessFlags = 0; // D3D11_CPU_ACCESS_WRITE
-	constBufDesc.MiscFlags = 0;
-	constBufDesc.StructureByteStride = 0;
+	D3D11_BUFFER_DESC constBufDescPerObject = {};
+	constBufDescPerObject.ByteWidth = sizeof(PerObject);
+	constBufDescPerObject.Usage = D3D11_USAGE_DEFAULT;
+	constBufDescPerObject.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDescPerObject.CPUAccessFlags = 0;
+	constBufDescPerObject.MiscFlags = 0;
+	constBufDescPerObject.StructureByteStride = 0;
 
-	constData->pSysMem = constBufMatrix.get();
-	constData->SysMemPitch = 0;
-	constData->SysMemSlicePitch = 0;
+	Game::Instance()->renderSystem->device->CreateBuffer(&constBufDescPerObject, nullptr, &constBuffers[0]);
 
-	Game::Instance()->renderSystem->device->CreateBuffer(&constBufDesc, constData.get(), constBuf.GetAddressOf());
+	D3D11_BUFFER_DESC constBufDescPerScene = {};
+	constBufDescPerScene.ByteWidth = sizeof(PerScene);
+	constBufDescPerScene.Usage = D3D11_USAGE_DEFAULT;
+	constBufDescPerScene.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDescPerScene.CPUAccessFlags = 0;
+	constBufDescPerScene.MiscFlags = 0;
+	constBufDescPerScene.StructureByteStride = 0;
+
+	Game::Instance()->renderSystem->device->CreateBuffer(&constBufDescPerScene, nullptr, &constBuffers[1]);
 
 
 	res = CreateWICTextureFromFile(
@@ -202,13 +203,17 @@ void RenderComponent::Initialize() {
 	res = Game::Instance()->renderSystem->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
 	Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
-	strides[0] = 32; // Position and color in one structure, so array with one value - 32 (2 float4)
+	strides[0] = 48; // Position and color in one structure, so array with one value - 48 (3 float4)
 	offsets[0] = 0;
+
+	perObject = {};
+	perScene = {};
+	perScene.lightDirection = { 1.0f, 1.0f, 1.0f, 0.0f };
+	perScene.lightDirection.Normalize();
+	perScene.lightColor = { 1.0f, 1.0f, 1.0f, 0.4f };
 }
 
 void RenderComponent::Update() {}
-
-void RenderComponent::FixedUpdate() {}
 
 void RenderComponent::Draw() {
 	if (enabled) {
@@ -225,11 +230,25 @@ void RenderComponent::Draw() {
 
 		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
-		*constBufMatrix = owner->transform->GetModel() * Game::Instance()->camera->GetCameraMatrix();
-		*constBufMatrix = constBufMatrix->Transpose();
+		perObject.constBufMatrix = owner->transform->GetModel() * Game::Instance()->camera->GetCameraMatrix();
+		perObject.constBufMatrix.Transpose();
+		perObject.invTrWorld = (Matrix::CreateScale(*owner->transform->scale) * Matrix::CreateFromQuaternion(owner->transform->GetRotation())).Invert().Transpose();
 
-		Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);
-		Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 1, constBuf.GetAddressOf());
+		perScene.viewDirectionSpecular =
+			Vector4(
+				Game::Instance()->camera->transform->localPosition->x - Game::Instance()->camera->target.x,
+				Game::Instance()->camera->transform->localPosition->y - Game::Instance()->camera->target.y,
+				Game::Instance()->camera->transform->localPosition->z - Game::Instance()->camera->target.z,
+				0.0f
+			);
+
+		perScene.viewDirectionSpecular.Normalize();
+		perScene.viewDirectionSpecular.w = 0.5f;
+
+		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[0], 0, nullptr, &perObject, 0, 0);
+		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[1], 0, nullptr, &perScene, 0, 0);
+		Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 2, constBuffers);
+		Game::Instance()->renderSystem->context->PSSetConstantBuffers(0, 2, constBuffers);
 
 		Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
 	}

@@ -16,7 +16,6 @@ private:
 
 	float yaw = 0;
 	float pitch = 0;
-	Vector3 target;
 	Vector3 up;
 	float rotationSpeed = 0.005f;
 	float orbitApproximationSpeed = 0.0025f;
@@ -34,6 +33,7 @@ public:
 	bool perspective = true;
 	bool orbitMode = false;
 	Vector3 orbitOffset;
+	Vector3 target;
 
 	void Initialize() override;
 	void Update() override;
