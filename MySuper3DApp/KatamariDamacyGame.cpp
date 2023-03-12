@@ -25,28 +25,28 @@ void KatamariDamacyGame::Initialize() {
 		"Models/LegoBoy.obj",
 		L"Textures/LegoBoy.jpg",
 		1.0f,
-		0.25f
+		0.5f
 	);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject2 = std::make_shared<KatamariDamacyGameObject>(
 		"Models/LegoBoy.obj",
 		L"Textures/LegoBoy.jpg",
 		1.0f,
-		0.25f
+		0.5f
 	);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject3 = std::make_shared<KatamariDamacyGameObject>(
 		"Models/LegoBoy.obj",
 		L"Textures/LegoBoy.jpg",
 		1.0f,
-		0.25f
+		0.5f
 	);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject4 = std::make_shared<KatamariDamacyGameObject>(
 		"Models/LegoBoy.obj",
 		L"Textures/LegoBoy.jpg",
 		1.0f,
-		0.25f
+		0.5f
 	);
 
 	gameObjects.push_back(testObject1);
