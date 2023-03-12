@@ -2,10 +2,23 @@
 #include "KatamariDamacyGameObject.h"
 #include "TransformComponent.h"
 
-KatamariDamacyGameObject::KatamariDamacyGameObject() {
+KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName) {
 	mesh = std::make_shared<MeshRenderComponent>(
-		"Models/LegoBrick.fbx",
-		L"Textures/LegoBrick.png"
+		modelFileName,
+		textureFileName
+	);
+
+	collider = std::make_shared<SphereColliderComponent>(
+		*transform->localPosition,
+		1.5f
+	);
+}
+
+KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float importScale) {
+	mesh = std::make_shared<MeshRenderComponent>(
+		modelFileName,
+		textureFileName,
+		importScale
 	);
 
 	collider = std::make_shared<SphereColliderComponent>(

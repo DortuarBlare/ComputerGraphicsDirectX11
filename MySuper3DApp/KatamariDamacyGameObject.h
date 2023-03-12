@@ -12,7 +12,8 @@ public:
 
 	Vector3 offsetFromParent;
 
-	KatamariDamacyGameObject();
+	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName);
+	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float importScale);
 
 	void Initialize() override;
 	void Update() override;

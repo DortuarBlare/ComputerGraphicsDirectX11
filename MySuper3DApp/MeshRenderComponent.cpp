@@ -6,6 +6,12 @@ MeshRenderComponent::MeshRenderComponent(std::string modelFileName, LPCWSTR text
 	this->modelFileName = modelFileName;
 }
 
+MeshRenderComponent::MeshRenderComponent(std::string modelFileName, LPCWSTR textureFileName, float importScale)
+	: RenderComponent(textureFileName, D3D11_FILL_SOLID) {
+	this->modelFileName = modelFileName;
+	this->importScale = importScale;
+}
+
 void MeshRenderComponent::Initialize() {
 	Assimp::Importer importer;
 	const aiScene* pScene = importer.ReadFile(modelFileName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
@@ -37,7 +43,14 @@ void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 			textureCoordinate.y = (float)mesh->mTextureCoords[0][i].y;
 		}
 
-		points.push_back({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0f });
+		points.push_back(
+			{ 
+				mesh->mVertices[i].x * importScale,
+				mesh->mVertices[i].y * importScale,
+				mesh->mVertices[i].z * importScale,
+				1.0f 
+			}
+		);
 		points.push_back(textureCoordinate);
 	}
 

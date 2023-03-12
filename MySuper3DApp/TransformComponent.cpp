@@ -62,7 +62,10 @@ Matrix TransformComponent::GetModel() {
 }
 
 Matrix TransformComponent::GetLocalView() {
-	return Matrix::CreateTranslation(-(*localPosition)) * Matrix::CreateFromQuaternion(*localRotation).Transpose();
+	return 
+		Matrix::CreateTranslation(-(*localPosition)) * 
+		Matrix::CreateFromQuaternion(*localRotation).Transpose() *
+		Matrix::CreateScale({ 1 / scale->x, 1 / scale->y, 1 / scale->z });
 }
 
 Matrix TransformComponent::GetView() {
@@ -86,7 +89,7 @@ Vector3 TransformComponent::LocalRight() {
 }
 
 Vector3 TransformComponent::Forward() {
-	return Vector3::Transform(Vector3::Forward, GetRotation());
+	return Vector3::TransformNormal(Vector3::Forward, GetModel());
 }
 
 Vector3 TransformComponent::Up() {

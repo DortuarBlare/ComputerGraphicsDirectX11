@@ -4,7 +4,11 @@
 
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name) : Game(name) {
 	ground = std::make_shared<GameObject>();
-	player = std::make_shared<KatamariDamacyGameObject>();
+	player = std::make_shared<KatamariDamacyGameObject>(
+		"Models/Slime.fbx",
+		L"Textures/Slime.png",
+		0.01f
+	);
 }
 
 void KatamariDamacyGame::CreateInstance(LPCWSTR name) {
@@ -16,9 +20,21 @@ void KatamariDamacyGame::Initialize() {
 	gameObjects.push_back(ground);
 	gameObjects.push_back(player);
 
-	std::shared_ptr<KatamariDamacyGameObject> testObject1 = std::make_shared<KatamariDamacyGameObject>();
-	std::shared_ptr<KatamariDamacyGameObject> testObject2 = std::make_shared<KatamariDamacyGameObject>();
-	std::shared_ptr<KatamariDamacyGameObject> testObject3 = std::make_shared<KatamariDamacyGameObject>();
+	std::shared_ptr<KatamariDamacyGameObject> testObject1 = std::make_shared<KatamariDamacyGameObject>(
+		"Models/LegoBrick.fbx",
+		L"Textures/LegoBrick.png"
+	);
+
+	std::shared_ptr<KatamariDamacyGameObject> testObject2 = std::make_shared<KatamariDamacyGameObject>(
+		"Models/LegoBrick.fbx",
+		L"Textures/LegoBrick.png"
+	);
+
+	std::shared_ptr<KatamariDamacyGameObject> testObject3 = std::make_shared<KatamariDamacyGameObject>(
+		"Models/LegoBrick.fbx",
+		L"Textures/LegoBrick.png"
+	);
+
 	gameObjects.push_back(testObject1);
 	gameObjects.push_back(testObject2);
 	gameObjects.push_back(testObject3);
@@ -41,11 +57,14 @@ void KatamariDamacyGame::Initialize() {
 
 	player->velocity = 4.0f;
 	*player->transform->localPosition += {0.0f, 1.5f, 0.0f};
-	*player->transform->scale *= 10;
+	*player->transform->scale *= 100;
 
 	*testObject1->transform->localPosition += {0.0f, 1.5f, 10.0f};
+	*testObject1->transform->scale *= 100;
 	*testObject2->transform->localPosition += {20.0f, 1.5f, 20.0f};
+	*testObject2->transform->scale *= 100;
 	*testObject3->transform->localPosition += {30.0f, 1.5f, 30.0f};
+	*testObject3->transform->scale *= 100;
 
 	camera->AttachTo(player->transform);
 	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
