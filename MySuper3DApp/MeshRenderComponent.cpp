@@ -42,7 +42,7 @@ void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 			textureCoordinate.x = (float)mesh->mTextureCoords[0][i].x;
 			textureCoordinate.y = (float)mesh->mTextureCoords[0][i].y;
 		}
-
+		
 		points.push_back(
 			{ 
 				mesh->mVertices[i].x * importScale,

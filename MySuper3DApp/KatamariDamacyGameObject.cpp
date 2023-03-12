@@ -2,7 +2,7 @@
 #include "KatamariDamacyGameObject.h"
 #include "TransformComponent.h"
 
-KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName) {
+KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius) {
 	mesh = std::make_shared<MeshRenderComponent>(
 		modelFileName,
 		textureFileName
@@ -10,11 +10,11 @@ KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LP
 
 	collider = std::make_shared<SphereColliderComponent>(
 		*transform->localPosition,
-		1.5f
+		colliderRadius
 	);
 }
 
-KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float importScale) {
+KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius, float importScale) {
 	mesh = std::make_shared<MeshRenderComponent>(
 		modelFileName,
 		textureFileName,
@@ -23,7 +23,7 @@ KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LP
 
 	collider = std::make_shared<SphereColliderComponent>(
 		*transform->localPosition,
-		1.5f
+		colliderRadius
 	);
 }
 
@@ -36,21 +36,4 @@ void KatamariDamacyGameObject::Initialize() {
 
 void KatamariDamacyGameObject::Update() {
 	GameObject::Update();
-
-	/*if (transform->parent) {
-		*transform->localPosition =
-			*transform->parent->localPosition +
-			Vector3::Transform(offsetFromParent, *transform->parent->localRotation);
-
-		*transform->localRotation = *transform->parent->localRotation;
-	}*/
-}
-
-void KatamariDamacyGameObject::AttachTo(KatamariDamacyGameObject& other) {
-	transform->parent = other.transform;
-	offsetFromParent = *transform->localPosition - *transform->parent->localPosition;
-
-	offsetFromParent.Normalize();
-	offsetFromParent *= other.collider->boundingSphere->Radius * 2;
-	collider->enabled = false;
 }

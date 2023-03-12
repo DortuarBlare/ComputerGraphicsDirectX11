@@ -10,13 +10,9 @@ public:
 	std::shared_ptr<MeshRenderComponent> mesh;
 	std::shared_ptr<SphereColliderComponent> collider;
 
-	Vector3 offsetFromParent;
-
-	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName);
-	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float importScale);
+	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius);
+	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius, float importScale);
 
 	void Initialize() override;
 	void Update() override;
-
-	void AttachTo(KatamariDamacyGameObject& other);
 };

@@ -5,9 +5,10 @@
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name) : Game(name) {
 	ground = std::make_shared<GameObject>();
 	player = std::make_shared<KatamariDamacyGameObject>(
-		"Models/Slime.fbx",
-		L"Textures/Slime.png",
-		0.01f
+		"Models/Player.fbx",
+		L"Textures/Player.png",
+		2,
+		0.06
 	);
 }
 
@@ -21,23 +22,37 @@ void KatamariDamacyGame::Initialize() {
 	gameObjects.push_back(player);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject1 = std::make_shared<KatamariDamacyGameObject>(
-		"Models/LegoBrick.fbx",
-		L"Textures/LegoBrick.png"
+		"Models/LegoBoy.obj",
+		L"Textures/LegoBoy.jpg",
+		1.0f,
+		0.25f
 	);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject2 = std::make_shared<KatamariDamacyGameObject>(
-		"Models/LegoBrick.fbx",
-		L"Textures/LegoBrick.png"
+		"Models/LegoBoy.obj",
+		L"Textures/LegoBoy.jpg",
+		1.0f,
+		0.25f
 	);
 
 	std::shared_ptr<KatamariDamacyGameObject> testObject3 = std::make_shared<KatamariDamacyGameObject>(
-		"Models/LegoBrick.fbx",
-		L"Textures/LegoBrick.png"
+		"Models/LegoBoy.obj",
+		L"Textures/LegoBoy.jpg",
+		1.0f,
+		0.25f
+	);
+
+	std::shared_ptr<KatamariDamacyGameObject> testObject4 = std::make_shared<KatamariDamacyGameObject>(
+		"Models/LegoBoy.obj",
+		L"Textures/LegoBoy.jpg",
+		1.0f,
+		0.25f
 	);
 
 	gameObjects.push_back(testObject1);
 	gameObjects.push_back(testObject2);
 	gameObjects.push_back(testObject3);
+	gameObjects.push_back(testObject4);
 
 
 	std::shared_ptr<RectangleRenderComponent> groundMesh =
@@ -52,19 +67,16 @@ void KatamariDamacyGame::Initialize() {
 
 	Game::Initialize();
 
-
+	// Rotate ground
 	*ground->transform->localRotation *= Quaternion::CreateFromAxisAngle(Vector3::Right, XM_PIDIV2);
 
 	player->velocity = 4.0f;
-	*player->transform->localPosition += {0.0f, 1.5f, 0.0f};
-	*player->transform->scale *= 100;
+	player->transform->localPosition->y = player->collider->boundingSphere->Radius;
 
-	*testObject1->transform->localPosition += {0.0f, 1.5f, 10.0f};
-	*testObject1->transform->scale *= 100;
-	*testObject2->transform->localPosition += {20.0f, 1.5f, 20.0f};
-	*testObject2->transform->scale *= 100;
-	*testObject3->transform->localPosition += {30.0f, 1.5f, 30.0f};
-	*testObject3->transform->scale *= 100;
+	*testObject1->transform->localPosition += {0.0f, testObject1->collider->boundingSphere->Radius, 10.0f};
+	*testObject2->transform->localPosition += {0.0f, testObject2->collider->boundingSphere->Radius, 17.5f};
+	*testObject3->transform->localPosition += {0.0f, testObject3->collider->boundingSphere->Radius, 40.0f};
+	*testObject4->transform->localPosition += {0.0f, testObject4->collider->boundingSphere->Radius, 50.0f};
 
 	camera->AttachTo(player->transform);
 	*camera->transform->localPosition += {0.0f, 15.0f, 20.0f};
@@ -88,12 +100,8 @@ void KatamariDamacyGame::Update() {
 						secondKatamari->transform->SetPosition(position);
 						secondKatamari->transform->SetRotation(rotation);
 						secondKatamari->collider->enabled = false;
-
-						//player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius/* * 2*/;
-						//*player->transform->localPosition += {0.0f, secondKatamari->collider->boundingSphere->Radius/* * 2*/, 0.0f};
-						//*player->transform->scale += Vector3::One * (secondKatamari->collider->boundingSphere->Radius);
-						//player->velocity *= secondKatamari->collider->boundingSphere->Radius;
-						//secondKatamari->AttachTo(*player);
+						player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius * 2;
+						player->transform->localPosition->y = player->collider->boundingSphere->Radius;
 					}
 				}
 			}
