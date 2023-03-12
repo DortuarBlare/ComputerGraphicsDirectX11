@@ -7,38 +7,27 @@ TransformComponent::TransformComponent() {
 	scale = std::make_shared<Vector3>(Vector3::One);
 }
 
-Vector3 TransformComponent::GetPosition() {
-	if (parent) {
-		Vector4 temp =
-			Vector4::Transform(
-				Vector4(localPosition->x, localPosition->y, localPosition->z, 1.0f),
-				parent->GetModel()
-			);
-
-		return Vector3(temp.x, temp.y, temp.z);
-	}
-
-	return *localPosition;
-}
-
-void TransformComponent::SetPosition(Vector3 position) {
-	if (!parent)
-		*localPosition = position;
-	else {
-		Vector4 temp =
-			Vector4::Transform(
-				Vector4(position.x, position.y, position.z, 1.0f),
-				parent->GetModel()
-			);
-
-		*localPosition = Vector3(temp.x, temp.y, temp.z);
-	}
-}
 
 // Moves the position in the direction and distance of "translation"
 void TransformComponent::Translate(Vector3 translation) {
 	*localPosition += translation;
 }
+
+
+Vector3 TransformComponent::GetPosition() {
+	if (parent)
+		return Vector3::Transform(*localPosition, parent->GetModel());
+
+	return *localPosition;
+}
+
+void TransformComponent::SetPosition(Vector3 position) {
+	if (parent)
+		*localPosition = Vector3::Transform(position, parent->GetView());
+	else
+		*localPosition = position;
+}
+
 
 Quaternion TransformComponent::GetRotation() {
 	if (parent)
@@ -48,37 +37,52 @@ Quaternion TransformComponent::GetRotation() {
 }
 
 void TransformComponent::SetRotation(Quaternion rotation) {
-	*localRotation = rotation;
+	if (parent) {
+		Quaternion quaternion;
+		parent->GetRotation().Inverse(quaternion);
+		*localRotation = rotation * quaternion;
+	}
+	else
+		*localRotation = rotation;
 }
 
+
 Matrix TransformComponent::GetLocalModel() {
-	return Matrix::CreateScale(*scale) * Matrix::CreateFromQuaternion(*localRotation) * Matrix::CreateTranslation(*localPosition);
+	return 
+		Matrix::CreateScale(*scale) * 
+		Matrix::CreateFromQuaternion(*localRotation) * 
+		Matrix::CreateTranslation(*localPosition);
 }
 
 Matrix TransformComponent::GetModel() {
-	return !parent ? GetLocalModel() : parent->GetModel() * GetLocalModel();
+	if (parent)
+		return GetLocalModel() * parent->GetModel();
+
+	return GetLocalModel();
 }
 
 Matrix TransformComponent::GetLocalView() {
-	/*Matrix view = Matrix::CreateFromQuaternion(*localRotation).Transpose();
-	view._13 = -localPosition->x * view._11 - localPosition->y * view._12 - localPosition->z * view._13;
-	view._23 = -localPosition->x * view._21 - localPosition->y * view._22 - localPosition->z * view._23;
-	view._33 = -localPosition->x * view._31 - localPosition->y * view._32 - localPosition->z * view._33;
-	return view;*/
-
-	return Matrix::CreateFromQuaternion(*localRotation).Transpose() * Matrix::CreateTranslation(*localPosition);
+	return Matrix::CreateTranslation(-(*localPosition)) * Matrix::CreateFromQuaternion(*localRotation).Transpose();
 }
 
+Matrix TransformComponent::GetView() {
+	if (parent)
+		return parent->GetView() * GetLocalView();
+
+	return GetLocalView();
+}
+
+
 Vector3 TransformComponent::LocalForward() {
-	return *localRotation * Vector3::Forward;
+	return Vector3::TransformNormal(Vector3::Forward, GetLocalModel());
 }
 
 Vector3 TransformComponent::LocalUp() {
-	return *localRotation * Vector3::Up;
+	return Vector3::TransformNormal(Vector3::Up, GetLocalModel());
 }
 
 Vector3 TransformComponent::LocalRight() {
-	return *localRotation * Vector3::Right;
+	return Vector3::TransformNormal(Vector3::Left, GetLocalModel());
 }
 
 Vector3 TransformComponent::Forward() {
@@ -86,9 +90,9 @@ Vector3 TransformComponent::Forward() {
 }
 
 Vector3 TransformComponent::Up() {
-	return GetRotation() * Vector3::Up;
+	return Vector3::TransformNormal(Vector3::Up, GetModel());
 }
 
 Vector3 TransformComponent::Right() {
-	return GetRotation() * Vector3::Right;
+	return Vector3::TransformNormal(Vector3::Left, GetModel());
 }

@@ -29,6 +29,20 @@ SphereRenderComponent::SphereRenderComponent(
 	this->bottomColor = { 0.0f, 0.0f, 0.0f };
 }
 
+SphereRenderComponent::SphereRenderComponent(
+	LPCWSTR textureFileName,
+	D3D11_FILL_MODE fillMode,
+	float radius,
+	int sliceCount,
+	int stackCount
+) : RenderComponent(textureFileName, fillMode) {
+	this->radius = radius;
+	this->sliceCount = sliceCount;
+	this->stackCount = stackCount;
+	this->topColor = { 0.0f, 0.0f, 0.0f };
+	this->bottomColor = { 0.0f, 0.0f, 0.0f };
+}
+
 void SphereRenderComponent::Initialize() {
 	points.push_back({ 0.0f, radius, 0.0f, 1.0f });
 	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, });

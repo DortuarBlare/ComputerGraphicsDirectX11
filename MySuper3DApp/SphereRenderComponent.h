@@ -26,6 +26,13 @@ public:
 		int sliceCount,
 		int stackCount
 	);
+	SphereRenderComponent(
+		LPCWSTR textureFileName,
+		D3D11_FILL_MODE fillMode,
+		float radius,
+		int sliceCount,
+		int stackCount
+	);
 
 	void Initialize() override;
 };

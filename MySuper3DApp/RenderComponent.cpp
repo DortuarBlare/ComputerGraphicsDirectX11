@@ -186,7 +186,7 @@ void RenderComponent::Initialize() {
 	);
 
 	D3D11_SAMPLER_DESC samplerStateDesc = {};
-	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerStateDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -225,7 +225,7 @@ void RenderComponent::Draw() {
 
 		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
 
-		*constBufMatrix = owner->transform->GetLocalModel() * Game::Instance()->camera->GetCameraMatrix();
+		*constBufMatrix = owner->transform->GetModel() * Game::Instance()->camera->GetCameraMatrix();
 		*constBufMatrix = constBufMatrix->Transpose();
 
 		Game::Instance()->renderSystem->context->UpdateSubresource(constBuf.Get(), 0, nullptr, constBufMatrix.get(), 0, 0);

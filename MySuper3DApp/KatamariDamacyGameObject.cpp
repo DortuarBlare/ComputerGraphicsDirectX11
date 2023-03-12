@@ -3,11 +3,9 @@
 #include "TransformComponent.h"
 
 KatamariDamacyGameObject::KatamariDamacyGameObject() {
-	mesh = std::make_shared<SphereRenderComponent>(
-		L"Textures/Player.png",
-		1.5f,
-		32,
-		32
+	mesh = std::make_shared<MeshRenderComponent>(
+		"Models/LegoBrick.fbx",
+		L"Textures/LegoBrick.png"
 	);
 
 	collider = std::make_shared<SphereColliderComponent>(
@@ -26,13 +24,13 @@ void KatamariDamacyGameObject::Initialize() {
 void KatamariDamacyGameObject::Update() {
 	GameObject::Update();
 
-	if (transform->parent) {
+	/*if (transform->parent) {
 		*transform->localPosition =
 			*transform->parent->localPosition +
 			Vector3::Transform(offsetFromParent, *transform->parent->localRotation);
 
 		*transform->localRotation = *transform->parent->localRotation;
-	}
+	}*/
 }
 
 void KatamariDamacyGameObject::AttachTo(KatamariDamacyGameObject& other) {
@@ -40,6 +38,6 @@ void KatamariDamacyGameObject::AttachTo(KatamariDamacyGameObject& other) {
 	offsetFromParent = *transform->localPosition - *transform->parent->localPosition;
 
 	offsetFromParent.Normalize();
-	offsetFromParent *= 3.0f;
+	offsetFromParent *= other.collider->boundingSphere->Radius * 2;
 	collider->enabled = false;
 }

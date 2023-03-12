@@ -14,9 +14,10 @@ public:
 
 	TransformComponent();
 
+	void Translate(Vector3 translation);
+
 	Vector3 GetPosition();
 	void SetPosition(Vector3 position);
-	void Translate(Vector3 translation);
 
 	Quaternion GetRotation();
 	void SetRotation(Quaternion rotation);
@@ -24,6 +25,7 @@ public:
 	Matrix GetLocalModel();
 	Matrix GetModel();
 	Matrix GetLocalView();
+	Matrix GetView();
 
 	Vector3 LocalForward();
 	Vector3 LocalUp();

@@ -41,8 +41,9 @@ void KatamariDamacyGame::Initialize() {
 
 	player->velocity = 4.0f;
 	*player->transform->localPosition += {0.0f, 1.5f, 0.0f};
+	*player->transform->scale *= 10;
 
-	*testObject1->transform->localPosition += {10.0f, 1.5f, 10.0f};
+	*testObject1->transform->localPosition += {0.0f, 1.5f, 10.0f};
 	*testObject2->transform->localPosition += {20.0f, 1.5f, 20.0f};
 	*testObject3->transform->localPosition += {30.0f, 1.5f, 30.0f};
 
@@ -62,11 +63,18 @@ void KatamariDamacyGame::Update() {
 					KatamariDamacyGameObject* secondKatamari = dynamic_cast<KatamariDamacyGameObject*>(gameObject.get());
 
 					if (secondKatamari) {
-						secondKatamari->AttachTo(*player);
-						*player->transform->localPosition += {0.0f, secondKatamari->collider->boundingSphere->Radius * 2, 0.0f};
-						*player->transform->scale *= secondKatamari->collider->boundingSphere->Radius * 2;
-						player->collider->boundingSphere->Radius *= secondKatamari->collider->boundingSphere->Radius * 2;
-						player->velocity *= secondKatamari->collider->boundingSphere->Radius * 2;
+						Vector3 position = secondKatamari->transform->GetPosition();
+						Quaternion rotation = secondKatamari->transform->GetRotation();
+						secondKatamari->transform->parent = player->transform;
+						secondKatamari->transform->SetPosition(position);
+						secondKatamari->transform->SetRotation(rotation);
+						secondKatamari->collider->enabled = false;
+
+						//player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius/* * 2*/;
+						//*player->transform->localPosition += {0.0f, secondKatamari->collider->boundingSphere->Radius/* * 2*/, 0.0f};
+						//*player->transform->scale += Vector3::One * (secondKatamari->collider->boundingSphere->Radius);
+						//player->velocity *= secondKatamari->collider->boundingSphere->Radius;
+						//secondKatamari->AttachTo(*player);
 					}
 				}
 			}
@@ -75,7 +83,10 @@ void KatamariDamacyGame::Update() {
 
 	if (inputDevice->IsKeyDown(Keys::W)) {
 		// Player translation and rotation
-		player->transform->Translate(camera->OrbitForwardXZ() * player->velocity * Time::DeltaTime());
-		*player->transform->localRotation *= Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), camera->velocity * Time::DeltaTime());
+		player->transform->SetPosition(player->transform->GetPosition() + camera->OrbitForwardXZ() * camera->velocity * Time::DeltaTime());
+		player->transform->SetRotation(
+			player->transform->GetRotation() *
+			Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), camera->velocity * Time::DeltaTime())
+		);
 	}
 }
