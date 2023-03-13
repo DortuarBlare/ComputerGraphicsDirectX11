@@ -8,6 +8,8 @@ private:
 	Color topColor;
 	Color bottomColor;
 
+	void GenerateSphere();
+
 public:
 	float radius;
 
@@ -35,4 +37,7 @@ public:
 	);
 
 	void Initialize() override;
+
+	
+	void ChangeRadius(float radius);
 };

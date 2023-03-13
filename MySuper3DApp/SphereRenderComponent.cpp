@@ -43,9 +43,10 @@ SphereRenderComponent::SphereRenderComponent(
 	this->bottomColor = { 0.0f, 0.0f, 0.0f };
 }
 
-void SphereRenderComponent::Initialize() {
-	points.push_back({ 0.0f, radius, 0.0f, 1.0f });
-	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, });
+void SphereRenderComponent::GenerateSphere() {
+	points.push_back({ 0.0f, radius, 0.0f, 1.0f }); // Position
+	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, }); // Texture coordinates
+	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, }); // Normal
 
 	const float phiStep = XM_PI / static_cast<float>(stackCount);
 	const float thetaStep = XM_2PI / static_cast<float>(sliceCount);
@@ -68,11 +69,13 @@ void SphereRenderComponent::Initialize() {
 
 			points.push_back(tempPoint);
 			points.push_back(tempTexCoords);
+			points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, }); // Normal
 		}
 	}
 
 	points.push_back({ 0.0f, -radius, 0.0f, 1.0f });
 	points.push_back({ 0.0f, 1.0f, 0.0f, 0.0f, });
+	points.push_back({ 0.0f, 0.0f, 0.0f, 0.0f, }); // Normal
 
 	for (int i = 1; i <= sliceCount; i++) {
 		indexes.push_back(0);
@@ -94,7 +97,7 @@ void SphereRenderComponent::Initialize() {
 		}
 	}
 
-	const int southPoleIndex = points.size() / 2 - 1;
+	const int southPoleIndex = points.size() / 3 - 1;
 
 	baseIndex = southPoleIndex - ringVertexCount;
 
@@ -103,6 +106,25 @@ void SphereRenderComponent::Initialize() {
 		indexes.push_back(baseIndex + i);
 		indexes.push_back(baseIndex + i + 1);
 	}
+}
 
+void SphereRenderComponent::Initialize() {
+	GenerateSphere();
+	RenderComponent::Initialize();
+}
+
+void SphereRenderComponent::ChangeRadius(float radius) {
+	/*for (int i = 0; i < points.size(); i += 3) {
+		if (i > points.size())
+			break;
+
+		points[i].x *= scale;
+		points[i].y *= scale;
+		points[i].z *= scale;
+	}*/
+
+	this->radius = radius;
+	points.clear();
+	GenerateSphere();
 	RenderComponent::Initialize();
 }

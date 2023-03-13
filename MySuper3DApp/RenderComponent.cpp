@@ -208,9 +208,9 @@ void RenderComponent::Initialize() {
 
 	perObject = {};
 	perScene = {};
-	perScene.lightDirection = { 1.0f, 1.0f, 1.0f, 0.0f };
+	perScene.lightDirection = { 1.0f, 1.0f, 0.0f, 0.0f };
 	perScene.lightDirection.Normalize();
-	perScene.lightColor = { 1.0f, 1.0f, 1.0f, 0.4f };
+	perScene.lightColor = { 1.0f, 1.0f, 1.0f, 0.5f };
 }
 
 void RenderComponent::Update() {}

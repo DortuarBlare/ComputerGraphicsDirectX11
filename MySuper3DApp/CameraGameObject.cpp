@@ -42,7 +42,7 @@ void CameraGameObject::AttachTo(std::shared_ptr<TransformComponent> transform) {
     orbitMode = true;
     this->transform->parent = transform;
 
-    orbitOffset = 10.0f *
+    orbitOffset = 5.0f *
         Vector3::Transform(
             Vector3::Forward + Vector3::Up,
             Matrix::CreateFromYawPitchRoll(yaw, pitch, 0)

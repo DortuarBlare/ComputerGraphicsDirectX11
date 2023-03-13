@@ -169,7 +169,6 @@
     <ClCompile Include="InputDevice.cpp" />
     <ClCompile Include="MySuper3DApp.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
-    <ClCompile Include="RectangleRenderComponent.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,7 +202,6 @@
     <ClInclude Include="InputDevice.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="SimpleMath.h" />
-    <ClInclude Include="RectangleRenderComponent.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,6 @@
 #pragma once
 #include "Game.h"
 #include "KatamariDamacyGameObject.h"
-#include "LineRenderComponent.h"
-#include "RectangleRenderComponent.h"
 #include "SphereColliderComponent.h"
 
 class KatamariDamacyGame : public Game {

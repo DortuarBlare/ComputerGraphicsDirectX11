@@ -84,9 +84,6 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Source Files\Game\GameObject\Component\Render</Filter>
     </ClCompile>
-    <ClCompile Include="RectangleRenderComponent.cpp">
-      <Filter>Source Files\Game\GameObject\Component\Render</Filter>
-    </ClCompile>
     <ClCompile Include="CameraGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
       <Filter>Header Files\Game\GameObject\Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
-      <Filter>Header Files\Game\GameObject\Component\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="RectangleRenderComponent.h">
       <Filter>Header Files\Game\GameObject\Component\Render</Filter>
     </ClInclude>
     <ClInclude Include="CameraGameObject.h">
