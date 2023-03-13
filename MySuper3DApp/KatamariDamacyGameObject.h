@@ -12,6 +12,8 @@ public:
 	std::shared_ptr<SphereColliderComponent> collider;
 	std::shared_ptr<SphereRenderComponent> colliderDebugSphere;
 
+	float targetRadius;
+
 	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius);
 	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius, float importScale);
 	KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius, float importScale, Vector3 importTranslation);

@@ -187,9 +187,9 @@ void KatamariDamacyGame::Update() {
 					if (secondKatamari) {
 						secondKatamari->AttachTo(player->transform);
 
-						player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius;
-						player->colliderDebugSphere->ChangeRadius(player->collider->boundingSphere->Radius);
-						player->transform->localPosition->y = player->collider->boundingSphere->Radius;
+						//player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius;
+						player->targetRadius = player->collider->boundingSphere->Radius + secondKatamari->collider->boundingSphere->Radius;
+						//player->colliderDebugSphere->ChangeRadius(player->collider->boundingSphere->Radius);
 					}
 				}
 			}
@@ -204,4 +204,6 @@ void KatamariDamacyGame::Update() {
 			Quaternion::CreateFromAxisAngle(camera->OrbitRightXZ(), camera->velocity * Time::DeltaTime())
 		);
 	}
+
+	player->transform->localPosition->y = player->collider->boundingSphere->Radius;
 }

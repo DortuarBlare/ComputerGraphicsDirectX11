@@ -41,6 +41,8 @@ KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LP
 		32,
 		32
 	);
+
+	targetRadius = colliderRadius;
 }
 
 KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LPCWSTR textureFileName, float colliderRadius, float importScale, Vector3 importTranslation) {
@@ -63,6 +65,8 @@ KatamariDamacyGameObject::KatamariDamacyGameObject(std::string modelFileName, LP
 		32,
 		32
 	);
+
+	targetRadius = colliderRadius;
 }
 
 void KatamariDamacyGameObject::Initialize() {
@@ -75,6 +79,15 @@ void KatamariDamacyGameObject::Initialize() {
 
 void KatamariDamacyGameObject::Update() {
 	GameObject::Update();
+
+	if (collider->boundingSphere->Radius != targetRadius) {
+		if (collider->boundingSphere->Radius + Time::DeltaTime() > targetRadius)
+			collider->boundingSphere->Radius = targetRadius;
+		else
+			collider->boundingSphere->Radius += Time::DeltaTime();
+
+		colliderDebugSphere->ChangeRadius(collider->boundingSphere->Radius);
+	}
 }
 
 void KatamariDamacyGameObject::AttachTo(std::shared_ptr<TransformComponent>& parentTransform) {
