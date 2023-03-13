@@ -234,23 +234,16 @@ void RenderComponent::Draw() {
 		perObject.constBufMatrix.Transpose();
 		perObject.invTrWorld = (Matrix::CreateScale(*owner->transform->scale) * Matrix::CreateFromQuaternion(owner->transform->GetRotation())).Invert().Transpose();
 
-		/*perScene.viewDirectionSpecular =
+		perScene.viewDirectionSpecular =
 			Vector4(
 				Game::Instance()->camera->transform->localPosition->x - Game::Instance()->camera->target.x,
 				Game::Instance()->camera->transform->localPosition->y - Game::Instance()->camera->target.y,
 				Game::Instance()->camera->transform->localPosition->z - Game::Instance()->camera->target.z,
 				0.0f
-			);*/
-		perScene.viewDirectionSpecular =
-			Vector4(
-				Game::Instance()->camera->transform->GetPosition().x - Game::Instance()->camera->target.x,
-				Game::Instance()->camera->transform->GetPosition().y - Game::Instance()->camera->target.y,
-				Game::Instance()->camera->transform->GetPosition().z - Game::Instance()->camera->target.z,
-				0.0f
 			);
 
 		perScene.viewDirectionSpecular.Normalize();
-		perScene.viewDirectionSpecular.w = 0.0f;
+		perScene.viewDirectionSpecular.w = 0.5f;
 
 		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[0], 0, nullptr, &perObject, 0, 0);
 		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[1], 0, nullptr, &perScene, 0, 0);
