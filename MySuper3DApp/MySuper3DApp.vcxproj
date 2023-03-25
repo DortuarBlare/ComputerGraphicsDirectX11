@@ -146,9 +146,11 @@
     <ClCompile Include="DirectXHelpers.cpp" />
     <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="KatamariDamacyGameObject.cpp" />
+    <ClCompile Include="LightGameObject.cpp" />
     <ClCompile Include="LineRenderComponent.cpp" />
     <ClCompile Include="MeshRenderComponent.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ShadowRenderSystem.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="SolarSystemGameObject.cpp" />
     <ClCompile Include="SphereColliderComponent.cpp" />
@@ -182,11 +184,13 @@
     <ClInclude Include="Effects.h" />
     <ClInclude Include="KatamariDamacyGame.h" />
     <ClInclude Include="KatamariDamacyGameObject.h" />
+    <ClInclude Include="LightGameObject.h" />
     <ClInclude Include="LineRenderComponent.h" />
     <ClInclude Include="LoaderHelpers.h" />
     <ClInclude Include="MeshRenderComponent.h" />
     <ClInclude Include="PlatformHelpers.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="ShadowRenderSystem.h" />
     <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="SolarSystemGameObject.h" />
     <ClInclude Include="SphereColliderComponent.h" />
@@ -210,6 +214,11 @@
       <FileType>Document</FileType>
     </None>
     <None Include="SimpleMath.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DepthShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

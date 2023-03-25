@@ -138,6 +138,12 @@
     <ClCompile Include="MeshRenderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowRenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayWin32.h">
@@ -233,6 +239,12 @@
     <ClInclude Include="MeshRenderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LightGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowRenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\SimpleShader.hlsl">
@@ -242,5 +254,6 @@
       <Filter>Header Files\Math</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="Shaders\DepthShader.hlsl" />
   </ItemGroup>
 </Project>

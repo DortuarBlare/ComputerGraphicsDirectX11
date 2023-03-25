@@ -46,7 +46,8 @@ float4 PSMain(PS_IN input) : SV_Target {
     float currentDepth = lightDirection.z / lightDirection.w * 0.5 + 0.5; // get depth of current fragment from light's perspective
     float inShadow = currentDepth > closestDepth ? 1.0 : 0.0; // check whether current frag pos is in shadow
     
-    float4 result = (ambient + diffuse + specular) * tex * inShadow;
+    //float4 result = (ambient + diffuse + specular) * tex * inShadow;
+    float4 result = (ambient + diffuse + specular) * tex;
 	
     return float4(result.xyz, 1.0f);
 }

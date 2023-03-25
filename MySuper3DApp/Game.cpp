@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "Game.h"
+#include "TransformComponent.h"
 
 std::unique_ptr<Game> Game::instance = nullptr;
 
 Game::Game(LPCWSTR name) {
 	this->name = name;
 	camera = std::make_unique<CameraGameObject>();
+	lightGameObject = std::make_unique<LightGameObject>();
 }
 
 // Access to Game::instance
@@ -29,6 +31,8 @@ void Game::Initialize() {
 		component->Initialize();
 
 	camera->Initialize();
+	*lightGameObject->transform->localPosition += { 0.0f, 10.0f, 0.0f };
+	//*lightGameObject->transform->localRotation = Quaternion::CreateFromAxisAngle(Vector3::Right, XM_PIDIV2);
 }
 
 /*
@@ -40,11 +44,11 @@ void Game::Update() {
 		gameObject->Update();
 
 	camera->Update();
+	shadowRenderSystem->Update();
 
 	// Handle ESC button to break main while cycle
 	if (inputDevice->IsKeyDown(Keys::Escape))
 		PostQuitMessage(0);
-
 }
 
 /*
@@ -56,6 +60,7 @@ void Game::UpdateInternal() {
 	Time::Update();
 	Update();
 	renderSystem->Draw(gameObjects);
+	shadowRenderSystem->Draw(gameObjects);
 }
 
 void Game::DestroyResources() {
@@ -67,6 +72,7 @@ void Game::DestroyResources() {
 // Main method for starting game with initializatio
 void Game::Run(int clientWidth, int clientHeight, bool fullscreen) {
 	renderSystem = std::make_unique<RenderSystem>(name, clientWidth, clientHeight, fullscreen, WndProc);
+	shadowRenderSystem = std::make_unique<ShadowRenderSystem>();
 	inputDevice = std::make_unique<InputDevice>();
 	Initialize();
 

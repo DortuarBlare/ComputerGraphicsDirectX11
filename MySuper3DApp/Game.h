@@ -5,10 +5,13 @@
 
 #include "Time.h"
 #include "RenderSystem.h"
+#include "ShadowRenderSystem.h"
 #include "GameObject.h"
 #include "CameraGameObject.h"
+#include "LightGameObject.h"
 
 class InputDevice;
+class ShadowRenderSystem;
 class GameObject;
 class CameraGameObject;
 
@@ -28,8 +31,11 @@ protected:
 
 public:
 	std::unique_ptr<RenderSystem> renderSystem;
+	std::unique_ptr<ShadowRenderSystem> shadowRenderSystem;
 	std::unique_ptr<InputDevice> inputDevice;
 	std::unique_ptr<CameraGameObject> camera;
+	std::unique_ptr<LightGameObject> lightGameObject;
+
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 
 	static std::unique_ptr<Game>& Instance();
