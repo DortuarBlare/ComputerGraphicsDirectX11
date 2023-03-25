@@ -59,9 +59,7 @@ RenderSystem::RenderSystem(LPCWSTR name, int clientWidth, int clientHeight, bool
 		context.GetAddressOf()
 	);
 
-	if (FAILED(res)) {
-		// Well, that was unexpected
-	}
+	if (FAILED(res)) { /* Well, that was unexpected */ }
 
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backTex.GetAddressOf()); // Accesses one of the buffers of the back buffer chain
 	res = device->CreateRenderTargetView(backTex.Get(), nullptr, rtv.GetAddressOf());

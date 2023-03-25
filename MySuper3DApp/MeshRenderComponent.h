@@ -9,6 +9,11 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 class MeshRenderComponent : public RenderComponent {
+private:
+	void LoadModel(aiNode* rootNode, const aiScene* scene);
+	void ProcessNode(aiNode* node, const aiScene* scene);
+	void ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
 public:
 	std::string modelFileName;
 	float importScale = 1.0f;
@@ -20,6 +25,4 @@ public:
 	MeshRenderComponent(std::string modelFileName, LPCWSTR textureFileName, float importScale, Vector3 importTranslation);
 
 	void Initialize() override;
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	void ProcessMesh(aiMesh* mesh, const aiScene* scene);
 };

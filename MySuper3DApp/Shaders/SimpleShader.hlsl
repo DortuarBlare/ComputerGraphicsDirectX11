@@ -26,6 +26,8 @@ cbuffer SceneConstBuf : register(b1) {
 Texture2D DiffuseMap : register(t0);
 SamplerState Sampler : register(s0);
 
+
+
 float4 PSMain(PS_IN input) : SV_Target {
     float4 ambient = lightColor.w * float4(lightColor.xyz, 1.0f);
     float4 tex = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
@@ -36,9 +38,15 @@ float4 PSMain(PS_IN input) : SV_Target {
 
     float4 reflectDir = reflect(-lightDirection, norm);
     float spec = pow(max(dot(viewDirectionSpecular.xyz, reflectDir.xyz), 0.0f), 16);
-    float4 specular = viewDirectionSpecular.w * spec/* * float4(viewDirectionSpecular.xyz, 1.0f)*/;
+    float4 specular = viewDirectionSpecular.w * spec /* * float4(viewDirectionSpecular.xyz, 1.0f)*/;
 
-    float4 result = (ambient + diffuse + specular) * tex;
+    float3 projCoords = lightDirection.xyz / lightDirection.w; // perform perspective divide
+    projCoords = projCoords * 0.5 + 0.5; // transform to [0,1] range
+    float closestDepth = DiffuseMap.SampleLevel(Sampler, projCoords.xy, 0).r; // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float currentDepth = lightDirection.z / lightDirection.w * 0.5 + 0.5; // get depth of current fragment from light's perspective
+    float inShadow = currentDepth > closestDepth ? 1.0 : 0.0; // check whether current frag pos is in shadow
+    
+    float4 result = (ambient + diffuse + specular) * tex * inShadow;
 	
     return float4(result.xyz, 1.0f);
 }

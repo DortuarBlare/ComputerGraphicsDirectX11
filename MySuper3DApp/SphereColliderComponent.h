@@ -8,8 +8,7 @@ public:
 	SphereColliderComponent() = delete;
 	SphereColliderComponent(Vector3 center, float radius);
 
-	void Initialize();
-	void Update();
+	void Update() override;
 
 	bool Intersects(SphereColliderComponent& other);
 };

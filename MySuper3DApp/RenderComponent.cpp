@@ -36,7 +36,7 @@ void RenderComponent::Initialize() {
 	// Compile pixel shader
 	HRESULT res =
 		D3DCompileFromFile(
-			L"./Shaders/MyVeryFirstShader.hlsl",
+			L"./Shaders/SimpleShader.hlsl",
 			nullptr /*macros*/,
 			nullptr /*include*/,
 			"PSMain",
@@ -50,7 +50,7 @@ void RenderComponent::Initialize() {
 	// Compile vertex shader
 	res =
 		D3DCompileFromFile(
-			L"./Shaders/MyVeryFirstShader.hlsl",
+			L"./Shaders/SimpleShader.hlsl",
 			nullptr /*macros*/,
 			nullptr /*include*/,
 			"VSMain",
@@ -70,7 +70,7 @@ void RenderComponent::Initialize() {
 		}
 		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
-			MessageBox(Game::Instance()->renderSystem->display->GetHWnd(), L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
+			MessageBox(Game::Instance()->renderSystem->display->GetHWnd(), L"SimpleShader.hlsl", L"Missing Shader File", MB_OK);
 
 		return;
 	}
@@ -213,47 +213,44 @@ void RenderComponent::Initialize() {
 	perScene.lightColor = { 1.0f, 1.0f, 1.0f, 0.5f };
 }
 
-void RenderComponent::Update() {}
+void RenderComponent::Update() {
+	GameObjectComponent::Update();
 
-void RenderComponent::Draw() {
-	if (enabled) {
-		Game::Instance()->renderSystem->context->IASetInputLayout(layout.Get());
-		Game::Instance()->renderSystem->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		Game::Instance()->renderSystem->context->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
-		Game::Instance()->renderSystem->context->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
+	perObject.worldViewProjMatrix = owner->transform->GetModel() * Game::Instance()->camera->GetCameraMatrix();
+	perObject.invertedTransposedMatrix = (Matrix::CreateScale(*owner->transform->scale) * Matrix::CreateFromQuaternion(owner->transform->GetRotation())).Invert().Transpose();
 
-		Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
-		Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
+	perScene.viewDirectionSpecular =
+		Vector4(
+			Game::Instance()->camera->transform->localPosition->x - owner->transform->GetPosition().x,
+			Game::Instance()->camera->transform->localPosition->y - owner->transform->GetPosition().y,
+			Game::Instance()->camera->transform->localPosition->z - owner->transform->GetPosition().z,
+			0.0f
+		);
 
-		Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
-		Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
-
-		Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
-
-		perObject.constBufMatrix = owner->transform->GetModel() * Game::Instance()->camera->GetCameraMatrix();
-		perObject.constBufMatrix.Transpose();
-		perObject.invTrWorld = (Matrix::CreateScale(*owner->transform->scale) * Matrix::CreateFromQuaternion(owner->transform->GetRotation())).Invert().Transpose();
-
-		perScene.viewDirectionSpecular =
-			Vector4(
-				Game::Instance()->camera->transform->localPosition->x - Game::Instance()->camera->target.x,
-				Game::Instance()->camera->transform->localPosition->y - Game::Instance()->camera->target.y,
-				Game::Instance()->camera->transform->localPosition->z - Game::Instance()->camera->target.z,
-				0.0f
-			);
-
-		perScene.viewDirectionSpecular.Normalize();
-		perScene.viewDirectionSpecular.w = 0.5f;
-
-		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[0], 0, nullptr, &perObject, 0, 0);
-		Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[1], 0, nullptr, &perScene, 0, 0);
-		Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 2, constBuffers);
-		Game::Instance()->renderSystem->context->PSSetConstantBuffers(0, 2, constBuffers);
-
-		Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
-	}
+	perScene.viewDirectionSpecular.Normalize();
+	perScene.viewDirectionSpecular.w = 0.5f;
 }
 
-void RenderComponent::Reload() {}
+void RenderComponent::Draw() {
+	GameObjectComponent::Draw();
 
-void RenderComponent::DestroyResources() {}
+	Game::Instance()->renderSystem->context->IASetInputLayout(layout.Get());
+	Game::Instance()->renderSystem->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Game::Instance()->renderSystem->context->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R32_UINT, 0);
+	Game::Instance()->renderSystem->context->IASetVertexBuffers(0, 1, vertexBuf.GetAddressOf(), strides, offsets);
+
+	Game::Instance()->renderSystem->context->VSSetShader(vertexShader.Get(), nullptr, 0);
+	Game::Instance()->renderSystem->context->PSSetShader(pixelShader.Get(), nullptr, 0);
+
+	Game::Instance()->renderSystem->context->PSSetShaderResources(0, 1, textureView.GetAddressOf());
+	Game::Instance()->renderSystem->context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+
+	Game::Instance()->renderSystem->context->RSSetState(rastState.Get());
+
+	Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[0], 0, nullptr, &perObject, 0, 0);
+	Game::Instance()->renderSystem->context->UpdateSubresource(constBuffers[1], 0, nullptr, &perScene, 0, 0);
+	Game::Instance()->renderSystem->context->VSSetConstantBuffers(0, 2, constBuffers);
+	Game::Instance()->renderSystem->context->PSSetConstantBuffers(0, 2, constBuffers);
+
+	Game::Instance()->renderSystem->context->DrawIndexed(indexes.size(), 0, 0);
+}

@@ -186,10 +186,7 @@ void KatamariDamacyGame::Update() {
 
 					if (secondKatamari) {
 						secondKatamari->AttachTo(player->transform);
-
-						//player->collider->boundingSphere->Radius += secondKatamari->collider->boundingSphere->Radius;
 						player->targetRadius = player->collider->boundingSphere->Radius + secondKatamari->collider->boundingSphere->Radius;
-						//player->colliderDebugSphere->ChangeRadius(player->collider->boundingSphere->Radius);
 					}
 				}
 			}

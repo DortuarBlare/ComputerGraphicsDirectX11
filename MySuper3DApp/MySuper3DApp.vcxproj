@@ -206,7 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="Shaders\MyVeryFirstShader.hlsl">
+    <None Include="Shaders\SimpleShader.hlsl">
       <FileType>Document</FileType>
     </None>
     <None Include="SimpleMath.inl" />

@@ -81,12 +81,12 @@ void KatamariDamacyGameObject::Update() {
 	GameObject::Update();
 
 	if (collider->boundingSphere->Radius != targetRadius) {
-		if (collider->boundingSphere->Radius + Time::DeltaTime() > targetRadius)
+		if (collider->boundingSphere->Radius + Time::DeltaTime() > targetRadius) {
 			collider->boundingSphere->Radius = targetRadius;
+			colliderDebugSphere->ChangeRadius(collider->boundingSphere->Radius);
+		}
 		else
 			collider->boundingSphere->Radius += Time::DeltaTime();
-
-		colliderDebugSphere->ChangeRadius(collider->boundingSphere->Radius);
 	}
 }
 

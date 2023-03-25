@@ -8,8 +8,8 @@ using namespace DirectX::SimpleMath;
 using namespace Microsoft::WRL;
 
 struct PerObject {
-	Matrix constBufMatrix;
-	Matrix invTrWorld;
+	Matrix worldViewProjMatrix;
+	Matrix invertedTransposedMatrix;
 };
 
 struct PerScene {
@@ -58,8 +58,6 @@ public:
 	RenderComponent(LPCWSTR textureFileName, D3D11_FILL_MODE fillMode);
 
 	virtual void Initialize();
-	void Update();
-	virtual void Draw();
-	void Reload();
-	void DestroyResources();
+	void Update() override;
+	virtual void Draw() override;
 };

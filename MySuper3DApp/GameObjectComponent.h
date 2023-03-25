@@ -11,8 +11,8 @@ public:
 	bool enabled = true;
 
 	virtual void Initialize() {};
-	virtual void Update() {};
-	virtual void Draw() {};
+	virtual void Update();
+	virtual void Draw();
 	virtual void Reload() {};
 	virtual void DestroyResources() {};
 };

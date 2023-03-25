@@ -26,9 +26,13 @@ void MeshRenderComponent::Initialize() {
 	if (!pScene)
 		return;
 
-	ProcessNode(pScene->mRootNode, pScene);
-
+	LoadModel(pScene->mRootNode, pScene);
+	
 	RenderComponent::Initialize();
+}
+
+void MeshRenderComponent::LoadModel(aiNode* rootNode, const aiScene* scene) {
+	ProcessNode(rootNode, scene);
 }
 
 void MeshRenderComponent::ProcessNode(aiNode* node, const aiScene* scene) {
@@ -43,13 +47,7 @@ void MeshRenderComponent::ProcessNode(aiNode* node, const aiScene* scene) {
 
 void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 	for (UINT i = 0; i < mesh->mNumVertices; i++) {
-		XMFLOAT4 textureCoordinate = {};
-
-		if (mesh->mTextureCoords[0]) {
-			textureCoordinate.x = (float)mesh->mTextureCoords[0][i].x;
-			textureCoordinate.y = (float)mesh->mTextureCoords[0][i].y;
-		}
-		
+		// Vertex position
 		points.push_back(
 			{
 				mesh->mVertices[i].x * importScale + importTranslation.x,
@@ -59,8 +57,17 @@ void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 			}
 		);
 
+		// Texture coordinates
+		XMFLOAT4 textureCoordinate = {};
+
+		if (mesh->mTextureCoords[0]) {
+			textureCoordinate.x = (float)mesh->mTextureCoords[0][i].x;
+			textureCoordinate.y = (float)mesh->mTextureCoords[0][i].y;
+		}
+
 		points.push_back(textureCoordinate);
 
+		// Normals
 		points.push_back(
 			{
 				mesh->mNormals[i].x,
@@ -71,7 +78,6 @@ void MeshRenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 		);
 	}
 
-	//Get indices
 	for (UINT i = 0; i < mesh->mNumFaces; i++) {
 		aiFace face = mesh->mFaces[i];
 
